@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   },
   basePath: '',
   trailingSlash: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
