@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '',
+  basePath: '/STARTUP_PATH',
+  assetPrefix: '/STARTUP_PATH/',
   trailingSlash: true,
   eslint: {
     ignoreDuringBuilds: true,
