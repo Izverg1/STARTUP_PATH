@@ -300,7 +300,7 @@ export default function CollaborationPage() {
                 </Avatar>
                 <div className="flex-1">
                   <div className="bg-green-900/30 rounded-lg p-3">
-                    <p className="text-sm text-white">I'll handle the optimization. Should be done by EOD.</p>
+                    <p className="text-sm text-white">I&apos;ll handle the optimization. Should be done by EOD.</p>
                   </div>
                   <p className="text-xs text-gray-400 mt-1">Marcus Rodriguez • 30 min ago</p>
                 </div>

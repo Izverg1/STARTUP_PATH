@@ -164,7 +164,7 @@ export default function AssistantPage() {
               <div>
                 <h2 className="text-lg font-semibold mb-2">Available Tools</h2>
                 <p className="text-muted-foreground">
-                  Explore the AI Assistant's capabilities and tools for marketing analysis and optimization.
+                  Explore the AI Assistant&apos;s capabilities and tools for marketing analysis and optimization.
                 </p>
               </div>
 
@@ -189,7 +189,7 @@ export default function AssistantPage() {
                           Example usage:
                         </div>
                         <div className="text-xs text-muted-foreground italic">
-                          "{tool.examples[0]}"
+                          &quot;{tool.examples[0]}&quot;
                         </div>
                       </div>
 
