@@ -579,15 +579,15 @@ export default function SpaceLandingPage() {
             {/* The 4-Agent Team */}
             <div className="grid grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
               
-              {/* Agent 1: Channel Scout */}
+              {/* Agent 1: Channel Discovery Engine */}
               <Card className="bg-black/60 border border-cyan-500/30 p-6 hover:border-cyan-500/50 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center">
                     <Satellite className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-cyan-400">Channel Scout</h3>
-                    <p className="text-sm text-gray-400">Discovers & validates new opportunities</p>
+                    <h3 className="text-xl font-bold text-cyan-400">Channel Discovery Engine</h3>
+                    <p className="text-sm text-gray-400">Identifies & validates marketing opportunities</p>
                   </div>
                 </div>
                 <div className="space-y-3 text-sm text-gray-300">
@@ -600,7 +600,7 @@ export default function SpaceLandingPage() {
                     <MetricPopup 
                       metric="Channel Discovery Rate"
                       value="3-5 validated channels/month"
-                      rationale="Channel Scout identifies 3-5 new profitable marketing channels monthly through systematic testing, compared to manual discovery which averages 0.5 channels per quarter."
+                      rationale="Channel Discovery Engine identifies 3-5 new profitable marketing channels monthly through systematic testing, compared to manual discovery which averages 0.5 channels per quarter."
                       methodology="Analysis of channel discovery rates across 200+ B2B SaaS companies using automated vs manual channel testing approaches."
                       source="STARTUP_PATH Internal Analytics 2024"
                       className="text-cyan-400 font-bold"
@@ -610,15 +610,15 @@ export default function SpaceLandingPage() {
                 </div>
               </Card>
 
-              {/* Agent 2: Offer Alchemist */}
+              {/* Agent 2: Campaign Optimization Engine */}
               <Card className="bg-black/60 border border-red-500/30 p-6 hover:border-red-500/50 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center">
                     <Target className="w-6 h-6 text-red-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-red-400">Offer Alchemist</h3>
-                    <p className="text-sm text-gray-400">Optimizes messaging & creatives</p>
+                    <h3 className="text-xl font-bold text-red-400">Campaign Optimization Engine</h3>
+                    <p className="text-sm text-gray-400">Optimizes messaging & creative performance</p>
                   </div>
                 </div>
                 <div className="space-y-3 text-sm text-gray-300">
@@ -631,7 +631,7 @@ export default function SpaceLandingPage() {
                     <MetricPopup 
                       metric="Conversion Rate Improvement"
                       value="40-85% CTR increase"
-                      rationale="Offer Alchemist uses multivariate testing to optimize messaging, typically achieving 40-85% improvement in click-through rates compared to single-variant manual testing."
+                      rationale="Campaign Optimization Engine uses multivariate testing to optimize messaging, typically achieving 40-85% improvement in click-through rates compared to single-variant manual testing."
                       methodology="Meta-analysis of 500+ A/B test campaigns showing automated multivariate testing vs manual single-variant approaches across B2B SaaS companies."
                       source="Marketing Optimization Research 2024"
                       sourceUrl="https://optimization.com/b2b-testing-benchmarks"
@@ -642,15 +642,15 @@ export default function SpaceLandingPage() {
                 </div>
               </Card>
 
-              {/* Agent 3: Signal Wrangler */}
+              {/* Agent 3: Performance Analytics Engine */}
               <Card className="bg-black/60 border border-green-500/30 p-6 hover:border-green-500/50 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
                     <BarChart3 className="w-6 h-6 text-green-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-green-400">Signal Wrangler</h3>
-                    <p className="text-sm text-gray-400">Tracks & analyzes performance</p>
+                    <h3 className="text-xl font-bold text-green-400">Performance Analytics Engine</h3>
+                    <p className="text-sm text-gray-400">Real-time performance monitoring & analysis</p>
                   </div>
                 </div>
                 <div className="space-y-3 text-sm text-gray-300">
@@ -663,7 +663,7 @@ export default function SpaceLandingPage() {
                     <MetricPopup 
                       metric="Trend Detection Speed"
                       value="2-4 hours vs 6+ weeks"
-                      rationale="Signal Wrangler detects performance trends and anomalies within 2-4 hours through real-time monitoring, compared to 6-8 weeks for manual analysis across multiple platforms."
+                      rationale="Performance Analytics Engine detects performance trends and anomalies within 2-4 hours through real-time monitoring, compared to 6-8 weeks for manual analysis across multiple platforms."
                       methodology="Time-to-detection analysis comparing automated monitoring vs manual dashboard reviews for identifying significant performance changes."
                       source="Marketing Analytics Efficiency Study 2024"
                       className="text-green-400 font-bold"
@@ -673,15 +673,15 @@ export default function SpaceLandingPage() {
                 </div>
               </Card>
 
-              {/* Agent 4: Budget Captain */}
+              {/* Agent 4: Budget Allocation Engine */}
               <Card className="bg-black/60 border border-purple-500/30 p-6 hover:border-purple-500/50 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
                     <TrendingUp className="w-6 h-6 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-purple-400">Budget Captain</h3>
-                    <p className="text-sm text-gray-400">Reallocates spend automatically</p>
+                    <h3 className="text-xl font-bold text-purple-400">Budget Allocation Engine</h3>
+                    <p className="text-sm text-gray-400">Automated spend optimization & reallocation</p>
                   </div>
                 </div>
                 <div className="space-y-3 text-sm text-gray-300">
@@ -694,7 +694,7 @@ export default function SpaceLandingPage() {
                     <MetricPopup 
                       metric="ROAS Improvement"
                       value="65-120% better ROAS"
-                      rationale="Budget Captain's Thompson Sampling algorithm achieves 65-120% better ROAS by automatically reallocating budget from underperforming to high-performing channels within 24 hours."
+                      rationale="Budget Allocation Engine's Thompson Sampling algorithm achieves 65-120% better ROAS by automatically reallocating budget from underperforming to high-performing channels within 24 hours."
                       methodology="Comparative analysis of automated vs manual budget allocation across 150+ B2B SaaS marketing portfolios over 12 months."
                       source="Thompson Sampling Marketing Study 2024"
                       sourceUrl="https://research.google.com/pubs/pub48424.html"
