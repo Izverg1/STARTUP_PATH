@@ -63,7 +63,7 @@ const WebinarLogo = () => (
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('demo@startuply.space')
+  const [email, setEmail] = useState('user@startuppath.ai')
   const [password, setPassword] = useState('demo123')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -76,7 +76,7 @@ export default function LoginPage() {
 
   // Fake user credentials
   const FAKE_USER = {
-    email: 'demo@startuply.space',
+    email: 'user@startuppath.ai',
     password: 'demo123'
   }
 
@@ -96,7 +96,7 @@ export default function LoginPage() {
       // Show loading transition
       setShowTransition(true)
     } else {
-      setError('Invalid credentials. Use demo@startuply.space / demo123')
+      setError('Invalid credentials. Use user@startuppath.ai / demo123')
       setIsLoading(false)
     }
   }
@@ -385,7 +385,7 @@ export default function LoginPage() {
             <div className="mt-4 p-3 bg-gray-800/50 rounded-lg border border-gray-700 backdrop-blur-sm">
               <p className="text-gray-300 text-sm text-center">
                 Demo Credentials:<br />
-                <span className="text-white font-mono text-xs">demo@startuply.space / demo123</span>
+                <span className="text-white font-mono text-xs">user@startuppath.ai / demo123</span>
               </p>
             </div>
           </div>

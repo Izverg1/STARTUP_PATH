@@ -88,7 +88,7 @@ export default function DashboardPage() {
               <div className="w-px h-8 bg-gray-500" />
               <div className="text-right">
                 <p className="text-sm text-white font-medium">Demo User</p>
-                <p className="text-xs text-gray-200">demo@startuply.space</p>
+                <p className="text-xs text-gray-200">user@startuppath.ai</p>
               </div>
             </div>
           </div>

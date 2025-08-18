@@ -41,7 +41,7 @@ export function Header() {
             <div className="flex flex-col space-y-1 leading-none">
               <p className="text-sm font-medium">Welcome</p>
               <p className="text-xs text-muted-foreground">
-                user@example.com
+                user@startuppath.ai
               </p>
             </div>
           </div>
