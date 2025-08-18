@@ -6,6 +6,7 @@ import { Header } from "./Header";
 import { NavigationTransition } from "./NavigationTransition";
 import { Button } from "@/components/ui/button";
 import { PanelLeftOpen, PanelLeftClose, PanelRightOpen, PanelRightClose } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -14,6 +15,7 @@ interface MainLayoutProps {
 
 export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) {
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(true); // State for right sidebar
+  const [isLeftSidebarExpanded, setIsLeftSidebarExpanded] = useState(false); // State for left sidebar
 
   return (
     <div className="flex h-screen bg-black electric-grid relative overflow-hidden">
@@ -24,34 +26,49 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
         <div className="absolute top-1/2 left-1/2 w-[600px] h-[300px] bg-blue-600/5 rounded-full filter blur-[100px]" />
       </div>
       
-      {/* Navigation - Left Sidebar (96px) */}
-      <div className="w-24 border-r border-red-500/20 bg-black/50 backdrop-blur-sm relative z-10">
-        <Navigation />
+      {/* Navigation - Left Sidebar (expandable) */}
+      <div className={cn(
+        "border-r border-red-500/20 bg-black/50 backdrop-blur-sm relative z-10 transition-all duration-300",
+        isLeftSidebarExpanded ? "w-64" : "w-24"
+      )}>
+        <Navigation 
+          isExpanded={isLeftSidebarExpanded} 
+          onToggle={() => setIsLeftSidebarExpanded(!isLeftSidebarExpanded)} 
+        />
       </div>
 
       {/* Command Center Area */}
       <div className="flex flex-1 flex-col min-w-0 relative z-10">
-        {/* Header */}
-        <Header />
+        {/* Header with Right Sidebar Toggle */}
+        <div className="flex items-center justify-between border-b border-gray-600 bg-gray-800/90 backdrop-blur-sm px-4 py-3">
+          <Header />
+          {showArtifacts && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
+              className="bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:text-white shadow-sm hidden xl:flex items-center gap-2"
+              title={isRightSidebarOpen ? "Hide Live Analytics" : "Show Live Analytics"}
+            >
+              {isRightSidebarOpen ? (
+                <>
+                  <PanelRightClose className="h-4 w-4" />
+                  <span className="text-xs">Hide Analytics</span>
+                </>
+              ) : (
+                <>
+                  <PanelRightOpen className="h-4 w-4" />
+                  <span className="text-xs">Show Analytics</span>
+                </>
+              )}
+            </Button>
+          )}
+        </div>
 
         {/* Content Layout */}
         <div className="flex flex-1 min-h-0">
           {/* Main Content (720-1280px fluid) */}
           <main className="flex-1 min-w-0 max-w-none lg:max-w-5xl xl:max-w-none overflow-x-auto overflow-y-hidden relative">
-            {/* Floating Sidebar Toggle Button - Always Visible */}
-            {showArtifacts && (
-              <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-20 xl:block hidden">
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
-                  className="bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white shadow-lg"
-                  title={isRightSidebarOpen ? "Hide Live Analytics" : "Show Live Analytics"}
-                >
-                  {isRightSidebarOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
-                </Button>
-              </div>
-            )}
             
             <div className="mx-auto px-4 py-6 w-full min-w-[720px] max-w-[1280px] h-full">
               <NavigationTransition>
