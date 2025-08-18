@@ -423,157 +423,131 @@ export default function SpaceLandingPage() {
           </div>
         </div>
 
-        {/* Slide 3: Channel Assessment Pipeline - Horizontal Factory Model */}
+        {/* Slide 3: Root Cause - Why This Happens */}
         <div className="min-w-full h-full flex-shrink-0 flex items-center px-16 relative overflow-hidden">
           <div className="w-full max-w-7xl mx-auto">
             {/* Title Section */}
-            <div className="mb-10">
-              <h2 className="text-3xl font-bold text-white mb-2">Channel Assessment Pipeline</h2>
-              <p className="text-gray-400">Transform scattered channels into optimized budget allocation</p>
-              <div className="mt-3 text-sm text-cyan-400 flex items-center gap-2">
-                <Info className="w-4 h-4 animate-pulse" />
-                <span>Click numbers for sources & methodology</span>
-              </div>
+            <div className="mb-12 text-center">
+              <h2 className="text-4xl font-bold tracking-wider mb-6">
+                <span className="text-white">WHY THIS</span> 
+                <span className="text-orange-500 neon-glow">HAPPENS</span>
+              </h2>
+              <p className="text-2xl text-gray-300 max-w-4xl mx-auto">
+                Your marketing data is scattered across{" "}
+                <MetricPopup 
+                  metric="Average Marketing Tools"
+                  value="12+ platforms"
+                  rationale="Modern startups use an average of 12-15 different marketing and analytics tools, creating data silos that prevent unified optimization."
+                  methodology="Survey of 250 B2B SaaS startups analyzing their marketing tech stack complexity."
+                  source="HubSpot State of Marketing 2024"
+                  sourceUrl="https://www.hubspot.com/state-of-marketing"
+                  className="text-orange-500 font-bold"
+                />, creating impossible optimization decisions
+              </p>
             </div>
 
-            {/* Horizontal Pipeline */}
+            {/* Scattered Data Visualization */}
             <div className="relative">
-              {/* Enhanced Animated flow particles */}
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-red-500/20 via-cyan-400/40 to-green-500/20">
-                  <div className="w-6 h-6 bg-cyan-400 rounded-full animate-ping absolute left-0" style={{ animationDelay: '0s' }} />
-                  <div className="w-4 h-4 bg-cyan-400 rounded-full animate-pipeline-flow shadow-lg shadow-cyan-400/50" />
-                  <div className="w-4 h-4 bg-red-400 rounded-full animate-pipeline-flow shadow-lg shadow-red-400/50" style={{ animationDelay: '0.5s' }} />
-                  <div className="w-4 h-4 bg-green-400 rounded-full animate-pipeline-flow shadow-lg shadow-green-400/50" style={{ animationDelay: '1s' }} />
-                  <div className="w-6 h-6 bg-green-400 rounded-full animate-ping absolute right-0" style={{ animationDelay: '1.5s' }} />
-                </div>
+              {/* Data chaos background */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+                <div className="absolute top-10 left-10 w-px h-20 bg-red-500 animate-pulse" />
+                <div className="absolute top-20 right-32 w-px h-16 bg-orange-500 animate-pulse" style={{ animationDelay: '0.5s' }} />
+                <div className="absolute bottom-16 left-1/3 w-px h-12 bg-yellow-500 animate-pulse" style={{ animationDelay: '1s' }} />
               </div>
               
-              <div className="flex items-center gap-3">
-                
-                {/* Input: Channels */}
-                <div className="flex-1 bg-gray-900/50 border border-red-500/20 rounded-lg p-5">
-                  <h3 className="text-xs font-mono text-red-400 mb-3 uppercase">Channel Inputs</h3>
-                  <div className="space-y-2">
-                    {['Google Ads', 'LinkedIn', 'Facebook', 'Content'].map((channel, i) => (
-                      <div key={channel} className={`flex items-center gap-2 animate-slide-in-right animation-delay-${(i + 1) * 100}`}>
-                        <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-data-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
-                        <span className="text-sm text-gray-300">{channel}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center">
-                  <ChevronRight className="w-8 h-8 text-cyan-400 animate-pulse" />
-                  <div className="text-xs text-cyan-400 font-mono mt-1">→</div>
-                </div>
-
-                {/* Process 1: Data Collection */}
-                <div className="flex-1 bg-gray-900/50 border border-gray-700/30 rounded-lg p-5">
-                  <h3 className="text-xs font-mono text-gray-400 mb-3 uppercase">Data Collection</h3>
+              {/* Scattered Data Tools Grid */}
+              <div className="grid grid-cols-4 gap-6 max-w-6xl mx-auto">
+                {/* Google Ads - Disconnected */}
+                <Card className="bg-black/60 border border-red-500/20 p-4 hover:border-red-500/40 transition-all duration-300">
                   <div className="text-center">
-                    <BarChart3 className="w-8 h-8 text-gray-400 mx-auto mb-3" />
-                    <div className="text-sm text-gray-500 space-y-1">
-                      <div>CTR • CAC</div>
-                      <div>Conversions</div>
-                      <div className="text-xs text-gray-600 mt-2">
-                        <MetricPopup 
-                          metric="Data Volume"
-                          value="500K+ data points"
-                          rationale="We process 500,000+ data points weekly from all connected channels, enabling statistically significant optimization decisions within 2-3 weeks instead of months."
-                          source="Internal platform analytics (2024)"
-                        />
-                      </div>
+                    <div className="text-red-500 text-lg mb-2">📊</div>
+                    <h3 className="text-sm font-bold text-red-400 mb-2">Google Ads</h3>
+                    <div className="space-y-1 text-xs text-gray-400">
+                      <div>• CTR: 3.2%</div>
+                      <div>• CPC: $4.50</div>
+                      <div>• Spend: $15K</div>
                     </div>
+                    <div className="mt-2 text-xs text-red-400 font-bold">Isolated Data</div>
                   </div>
-                </div>
+                </Card>
 
-                <div className="flex flex-col items-center">
-                  <ChevronRight className="w-8 h-8 text-cyan-400 animate-pulse" />
-                  <div className="text-xs text-cyan-400 font-mono mt-1">→</div>
-                </div>
-
-                {/* Process 2: AI Analysis */}
-                <div className="flex-1 bg-gray-900/50 border border-cyan-500/20 rounded-lg p-5">
-                  <h3 className="text-xs font-mono text-cyan-400 mb-3 uppercase">AI Optimization</h3>
+                {/* Facebook - Disconnected */}
+                <Card className="bg-black/60 border border-blue-500/20 p-4 hover:border-blue-500/40 transition-all duration-300">
                   <div className="text-center">
-                    <Brain className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
-                    <div className="text-sm text-gray-500 space-y-1">
-                      <div>Pattern Analysis</div>
-                      <div>Budget Allocation</div>
-                      <div className="text-xs text-gray-400 mt-2">Real-time</div>
+                    <div className="text-blue-500 text-lg mb-2">📱</div>
+                    <h3 className="text-sm font-bold text-blue-400 mb-2">Facebook</h3>
+                    <div className="space-y-1 text-xs text-gray-400">
+                      <div>• Reach: 50K</div>
+                      <div>• CPM: $12</div>
+                      <div>• Spend: $8K</div>
                     </div>
+                    <div className="mt-2 text-xs text-blue-400 font-bold">Separate System</div>
                   </div>
-                </div>
+                </Card>
 
-                <div className="flex flex-col items-center">
-                  <ChevronRight className="w-8 h-8 text-cyan-400 animate-pulse" />
-                  <div className="text-xs text-cyan-400 font-mono mt-1">→</div>
-                </div>
-
-                {/* Output: Optimized Budget */}
-                <div className="flex-1 bg-gray-900/50 border border-green-500/20 rounded-lg p-5">
-                  <h3 className="text-xs font-mono text-green-400 mb-3 uppercase">Optimized Output</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Google</span>
-                      <MetricPopup 
-                        metric="Google Ads Allocation"
-                        value="45%"
-                        rationale="Google Ads typically shows 2-3x better conversion rates (7-10%) for B2B SaaS compared to social channels. With $300 CPQM vs $600+ on other channels, it deserves the largest allocation."
-                        methodology="Analyzed conversion rates across 200+ B2B SaaS campaigns. Google Ads averages 7-10% conversion vs 1-3% for social platforms."
-                        source="WordStream Google Ads Benchmarks 2024"
-                        sourceUrl="https://www.wordstream.com/blog/ws/2024/03/07/google-ads-industry-benchmarks"
-                        className="text-green-400 font-bold animate-metric-reveal animation-delay-700"
-                      />
+                {/* HubSpot - Disconnected */}
+                <Card className="bg-black/60 border border-orange-500/20 p-4 hover:border-orange-500/40 transition-all duration-300">
+                  <div className="text-center">
+                    <div className="text-orange-500 text-lg mb-2">🎯</div>
+                    <h3 className="text-sm font-bold text-orange-400 mb-2">HubSpot</h3>
+                    <div className="space-y-1 text-xs text-gray-400">
+                      <div>• Leads: 234</div>
+                      <div>• Conv: 12%</div>
+                      <div>• MQLs: 28</div>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">LinkedIn</span>
-                      <MetricPopup 
-                        metric="LinkedIn Allocation"
-                        value="25%"
-                        rationale="LinkedIn shows 3-5% conversion for B2B with high-quality leads. Average CPQM of $450 makes it our second-best performer for enterprise deals."
-                        methodology="B2B campaigns analysis showing LinkedIn's higher lead quality but premium pricing. Best for enterprise deals $50K+ ACV."
-                        source="LinkedIn Marketing Solutions B2B Report 2024"
-                        sourceUrl="https://business.linkedin.com/marketing-solutions/b2b-marketing/b2b-marketing-insights"
-                        className="text-yellow-400 font-bold animate-metric-reveal animation-delay-800"
-                      />
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Facebook</span>
-                      <MetricPopup 
-                        metric="Facebook Allocation"
-                        value="15%"
-                        rationale="Facebook/Meta typically underperforms for B2B with 1-2% conversion. We maintain minimal spend for brand awareness and retargeting only."
-                        methodology="Analysis of B2B campaigns showing Facebook's lower conversion rates but value for remarketing and brand building."
-                        source="Meta Business B2B Marketing Report 2024"
-                        sourceUrl="https://www.facebook.com/business/insights/b2b-marketing"
-                        className="text-red-400 font-bold animate-metric-reveal"
-                        style={{ animationDelay: '900ms' }}
-                      />
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Content</span>
-                      <MetricPopup 
-                        metric="Content Marketing Allocation"
-                        value="15%"
-                        rationale="Content/SEO shows 35-45% webinar attendance rates with lowest CAC over time. Small allocation due to longer payback period (6-12 months)."
-                        methodology="Webinar marketing and content-driven lead generation analysis across 100+ B2B campaigns measuring attendance and conversion rates."
-                        source="ON24 Webinar Benchmarks Report 2024"
-                        sourceUrl="https://www.on24.com/resources/webinar-benchmarks-report/"
-                        className="text-gray-400 font-bold animate-metric-reveal"
-                        style={{ animationDelay: '1000ms' }}
-                      />
-                    </div>
+                    <div className="mt-2 text-xs text-orange-400 font-bold">No Attribution</div>
                   </div>
-                </div>
+                </Card>
+
+                {/* Analytics - Disconnected */}
+                <Card className="bg-black/60 border border-green-500/20 p-4 hover:border-green-500/40 transition-all duration-300">
+                  <div className="text-center">
+                    <div className="text-green-500 text-lg mb-2">📈</div>
+                    <h3 className="text-sm font-bold text-green-400 mb-2">Analytics</h3>
+                    <div className="space-y-1 text-xs text-gray-400">
+                      <div>• Sessions: 8.5K</div>
+                      <div>• Bounce: 65%</div>
+                      <div>• Goals: 89</div>
+                    </div>
+                    <div className="mt-2 text-xs text-green-400 font-bold">Missing Context</div>
+                  </div>
+                </Card>
               </div>
 
-              {/* Feedback Loop */}
-              <div className="mt-8 text-center">
-                <div className="inline-block bg-gray-900/30 rounded-full px-4 py-2">
-                  <span className="text-xs text-gray-500 uppercase tracking-wider">← Continuous Optimization Loop →</span>
+              {/* Problem Statement */}
+              <div className="mt-12 text-center bg-gray-900/30 rounded-lg p-8 border border-orange-500/20">
+                <h3 className="text-2xl font-bold text-orange-500 mb-4">The Result: Blind Decision Making</h3>
+                <div className="grid grid-cols-3 gap-6 text-center">
+                  <div>
+                    <div className="text-3xl font-bold text-red-500 mb-2">
+                      <MetricPopup 
+                        metric="Cross-Channel Visibility"
+                        value="0%"
+                        rationale="Without unified data, startups have zero visibility into which channels work together, leading to budget allocation based on incomplete information."
+                        methodology="Analysis of 100+ startup marketing stacks showing data silos preventing holistic optimization."
+                        source="STARTUP_PATH Internal Research 2024"
+                        className="text-red-500 font-bold"
+                      />
+                    </div>
+                    <p className="text-gray-400 text-sm">Cross-channel visibility</p>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-orange-500 mb-2">
+                      <MetricPopup 
+                        metric="Time to Optimization"
+                        value="8+ weeks"
+                        rationale="Manual data collection and analysis across platforms takes 8-12 weeks to identify optimization opportunities, during which budget continues to be wasted."
+                        methodology="Time-motion study of marketing teams managing multi-channel campaigns without unified platforms."
+                        source="Marketing Operations Survey 2024"
+                        className="text-orange-500 font-bold"
+                      />
+                    </div>
+                    <p className="text-gray-400 text-sm">Time to optimize</p>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-yellow-500 mb-2">Manual</div>
+                    <p className="text-gray-400 text-sm">Budget decisions</p>
+                  </div>
                 </div>
               </div>
             </div>
