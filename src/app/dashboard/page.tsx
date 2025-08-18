@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Tutorial } from '@/components/dashboard/Tutorial'
+import { AgentCards } from '@/components/dashboard/AgentCards'
 import { 
   TrendingUp, 
   TrendingDown,
@@ -68,27 +69,45 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex">
+    <div className="min-h-screen bg-black flex">
       {/* Tutorial Overlay */}
       {showTutorial && <Tutorial onComplete={() => setShowTutorial(false)} />}
 
+      {/* Agent Dock - Left Sidebar (96px) */}
+      <div className="w-24 bg-black/80 border-r border-cyan-500/20 p-3 flex flex-col items-center">
+        <div className="mb-6">
+          <div className="w-12 h-12 bg-gradient-to-br from-cyan-500/20 to-red-500/20 rounded-lg flex items-center justify-center border border-cyan-500/30">
+            <Rocket className="w-6 h-6 text-cyan-400" />
+          </div>
+        </div>
+        
+        {/* Professional Agent Cards */}
+        <AgentCards layout="vertical" size="small" />
+      </div>
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="bg-gray-800 border-b border-gray-600 px-6 py-4">
+        {/* Cyberpunk Header */}
+        <header className="bg-black/80 border-b border-cyan-500/20 px-6 py-4 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white">GTM Command Center</h1>
-              <p className="text-gray-200 mt-1">Real-time optimization matrix • Live channel performance</p>
+              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                <span className="neon-glow">STARTUP_PATH</span>
+                <span className="text-cyan-400 text-lg">Command Center</span>
+              </h1>
+              <p className="text-gray-300 mt-1 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+                Real-time optimization matrix • 4 engines active
+              </p>
             </div>
             <div className="flex items-center gap-3">
-              <button className="p-2 text-gray-200 hover:text-white transition-colors">
+              <button className="p-2 text-gray-300 hover:text-cyan-400 transition-colors">
                 <Bell className="w-5 h-5" />
               </button>
-              <div className="w-px h-8 bg-gray-500" />
+              <div className="w-px h-8 bg-cyan-500/30" />
               <div className="text-right">
                 <p className="text-sm text-white font-medium">Demo User</p>
-                <p className="text-xs text-gray-200">user@startuppath.ai</p>
+                <p className="text-xs text-cyan-400">user@startuppath.ai</p>
               </div>
             </div>
           </div>
