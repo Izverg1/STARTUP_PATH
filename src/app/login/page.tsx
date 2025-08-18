@@ -74,8 +74,8 @@ export default function LoginPage() {
     setIsClient(true)
   }, [])
 
-  // Fake user credentials
-  const FAKE_USER = {
+  // Demo credentials for professional platform
+  const DEMO_USER = {
     email: 'user@startuppath.ai',
     password: 'demo123'
   }
@@ -88,15 +88,15 @@ export default function LoginPage() {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500))
 
-    if (email === FAKE_USER.email && password === FAKE_USER.password) {
+    if (email === DEMO_USER.email && password === DEMO_USER.password) {
       // Store auth in localStorage
       localStorage.setItem('isAuthenticated', 'true')
       localStorage.setItem('userEmail', email)
       
-      // Show loading transition
+      // Show loading transition with professional messaging
       setShowTransition(true)
     } else {
-      setError('Invalid credentials. Use user@startuppath.ai / demo123')
+      setError('Invalid credentials. Use demo credentials: user@startuppath.ai / demo123')
       setIsLoading(false)
     }
   }

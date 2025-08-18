@@ -132,10 +132,10 @@ export async function getUserProfile() {
   if (!user) return null
   
   const { data: profile, error } = await supabase
-    .from('sg_users')
+    .from('SPATH_users')
     .select(`
       *,
-      sg_orgs:org_id (
+      SPATH_orgs:org_id (
         id,
         name,
         slug,
