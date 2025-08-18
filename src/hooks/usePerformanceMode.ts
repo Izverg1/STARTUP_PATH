@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 export type PerformanceMode = 'high' | 'medium' | 'low' | 'minimal';
 
-interface PerformanceConfig {
+export interface PerformanceConfig {
   animations: boolean;
   particleEffects: boolean;
   backgroundEffects: boolean;
@@ -100,28 +100,4 @@ export function usePerformanceMode(): [PerformanceMode, PerformanceConfig] {
   }, []);
 
   return [performanceMode, performanceConfigs[performanceMode]];
-}
-
-// Performance-aware animation component
-export function AnimatedComponent({ 
-  children, 
-  fallback = null,
-  requiredLevel = 'medium' as PerformanceMode 
-}: {
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
-  requiredLevel?: PerformanceMode;
-}) {
-  const [mode, config] = usePerformanceMode();
-  
-  const levelHierarchy: Record<PerformanceMode, number> = {
-    minimal: 0,
-    low: 1,
-    medium: 2,
-    high: 3
-  };
-
-  const shouldRender = levelHierarchy[mode] >= levelHierarchy[requiredLevel];
-  
-  return shouldRender ? <>{children}</> : <>{fallback}</>;
 }

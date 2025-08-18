@@ -7,7 +7,8 @@ import { NavigationTransition } from "./NavigationTransition";
 import { Button } from "@/components/ui/button";
 import { PanelLeftOpen, PanelLeftClose, PanelRightOpen, PanelRightClose } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { usePerformanceMode, AnimatedComponent } from "@/hooks/usePerformanceMode";
+import { usePerformanceMode } from "@/hooks/usePerformanceMode";
+import { AnimatedComponent } from "@/components/ui/AnimatedComponent";
 
 interface MainLayoutProps {
   children: ReactNode;
