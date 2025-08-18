@@ -390,7 +390,7 @@ export function ExperimentDesigner() {
                 <Separator />
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Remaining:</span>
-                  <span className={`font-medium ${budgetRemaining < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                  <span className={`font-medium ${budgetRemaining < 0 ? 'text-gray-400' : 'text-gray-400'}`}>
                     ${Math.abs(budgetRemaining).toLocaleString()}
                   </span>
                 </div>

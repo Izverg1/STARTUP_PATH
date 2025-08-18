@@ -78,7 +78,7 @@ const getTrendColor = (direction: TrendDirection, isGoodTrendUp: boolean = true)
     case 'up':
       return isPositiveTrend ? 'text-green-600' : 'text-red-600';
     case 'down':
-      return isPositiveTrend ? 'text-red-600' : 'text-green-600';
+      return isPositiveTrend ? 'text-gray-400' : 'text-gray-400';
     default:
       return 'text-gray-500';
   }

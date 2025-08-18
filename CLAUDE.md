@@ -156,3 +156,4 @@ The application is designed to be deployed on Vercel with Supabase as the backen
 - Respect prefers-reduced-motion for accessibility
 - Keep micro-animations under 120ms
 - Ensure 4.5:1 contrast ratio minimum
+- after you are done with a task, always show the link to the site

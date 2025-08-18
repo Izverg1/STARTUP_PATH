@@ -344,7 +344,7 @@ export default function AdminPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <CheckCircle2 className={`h-5 w-5 ${dataValidation.isValid ? 'text-green-600' : 'text-red-600'}`} />
+                    <CheckCircle2 className={`h-5 w-5 ${dataValidation.isValid ? 'text-gray-400' : 'text-gray-400'}`} />
                     Data Validation Status
                   </CardTitle>
                   <CardDescription>
@@ -506,7 +506,7 @@ export default function AdminPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">Data Source</span>
-                    <Badge variant={isDemoEnabled ? "secondary" : "default"}>
+                    <Badge variant="outline">
                       {isDemoEnabled ? "Synthetic" : "Live"}
                     </Badge>
                   </div>

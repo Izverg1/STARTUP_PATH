@@ -392,7 +392,7 @@ export function KillLog({
               <div>Failed</div>
             </div>
             <div className="text-center">
-              <div className="font-semibold text-lg text-red-600">{formatCurrency(totalLoss)}</div>
+              <div className="font-semibold text-lg text-white">{formatCurrency(totalLoss)}</div>
               <div>Total Loss</div>
             </div>
             <div className="text-center">

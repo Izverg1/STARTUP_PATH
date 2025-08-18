@@ -367,7 +367,7 @@ function ExperimentCard({ experiment, type }: ExperimentCardProps) {
                   Resume
                 </Button>
               )}
-              <Button variant="destructive" size="sm">
+              <Button variant="outline" size="sm" className="text-gray-300 border-gray-700 hover:bg-gray-800">
                 <XCircle className="h-3 w-3 mr-1" />
                 Kill
               </Button>
@@ -401,7 +401,7 @@ export default function ExperimentsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <FlaskConical className="h-8 w-8 text-blue-600" />
+            <FlaskConical className="h-8 w-8 text-gray-400" />
             Experiments
           </h1>
           <p className="text-muted-foreground mt-2">

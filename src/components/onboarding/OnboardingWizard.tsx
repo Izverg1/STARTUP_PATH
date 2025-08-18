@@ -150,7 +150,7 @@ export default function OnboardingWizard() {
               {index < steps.length - 1 && (
                 <div
                   className={`flex-1 h-0.5 mx-4 transition-colors ${
-                    completedSteps.includes(index) ? "bg-green-500" : "bg-gray-300"
+                    completedSteps.includes(index) ? "bg-gray-500" : "bg-gray-700"
                   }`}
                 />
               )}

@@ -283,13 +283,13 @@ export function PaybackPreview({ channels, maxPaybackMonths, icp }: PaybackPrevi
 
         {/* Performance Goals */}
         <div className="grid grid-cols-2 gap-2 text-xs">
-          <div className="text-center p-2 bg-green-50 rounded">
-            <div className="text-green-600 font-medium">Target CAC</div>
-            <div className="text-green-800">${(avgLTV / maxPaybackMonths * 12).toFixed(0)}</div>
+          <div className="text-center p-2 bg-gray-900/50 border border-gray-700 rounded">
+            <div className="text-gray-400 font-medium">Target CAC</div>
+            <div className="text-gray-300">${(avgLTV / maxPaybackMonths * 12).toFixed(0)}</div>
           </div>
-          <div className="text-center p-2 bg-blue-50 rounded">
-            <div className="text-blue-600 font-medium">Max Payback</div>
-            <div className="text-blue-800">{maxPaybackMonths} months</div>
+          <div className="text-center p-2 bg-gray-900/50 border border-gray-700 rounded">
+            <div className="text-gray-400 font-medium">Max Payback</div>
+            <div className="text-gray-300">{maxPaybackMonths} months</div>
           </div>
         </div>
       </CardContent>

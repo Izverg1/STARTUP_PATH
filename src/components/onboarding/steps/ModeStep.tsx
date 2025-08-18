@@ -157,7 +157,7 @@ export default function ModeStep() {
                 : "We'll help you connect your tools in the next step. This may take a few minutes to set up."}
             </p>
             {selectedMode === "connected" && (
-              <div className="mt-3 flex items-center gap-2 text-xs text-blue-600">
+              <div className="mt-3 flex items-center gap-2 text-xs text-gray-400">
                 <Settings className="h-3 w-3" />
                 <span>Supported integrations: HubSpot, Salesforce, Google Ads, LinkedIn Ads, and 40+ more</span>
               </div>

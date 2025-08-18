@@ -282,10 +282,11 @@ function ChannelPerformanceChart({ data }: { data: any[] }) {
                   return [value, name];
                 }}
                 contentStyle={{
-                  backgroundColor: 'white',
-                  border: '1px solid #e5e7eb',
+                  backgroundColor: '#1f2937',
+                  border: '1px solid #4b5563',
                   borderRadius: '8px',
-                  fontSize: '12px'
+                  fontSize: '12px',
+                  color: 'white'
                 }}
               />
               <Legend wrapperStyle={{ fontSize: '12px' }} />
@@ -371,10 +372,11 @@ function TrendAnalysisChart({ data }: { data: any[] }) {
                   return [value, name];
                 }}
                 contentStyle={{
-                  backgroundColor: 'white',
-                  border: '1px solid #e5e7eb',
+                  backgroundColor: '#1f2937',
+                  border: '1px solid #4b5563',
                   borderRadius: '8px',
-                  fontSize: '12px'
+                  fontSize: '12px',
+                  color: 'white'
                 }}
               />
               <Legend wrapperStyle={{ fontSize: '12px' }} />
@@ -656,17 +658,17 @@ export default function EffectivenessPage() {
                             <Badge 
                               variant="outline"
                               className={
-                                channel.efficiency_score >= 8 ? 'text-green-700 bg-green-100' :
-                                channel.efficiency_score >= 6 ? 'text-yellow-700 bg-yellow-100' :
-                                'text-red-700 bg-red-100'
+                                channel.efficiency_score >= 8 ? 'text-gray-300 bg-gray-800' :
+                                channel.efficiency_score >= 6 ? 'text-gray-300 bg-gray-800' :
+                                'text-gray-300 bg-gray-800'
                               }
                             >
                               {channel.efficiency_score.toFixed(1)}/10
                             </Badge>
                           </td>
                           <td className="p-2 text-center">
-                            {channel.trend === 'up' && <TrendingUp className="h-4 w-4 text-green-600 mx-auto" />}
-                            {channel.trend === 'down' && <TrendingDown className="h-4 w-4 text-red-600 mx-auto" />}
+                            {channel.trend === 'up' && <TrendingUp className="h-4 w-4 text-gray-400 mx-auto" />}
+                            {channel.trend === 'down' && <TrendingDown className="h-4 w-4 text-gray-400 mx-auto" />}
                             {channel.trend === 'flat' && <div className="h-1 w-4 bg-gray-400 mx-auto" />}
                           </td>
                         </tr>

@@ -236,9 +236,9 @@ export default function AssistantPage() {
                         <Badge 
                           variant="outline" 
                           className={
-                            interaction.type === 'analysis' ? 'bg-blue-50 text-blue-700' :
-                            interaction.type === 'copy' ? 'bg-green-50 text-green-700' :
-                            'bg-purple-50 text-purple-700'
+                            interaction.type === 'analysis' ? 'bg-gray-800 text-gray-300' :
+                            interaction.type === 'copy' ? 'bg-gray-800 text-gray-300' :
+                            'bg-gray-800 text-gray-300'
                           }
                         >
                           {interaction.type}

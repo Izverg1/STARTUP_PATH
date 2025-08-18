@@ -138,7 +138,7 @@ export default function SuccessStep() {
                 <div className="text-2xl font-bold text-green-700">
                   ${Math.round(cpqmTarget * 4).toLocaleString()}
                 </div>
-                <div className="text-green-600">Estimated CAC</div>
+                <div className="text-gray-400">Estimated CAC</div>
                 <div className="text-xs text-muted-foreground mt-1">
                   Assuming 25% meeting → customer conversion
                 </div>
@@ -147,7 +147,7 @@ export default function SuccessStep() {
                 <div className="text-2xl font-bold text-green-700">
                   {cacPaybackWindow}
                 </div>
-                <div className="text-green-600">Months to Payback</div>
+                <div className="text-gray-400">Months to Payback</div>
                 <div className="text-xs text-muted-foreground mt-1">
                   Based on your target window
                 </div>
@@ -156,7 +156,7 @@ export default function SuccessStep() {
                 <div className="text-2xl font-bold text-green-700">
                   {Math.round((recommendedCAC / (cpqmTarget * 4)) * 100)}%
                 </div>
-                <div className="text-green-600">Efficiency vs. Benchmark</div>
+                <div className="text-gray-400">Efficiency vs. Benchmark</div>
                 <div className="text-xs text-muted-foreground mt-1">
                   Higher is better
                 </div>

@@ -45,55 +45,60 @@
 }
 
 :root {
-  /* STARTUPLy™ - Space/Hyperdrive Theme */
-  --radius: 1rem;
+  /* SOL:GEN™ Blade Runner Cyberpunk Theme */
+  --radius: 0.5rem;
   
-  /* Deep space with cosmic gradients */
-  --background: #000000;
-  --foreground: #F8FAFC;
-  --card: rgba(99, 102, 241, 0.05);
-  --card-foreground: #F8FAFC;
-  --popover: rgba(0, 0, 0, 0.95);
-  --popover-foreground: #F8FAFC;
-  --primary: #6366F1;
-  --primary-foreground: #F8FAFC;
-  --secondary: rgba(147, 51, 234, 0.1);
-  --secondary-foreground: #E2E8F0;
-  --muted: rgba(99, 102, 241, 0.1);
-  --muted-foreground: #94A3B8;
-  --accent: rgba(59, 130, 246, 0.15);
-  --accent-foreground: #F8FAFC;
-  --accent-primary: #6366F1;
-  --accent-purple: #9333EA;
-  --accent-indigo: #6366F1;
-  --destructive: #EF4444;
-  --destructive-foreground: #F8FAFC;
-  --border: rgba(59, 130, 246, 0.2);
-  --input: rgba(99, 102, 241, 0.1);
-  --ring: #3B82F6;
+  /* Cyberpunk background */
+  --background: #1a1a1a;
+  --foreground: #ffffff;
+  --card: #0a0a0a;
+  --card-foreground: #ffffff;
+  --popover: rgba(0, 0, 0, 0.98);
+  --popover-foreground: #ffffff;
+  --primary: #ff0040;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
+  --muted: #0a0a0a;
+  --muted-foreground: #888888;
+  --accent: #0a0a0a;
+  --accent-foreground: #ffffff;
+  --accent-agents: #ff00aa;
+  --accent-agents-hover: #e6009a;
+  --destructive: #ff0040;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 0, 64, 0.2);
+  --input: #0a0a0a;
+  --ring: #ff0040;
   
-  /* Purple gradient colors */
-  --purple-from: #8B5CF6;
-  --purple-to: #6366F1;
-  --purple-accent: #A855F7;
-  --indigo-accent: #6366F1;
+  /* Cyberpunk colors */
+  --neon-red: #ff0040;
+  --neon-blue: #00ffff;
+  --neon-purple: #ff00aa;
+  --electric-blue: #0080ff;
+  --cyber-orange: #ff8000;
   
-  /* Charts */
-  --chart-1: #8B5CF6;
-  --chart-2: #6366F1;
-  --chart-3: #A855F7;
-  --chart-4: #EC4899;
-  --chart-5: #8B5CF6;
+  /* Agent-specific magenta colors */
+  --agent-primary: #ff00aa;
+  --agent-secondary: #e6009a;
+  --agent-muted: rgba(255, 0, 170, 0.1);
   
-  /* Sidebar - Space Command */
-  --sidebar: rgba(0, 0, 0, 0.95);
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #3B82F6;
-  --sidebar-primary-foreground: #F8FAFC;
-  --sidebar-accent: rgba(59, 130, 246, 0.1);
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: rgba(59, 130, 246, 0.2);
-  --sidebar-ring: #3B82F6;
+  /* Charts - using neutral colors except for agent data */
+  --chart-1: #fafafa;
+  --chart-2: #94A3B8;
+  --chart-3: #64748B;
+  --chart-4: #475569;
+  --chart-5: #334155;
+  
+  /* Sidebar - Karlson dark theme */
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #fafafa;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #151515;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #ff00aa;
 }
 
 /* Removed dark theme - using light theme only */
@@ -112,29 +117,26 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
-  /* Purple accent for agents */
-  .accent-purple {
-    color: var(--accent-purple);
+  /* Magenta accent for agents ONLY */
+  .accent-agents {
+    color: var(--accent-agents);
   }
   
-  .bg-accent-purple {
-    background-color: var(--accent-purple);
+  .bg-accent-agents {
+    background-color: var(--accent-agents);
   }
   
-  .border-accent-purple {
-    border-color: var(--accent-purple);
+  .border-accent-agents {
+    border-color: var(--accent-agents);
   }
   
-  .accent-indigo {
-    color: var(--accent-indigo);
+  .hover\:bg-accent-agents:hover {
+    background-color: var(--accent-agents-hover);
   }
   
-  .bg-accent-indigo {
-    background-color: var(--accent-indigo);
-  }
-  
-  .border-accent-indigo {
-    border-color: var(--accent-indigo);
+  /* Agent glow effects */
+  .glow-agents {
+    box-shadow: 0 0 20px rgba(255, 0, 170, 0.3), 0 0 40px rgba(255, 0, 170, 0.1);
   }
   
   /* High contrast focus states */
@@ -248,6 +250,38 @@
   .animate-scale-pulse {
     animation: scale-pulse 3s ease-in-out infinite;
   }
+  
+  /* Cyberpunk effects */
+  .electric-grid {
+    background-image: 
+      linear-gradient(rgba(255, 0, 64, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 0, 64, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-flow 30s linear infinite;
+  }
+  
+  .neon-glow {
+    text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red);
+  }
+  
+  .neon-border {
+    border: 1px solid var(--neon-red);
+    box-shadow: 0 0 10px var(--neon-red), inset 0 0 10px rgba(255, 0, 64, 0.1);
+  }
+  
+  .data-stream {
+    animation: data-flow 3s linear infinite;
+  }
+  
+  .cyber-flicker {
+    animation: cyber-flicker 0.15s linear infinite alternate;
+  }
+  
+  .hologram-effect {
+    background: linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.1) 50%, transparent 70%);
+    background-size: 20px 20px;
+    animation: hologram-scan 4s linear infinite;
+  }
 }
 
 @keyframes spin {
@@ -311,4 +345,632 @@
   50% {
     transform: scale(1.05);
   }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-delayed {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse-slower {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes spin-slowest {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float-delayed {
+  0% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes float-slower {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out;
+}
+
+.animate-fade-in-delayed {
+  animation: fade-in-delayed 2s ease-out;
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 4s ease infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-spin-reverse-slower {
+  animation: spin-reverse-slower 30s linear infinite;
+}
+
+.animate-spin-slowest {
+  animation: spin-slowest 40s linear infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 4s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+.animate-float-slower {
+  animation: float-slower 6s ease-in-out infinite;
+}
+
+/* Budget allocation animation classes */
+.animate-grow-width {
+  animation: grow-width 1.5s ease-out forwards;
+}
+
+.animate-shrink-width {
+  animation: shrink-width 1.5s ease-out forwards;
+}
+
+.animate-flow-right {
+  animation: flow-right 2s ease-in-out infinite;
+}
+
+.animate-flow-left {
+  animation: flow-left 2s ease-in-out infinite;
+}
+
+.animate-pulse-optimization {
+  animation: pulse-optimization 2s ease-in-out infinite;
+}
+
+.animate-count-up {
+  animation: count-up 0.8s ease-out forwards;
+}
+
+/* Pipeline animation classes */
+.animate-pipeline-flow {
+  animation: pipeline-flow 3s ease-in-out infinite;
+}
+
+.animate-data-pulse {
+  animation: data-pulse 2s ease-in-out infinite;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.6s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.6s ease-out forwards;
+}
+
+.animate-metric-reveal {
+  animation: metric-reveal 0.8s ease-out forwards;
+}
+
+.animate-connection-draw {
+  stroke-dasharray: 100;
+  animation: connection-draw 1.5s ease-out forwards;
+}
+
+/* Staggered animation delays */
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
+.animation-delay-600 { animation-delay: 600ms; }
+.animation-delay-700 { animation-delay: 700ms; }
+.animation-delay-800 { animation-delay: 800ms; }
+
+/* Vortex Portal Classes */
+.vortex-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.vortex-layer {
+  position: absolute;
+  inset: -50%;
+  animation: vortex-spin 20s linear infinite;
+  transform-style: preserve-3d;
+}
+
+.vortex-grid {
+  background-image: 
+    linear-gradient(rgba(139, 92, 246, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.15) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-warp 4s ease-in-out infinite;
+}
+
+.portal-center {
+  animation: portal-glow 3s ease-in-out infinite;
+}
+
+.particle-stream {
+  animation: particle-stream 3s linear infinite;
+}
+
+/* Cyberpunk keyframes */
+@keyframes grid-flow {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+@keyframes data-flow {
+  0% { transform: translateX(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes cyber-flicker {
+  0% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes hologram-scan {
+  0% { background-position: -20px 0; }
+  100% { background-position: 20px 0; }
+}
+
+@keyframes neon-pulse {
+  0%, 100% { 
+    text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red), 0 0 40px var(--neon-red);
+    opacity: 1;
+  }
+  50% { 
+    text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+    opacity: 0.8;
+  }
+}
+
+@keyframes electric-surge {
+  0% { transform: scaleX(0); opacity: 0; }
+  50% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(0); opacity: 0; }
+}
+
+@keyframes data-matrix {
+  0% { transform: translateY(-100%) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Budget allocation animations */
+@keyframes grow-width {
+  from { width: 0; }
+  to { width: var(--target-width, 100%); }
+}
+
+@keyframes shrink-width {
+  from { width: var(--initial-width, 100%); }
+  to { width: var(--target-width, 40%); }
+}
+
+@keyframes flow-right {
+  0% { 
+    transform: translateX(0) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% { 
+    transform: translateX(200px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes flow-left {
+  0% { 
+    transform: translateX(0) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% { 
+    transform: translateX(-200px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-optimization {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+  }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pipeline animations */
+@keyframes pipeline-flow {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes data-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes metric-reveal {
+  0% {
+    transform: scale(0.8) rotateX(90deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotateX(0deg);
+  }
+  100% {
+    transform: scale(1) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes connection-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Vortex Portal Animations */
+@keyframes vortex-spin {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes vortex-pull {
+  0% {
+    transform: scale(1.5) translateZ(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(0) translateZ(-500px);
+    opacity: 0;
+  }
+}
+
+@keyframes grid-warp {
+  0% {
+    transform: perspective(1000px) rotateX(60deg) scale(1.2);
+    opacity: 0.1;
+  }
+  50% {
+    transform: perspective(1000px) rotateX(60deg) scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: perspective(1000px) rotateX(60deg) scale(0.8);
+    opacity: 0.1;
+  }
+}
+
+@keyframes portal-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 60px rgba(139, 92, 246, 0.8),
+      0 0 120px rgba(99, 102, 241, 0.6),
+      0 0 200px rgba(79, 70, 229, 0.4),
+      inset 0 0 60px rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 80px rgba(139, 92, 246, 1),
+      0 0 160px rgba(99, 102, 241, 0.8),
+      0 0 240px rgba(79, 70, 229, 0.6),
+      inset 0 0 80px rgba(139, 92, 246, 0.5);
+  }
+}
+
+@keyframes particle-stream {
+  0% {
+    transform: translateZ(500px) scale(2);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateZ(-1000px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes spiral-in {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(400px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(720deg) translateX(0px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Storm animations */
+@keyframes storm-grid {
+  0%, 100% {
+    transform: perspective(800px) rotateX(60deg) translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: perspective(800px) rotateX(60deg) translateY(-20px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes storm-eye {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    filter: blur(0px);
+  }
+  25% {
+    transform: scale(1.1) rotate(5deg);
+    filter: blur(2px);
+  }
+  50% {
+    transform: scale(0.95) rotate(-3deg);
+    filter: blur(1px);
+  }
+  75% {
+    transform: scale(1.05) rotate(2deg);
+    filter: blur(0px);
+  }
+}
+
+@keyframes storm-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cloud-morph {
+  0%, 100% {
+    transform: translate(-50%, -50%) translate(var(--x), var(--y)) scale(1);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translate(-50%, -50%) translate(var(--x), var(--y)) scale(1.3);
+    opacity: 0.5;
+  }
+  66% {
+    transform: translate(-50%, -50%) translate(var(--x), var(--y)) scale(0.8);
+    opacity: 0.2;
+  }
+}
+
+@keyframes vortex-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes storm-float {
+  0%, 100% {
+    transform: translate(-50%, -50%) translate(var(--x), var(--y)) rotate(var(--r)) scale(1);
+    opacity: 0.8;
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(calc(var(--x) * 1.2), calc(var(--y) * 0.8)) rotate(calc(var(--r) + 90deg)) scale(1.1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(calc(var(--x) * 0.9), calc(var(--y) * 1.1)) rotate(calc(var(--r) + 180deg)) scale(0.95);
+    opacity: 0.9;
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(calc(var(--x) * 1.1), calc(var(--y) * 0.95)) rotate(calc(var(--r) + 270deg)) scale(1.05);
+    opacity: 0.85;
+  }
+}
+
+@keyframes rain-fall {
+  0% {
+    transform: translateY(-100px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+    transform: translateY(calc(100vh + 100px)) translateX(30px) rotate(15deg);
+  }
+  100% {
+    transform: translateY(calc(100vh + 200px)) translateX(40px) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes lightning-flash {
+  0%, 95%, 100% {
+    opacity: 0;
+  }
+  96% {
+    opacity: 0.8;
+  }
+  97% {
+    opacity: 0;
+  }
+  98% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes wind-blow {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Animation classes */
+.animate-storm-rotate {
+  animation: storm-rotate 45s linear infinite;
+}
+
+.animate-vortex-spin {
+  animation: vortex-spin 35s linear infinite;
 }

@@ -1,594 +1,311 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { MetricCard } from '@/components/dashboard/MetricCard';
-import { FunnelChart } from '@/components/dashboard/FunnelChart';
-import { FinanceMetrics } from '@/components/dashboard/FinanceMetrics';
-import { AllocatorTimeline } from '@/components/dashboard/AllocatorTimeline';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Tutorial } from '@/components/dashboard/Tutorial'
 import { 
   TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Users, 
-  Target, 
-  Calendar,
+  TrendingDown,
+  DollarSign,
+  Users,
+  Target,
   BarChart3,
-  PieChart,
-  Settings
-} from 'lucide-react';
-import Link from 'next/link';
-
-// Mock data - in a real app, this would come from your API/database
-const mockDashboardData = {
-  overview: {
-    totalRevenue: 1250000,
-    totalRevenueChange: 12.5,
-    newCustomers: 89,
-    newCustomersChange: -5.2,
-    conversionRate: 0.034,
-    conversionRateChange: 8.1,
-    avgDealSize: 14500,
-    avgDealSizeChange: 15.3,
-  },
-  financialMetrics: {
-    cpqm: {
-      current_value: 485,
-      target_value: 400,
-      benchmark_range: {
-        industry_median: 550,
-        top_quartile: 350,
-        bottom_quartile: 750,
-        source: 'Industry Report 2024',
-        last_updated: '2024-01-15'
-      },
-      trend: {
-        direction: 'down' as const,
-        magnitude: -8.5,
-        period_days: 30,
-        statistical_significance: 0.95,
-        volatility: 'low' as const
-      },
-      breakdown: {
-        by_channel: [],
-        by_source: [],
-        by_period: []
-      },
-      historical_data: []
-    },
-    cac: {
-      current_value: 1850,
-      target_value: 1500,
-      benchmark_range: {
-        industry_median: 2000,
-        top_quartile: 1400,
-        bottom_quartile: 2800,
-        source: 'Industry Report 2024',
-        last_updated: '2024-01-15'
-      },
-      trend: {
-        direction: 'up' as const,
-        magnitude: 5.2,
-        period_days: 30,
-        statistical_significance: 0.88,
-        volatility: 'medium' as const
-      },
-      breakdown: {
-        blended_cac: 1850,
-        by_channel: [],
-        by_cohort: [],
-        cost_components: []
-      },
-      payback_analysis: {
-        payback_months: 8.5
-      }
-    },
-    payback: {
-      current_months: 8.5,
-      target_months: 6.0,
-      acceptable_range: {
-        preferred_max: 6.0,
-        acceptable_max: 9.0,
-        current_value: 8.5,
-        status: 'acceptable' as const
-      },
-      trend: {
-        direction: 'flat' as const,
-        magnitude: 0.8,
-        period_days: 30,
-        statistical_significance: 0.65,
-        volatility: 'low' as const
-      },
-      breakdown: {
-        by_channel: [],
-        by_acv_band: [],
-        by_customer_segment: []
-      },
-      risk_factors: [
-        {
-          factor: 'Rising acquisition costs',
-          impact: 'medium' as const,
-          description: 'Increased competition driving up ad costs',
-          mitigation: 'Optimize targeting and creative rotation'
-        },
-        {
-          factor: 'Longer sales cycles',
-          impact: 'low' as const,
-          description: 'Enterprise deals taking longer to close',
-          mitigation: 'Implement sales acceleration tools'
-        }
-      ]
-    }
-  },
-  conversionFunnel: {
-    stages: [
-      {
-        name: 'impression' as const,
-        order: 1,
-        count: 250000,
-        conversion_rate: 1.0,
-        cost_per_conversion: 0.08,
-        status: 'performing' as const
-      },
-      {
-        name: 'click' as const,
-        order: 2,
-        count: 12500,
-        conversion_rate: 0.05,
-        cost_per_conversion: 1.60,
-        benchmark_conversion_rate: 0.06,
-        status: 'underperforming' as const
-      },
-      {
-        name: 'landing_page_view' as const,
-        order: 3,
-        count: 11800,
-        conversion_rate: 0.944,
-        cost_per_conversion: 1.69,
-        status: 'performing' as const
-      },
-      {
-        name: 'lead' as const,
-        order: 4,
-        count: 3540,
-        conversion_rate: 0.30,
-        cost_per_conversion: 5.65,
-        benchmark_conversion_rate: 0.35,
-        status: 'underperforming' as const
-      },
-      {
-        name: 'qualified_lead' as const,
-        order: 5,
-        count: 1770,
-        conversion_rate: 0.50,
-        cost_per_conversion: 11.30,
-        status: 'performing' as const
-      },
-      {
-        name: 'meeting_scheduled' as const,
-        order: 6,
-        count: 885,
-        conversion_rate: 0.50,
-        cost_per_conversion: 22.60,
-        status: 'performing' as const
-      },
-      {
-        name: 'opportunity' as const,
-        order: 7,
-        count: 265,
-        conversion_rate: 0.30,
-        cost_per_conversion: 75.47,
-        benchmark_conversion_rate: 0.35,
-        status: 'critical' as const
-      },
-      {
-        name: 'closed_won' as const,
-        order: 8,
-        count: 89,
-        conversion_rate: 0.336,
-        cost_per_conversion: 224.72,
-        status: 'performing' as const
-      }
-    ],
-    overall_conversion_rate: 0.000356,
-    drop_off_analysis: {
-      highest_drop_stage: 'opportunity' as const,
-      drop_rate: 0.70,
-      impact_on_pipeline: 125000,
-      root_causes: [
-        {
-          cause: 'Unclear value proposition in sales calls',
-          confidence: 0.85,
-          impact_score: 8.5,
-          actionable: true
-        },
-        {
-          cause: 'Long decision-making process',
-          confidence: 0.72,
-          impact_score: 6.2,
-          actionable: false
-        },
-        {
-          cause: 'Pricing concerns',
-          confidence: 0.68,
-          impact_score: 7.1,
-          actionable: true
-        }
-      ]
-    },
-    optimization_recommendations: [
-      {
-        stage: 'opportunity' as const,
-        opportunity: 'Improve sales deck and ROI calculator',
-        potential_improvement: 0.15,
-        effort_required: 'medium' as const,
-        expected_roi: 3.2
-      },
-      {
-        stage: 'lead' as const,
-        opportunity: 'Implement lead scoring to focus on high-quality leads',
-        potential_improvement: 0.10,
-        effort_required: 'high' as const,
-        expected_roi: 2.8
-      }
-    ]
-  },
-  budgetAllocation: [
-    {
-      date: '2024-01-01',
-      total_budget: 85000,
-      allocations: [
-        {
-          channel_id: '1',
-          channel_name: 'Google Ads',
-          channel_type: 'paid_search' as const,
-          amount: 35000,
-          percentage: 0.41,
-          efficiency_score: 8.2
-        },
-        {
-          channel_id: '2',
-          channel_name: 'LinkedIn Ads',
-          channel_type: 'paid_social' as const,
-          amount: 25000,
-          percentage: 0.29,
-          efficiency_score: 7.5
-        },
-        {
-          channel_id: '3',
-          channel_name: 'Display Network',
-          channel_type: 'display' as const,
-          amount: 15000,
-          percentage: 0.18,
-          efficiency_score: 6.8
-        },
-        {
-          channel_id: '4',
-          channel_name: 'Content Marketing',
-          channel_type: 'content' as const,
-          amount: 10000,
-          percentage: 0.12,
-          efficiency_score: 7.9
-        }
-      ],
-      events: [
-        {
-          type: 'campaign_launch' as const,
-          description: 'Launched Q1 lead generation campaign',
-          impact_magnitude: 15
-        }
-      ]
-    },
-    {
-      date: '2024-01-15',
-      total_budget: 90000,
-      allocations: [
-        {
-          channel_id: '1',
-          channel_name: 'Google Ads',
-          channel_type: 'paid_search' as const,
-          amount: 38000,
-          percentage: 0.42,
-          efficiency_score: 8.4
-        },
-        {
-          channel_id: '2',
-          channel_name: 'LinkedIn Ads',
-          channel_type: 'paid_social' as const,
-          amount: 27000,
-          percentage: 0.30,
-          efficiency_score: 7.8
-        },
-        {
-          channel_id: '3',
-          channel_name: 'Display Network',
-          channel_type: 'display' as const,
-          amount: 15000,
-          percentage: 0.17,
-          efficiency_score: 6.5
-        },
-        {
-          channel_id: '4',
-          channel_name: 'Content Marketing',
-          channel_type: 'content' as const,
-          amount: 10000,
-          percentage: 0.11,
-          efficiency_score: 8.1
-        }
-      ]
-    },
-    {
-      date: '2024-02-01',
-      total_budget: 95000,
-      allocations: [
-        {
-          channel_id: '1',
-          channel_name: 'Google Ads',
-          channel_type: 'paid_search' as const,
-          amount: 40000,
-          percentage: 0.42,
-          efficiency_score: 8.6
-        },
-        {
-          channel_id: '2',
-          channel_name: 'LinkedIn Ads',
-          channel_type: 'paid_social' as const,
-          amount: 28000,
-          percentage: 0.29,
-          efficiency_score: 8.0
-        },
-        {
-          channel_id: '3',
-          channel_name: 'Display Network',
-          channel_type: 'display' as const,
-          amount: 17000,
-          percentage: 0.18,
-          efficiency_score: 6.8
-        },
-        {
-          channel_id: '4',
-          channel_name: 'Content Marketing',
-          channel_type: 'content' as const,
-          amount: 10000,
-          percentage: 0.11,
-          efficiency_score: 8.3
-        }
-      ]
-    },
-    {
-      date: '2024-02-15',
-      total_budget: 100000,
-      forecast: true,
-      allocations: [
-        {
-          channel_id: '1',
-          channel_name: 'Google Ads',
-          channel_type: 'paid_search' as const,
-          amount: 42000,
-          percentage: 0.42,
-          efficiency_score: 8.8
-        },
-        {
-          channel_id: '2',
-          channel_name: 'LinkedIn Ads',
-          channel_type: 'paid_social' as const,
-          amount: 30000,
-          percentage: 0.30,
-          efficiency_score: 8.2
-        },
-        {
-          channel_id: '3',
-          channel_name: 'Display Network',
-          channel_type: 'display' as const,
-          amount: 18000,
-          percentage: 0.18,
-          efficiency_score: 7.0
-        },
-        {
-          channel_id: '4',
-          channel_name: 'Content Marketing',
-          channel_type: 'content' as const,
-          amount: 10000,
-          percentage: 0.10,
-          efficiency_score: 8.5
-        }
-      ]
-    }
-  ]
-};
+  ChevronLeft,
+  ChevronRight,
+  Rocket,
+  Brain,
+  Zap,
+  Activity,
+  Settings,
+  HelpCircle,
+  Bell,
+  Menu,
+  X,
+  ArrowUp,
+  ArrowDown,
+  Gauge
+} from 'lucide-react'
+import Link from 'next/link'
 
 export default function DashboardPage() {
+  const [showTutorial, setShowTutorial] = useState(false)
+  const [liveData, setLiveData] = useState({
+    revenue: 1250000,
+    customers: 89,
+    conversion: 3.4,
+    dealSize: 14500
+  })
+
+  useEffect(() => {
+    // Check if tutorial has been completed
+    const tutorialCompleted = localStorage.getItem('tutorialCompleted')
+    if (!tutorialCompleted) {
+      setShowTutorial(true)
+    }
+
+    // Simulate live data updates
+    const interval = setInterval(() => {
+      setLiveData(prev => ({
+        revenue: prev.revenue + Math.floor(Math.random() * 5000 - 2000),
+        customers: prev.customers + (Math.random() > 0.7 ? 1 : 0),
+        conversion: Math.max(0, Math.min(10, prev.conversion + (Math.random() - 0.5) * 0.1)),
+        dealSize: prev.dealSize + Math.floor(Math.random() * 500 - 250)
+      }))
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value)
+  }
+
   return (
-    <div className="h-screen overflow-hidden flex flex-col">
-      <div className="flex-1 overflow-x-auto overflow-y-hidden px-4 py-6">
-        <div className="min-w-[1400px] space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Mission Control</h1>
-          <p className="text-blue-200/70 mt-2">
-            Monitor your Startup_Path orbital metrics and channel performance
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm">
-            <Calendar className="h-4 w-4 mr-2" />
-            Last 30 days
-          </Button>
-          <Button variant="outline" size="sm">
-            <Settings className="h-4 w-4 mr-2" />
-            Customize
-          </Button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-black flex">
+      {/* Tutorial Overlay */}
+      {showTutorial && <Tutorial onComplete={() => setShowTutorial(false)} />}
 
-      {/* Quick Stats */}
-      <div className="flex gap-6 pb-4">
-        <MetricCard
-          title="Total Revenue"
-          value={mockDashboardData.overview.totalRevenue}
-          format="currency"
-          trend={{
-            direction: mockDashboardData.overview.totalRevenueChange > 0 ? 'up' : 'down',
-            magnitude: Math.abs(mockDashboardData.overview.totalRevenueChange),
-            period_days: 30,
-            statistical_significance: 0.95,
-            volatility: 'low'
-          }}
-          status="good"
-          tooltip="Total revenue generated in the selected period"
-        />
-        
-        <MetricCard
-          title="New Customers"
-          value={mockDashboardData.overview.newCustomers}
-          trend={{
-            direction: mockDashboardData.overview.newCustomersChange > 0 ? 'up' : 'down',
-            magnitude: Math.abs(mockDashboardData.overview.newCustomersChange),
-            period_days: 30,
-            statistical_significance: 0.88,
-            volatility: 'medium'
-          }}
-          status="concerning"
-          tooltip="Number of new customers acquired"
-        />
-        
-        <MetricCard
-          title="Conversion Rate"
-          value={mockDashboardData.overview.conversionRate}
-          format="percentage"
-          trend={{
-            direction: mockDashboardData.overview.conversionRateChange > 0 ? 'up' : 'down',
-            magnitude: Math.abs(mockDashboardData.overview.conversionRateChange),
-            period_days: 30,
-            statistical_significance: 0.92,
-            volatility: 'low'
-          }}
-          status="excellent"
-          tooltip="Percentage of leads that convert to customers"
-        />
-        
-        <MetricCard
-          title="Avg Deal Size"
-          value={mockDashboardData.overview.avgDealSize}
-          format="currency"
-          trend={{
-            direction: mockDashboardData.overview.avgDealSizeChange > 0 ? 'up' : 'down',
-            magnitude: Math.abs(mockDashboardData.overview.avgDealSizeChange),
-            period_days: 30,
-            statistical_significance: 0.87,
-            volatility: 'medium'
-          }}
-          status="good"
-          tooltip="Average revenue per customer"
-        />
-      </div>
-
-      {/* Financial Metrics */}
-      <div className="pb-4">
-        <FinanceMetrics
-          cpqm={mockDashboardData.financialMetrics.cpqm}
-          cac={mockDashboardData.financialMetrics.cac}
-          payback={mockDashboardData.financialMetrics.payback}
-        />
-      </div>
-
-      {/* Charts Row */}
-      <div className="flex gap-6 pb-4">
-        <div className="min-w-[600px]">
-        {/* Conversion Funnel */}
-        <FunnelChart 
-          data={mockDashboardData.conversionFunnel}
-          showDropOffAnalysis={true}
-          showOptimizations={true}
-        />
-        </div>
-        
-        {/* Quick Actions */}
-        <div className="min-w-[500px]">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="h-5 w-5" />
-              Quick Actions
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-3">
-              <Link href="/dashboard/experiments">
-                <Button variant="outline" className="w-full justify-start">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  View Active Experiments
-                  <Badge variant="secondary" className="ml-auto">
-                    5 running
-                  </Badge>
-                </Button>
-              </Link>
-              
-              <Link href="/dashboard/effectiveness">
-                <Button variant="outline" className="w-full justify-start">
-                  <PieChart className="h-4 w-4 mr-2" />
-                  Effectiveness Analysis
-                  <Badge variant="secondary" className="ml-auto">
-                    Updated 2h ago
-                  </Badge>
-                </Button>
-              </Link>
-              
-              <Button variant="outline" className="w-full justify-start">
-                <Users className="h-4 w-4 mr-2" />
-                Channel Performance
-                <Badge variant="outline" className="ml-auto text-green-600">
-                  +12% this week
-                </Badge>
-              </Button>
-              
-              <Button variant="outline" className="w-full justify-start">
-                <DollarSign className="h-4 w-4 mr-2" />
-                Budget Optimization
-                <Badge variant="outline" className="ml-auto text-orange-600">
-                  Action needed
-                </Badge>
-              </Button>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <header className="bg-gray-950 border-b border-gray-800 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white">GTM Command Center</h1>
+              <p className="text-gray-400 mt-1">Real-time optimization matrix • Live channel performance</p>
             </div>
-            
-            <div className="border-t pt-4">
-              <h4 className="font-medium mb-3">Recent Alerts</h4>
-              <div className="space-y-2">
-                <div className="flex items-start gap-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <TrendingDown className="h-4 w-4 text-yellow-600 mt-0.5" />
-                  <div className="text-sm">
-                    <p className="font-medium">Conversion rate dropped</p>
-                    <p className="text-muted-foreground">Opportunity stage showing 30% decline</p>
+            <div className="flex items-center gap-3">
+              <button className="p-2 text-gray-400 hover:text-white transition-colors">
+                <Bell className="w-5 h-5" />
+              </button>
+              <div className="w-px h-8 bg-gray-800" />
+              <div className="text-right">
+                <p className="text-sm text-white font-medium">Demo User</p>
+                <p className="text-xs text-gray-400">demo@startuply.space</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Dashboard Content */}
+        <div className="flex-1 p-6 overflow-auto">
+          {/* Live Analytics Bar */}
+          <div className="live-analytics mb-6 bg-gray-950 border border-gray-800 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Live Analytics</h2>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-xs text-gray-500">Real-time GTM optimization data streams here</span>
+              </div>
+            </div>
+            <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-red-600 to-red-500 animate-pulse" style={{ width: '60%' }} />
+            </div>
+          </div>
+
+          {/* Metrics Cards */}
+          <div className="metrics-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <Card className="bg-gray-950 border-gray-800 p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="p-2 bg-green-500/10 rounded-lg">
+                  <DollarSign className="w-5 h-5 text-green-500" />
+                </div>
+                <span className="text-xs text-green-500 flex items-center gap-1">
+                  <ArrowUp className="w-3 h-3" />
+                  +12.5% (30d)
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 mb-1">Total Revenue</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(liveData.revenue)}</p>
+            </Card>
+
+            <Card className="bg-gray-950 border-gray-800 p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="p-2 bg-red-500/10 rounded-lg">
+                  <Users className="w-5 h-5 text-red-500" />
+                </div>
+                <span className="text-xs text-red-500 flex items-center gap-1">
+                  <ArrowUp className="w-3 h-3" />
+                  +5.2% (30d)
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 mb-1">New Customers</p>
+              <p className="text-2xl font-bold text-white">{liveData.customers}</p>
+            </Card>
+
+            <Card className="bg-gray-950 border-gray-800 p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="p-2 bg-cyan-500/10 rounded-lg">
+                  <Target className="w-5 h-5 text-cyan-500" />
+                </div>
+                <span className="text-xs text-cyan-500 flex items-center gap-1">
+                  <ArrowUp className="w-3 h-3" />
+                  +8.1% (30d)
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 mb-1">Conversion Rate</p>
+              <p className="text-2xl font-bold text-white">{liveData.conversion.toFixed(1)}%</p>
+            </Card>
+
+            <Card className="bg-gray-950 border-gray-800 p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="p-2 bg-gray-700/20 rounded-lg">
+                  <TrendingUp className="w-5 h-5 text-gray-400" />
+                </div>
+                <span className="text-xs text-gray-400 flex items-center gap-1">
+                  <ArrowUp className="w-3 h-3" />
+                  +15.3% (30d)
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 mb-1">Avg Deal Size</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(liveData.dealSize)}</p>
+            </Card>
+          </div>
+
+          {/* Analysis Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* CPQM Analysis */}
+            <Card className="cpqm-analysis bg-gray-950 border-gray-800 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                  CPQM Analysis
+                  <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                </h3>
+                <TrendingDown className="w-5 h-5 text-red-500" />
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">Cost Per Qualified Meeting</p>
+                  <div className="flex items-baseline gap-3">
+                    <p className="text-3xl font-bold text-white">$485</p>
+                    <span className="text-sm text-red-500">↓ -8.5%</span>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <TrendingUp className="h-4 w-4 text-green-600 mt-0.5" />
-                  <div className="text-sm">
-                    <p className="font-medium">CPQM improving</p>
-                    <p className="text-muted-foreground">8.5% improvement this month</p>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">Current:</span>
+                    <span className="text-white font-medium">$485</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-200">Target:</span>
+                    <span className="text-green-500 font-medium">$400</span>
+                  </div>
+                  <div className="w-full bg-gray-800 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-red-600 to-red-500 h-2 rounded-full" style={{ width: '65%' }} />
+                  </div>
+                </div>
+                
+                <div className="pt-3 border-t border-gray-800">
+                  <p className="text-xs text-gray-200">Benchmark Range</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="flex-1 bg-gray-800 rounded h-1">
+                      <div className="bg-gray-500 h-1 rounded" style={{ width: '30%' }} />
+                    </div>
+                    <span className="text-xs text-gray-200">$350-$750</span>
                   </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        </div>
-      </div>
+            </Card>
 
-      {/* Budget Allocation Timeline */}
-      <AllocatorTimeline 
-        data={mockDashboardData.budgetAllocation}
-        title="Budget Allocation Timeline"
-        showForecast={true}
-        showChannelBreakdown={true}
-        showEfficiencyScores={true}
-      />
+            {/* CAC Analysis */}
+            <Card className="cac-analysis bg-gray-950 border-gray-800 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                  CAC Analysis
+                  <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                </h3>
+                <TrendingUp className="w-5 h-5 text-green-500" />
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">Customer Acquisition Cost</p>
+                  <div className="flex items-baseline gap-3">
+                    <p className="text-3xl font-bold text-white">$1,850</p>
+                    <span className="text-sm text-green-500">↑ 5.2%</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">Current:</span>
+                    <span className="text-white font-medium">$1,850</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-200">Target:</span>
+                    <span className="text-green-500 font-medium">$1,500</span>
+                  </div>
+                  <div className="w-full bg-gray-800 rounded-full h-2">
+                    <div className="bg-gray-400 h-2 rounded-full" style={{ width: '75%' }} />
+                  </div>
+                </div>
+                
+                <div className="pt-3 border-t border-gray-800">
+                  <p className="text-xs text-gray-200">Payback Analysis</p>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-sm text-white font-medium">8.5 months</span>
+                    <span className="text-xs text-gray-200">Target: 6.0mo</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Payback Period */}
+            <Card className="bg-gray-950 border-gray-800 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Payback Period</h3>
+                <Zap className="w-5 h-5 text-yellow-500" />
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">CAC Payback</p>
+                  <div className="flex items-baseline gap-3">
+                    <p className="text-3xl font-bold text-white">8.5mo</p>
+                    <span className="text-sm text-yellow-500">→ 0.8%</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">Current:</span>
+                    <span className="text-white font-medium">8.5 months</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-200">Target:</span>
+                    <span className="text-green-500 font-medium">6.0 months</span>
+                  </div>
+                  <div className="w-full bg-gray-800 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-yellow-600 to-orange-500 h-2 rounded-full" style={{ width: '85%' }} />
+                  </div>
+                </div>
+                
+                <div className="pt-3 border-t border-gray-800">
+                  <p className="text-xs text-gray-200 mb-2">Risk Factors</p>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full" />
+                      <span className="text-xs text-gray-200">Rising acquisition costs</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-gray-500 rounded-full" />
+                      <span className="text-xs text-gray-200">Longer sales cycles</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

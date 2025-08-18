@@ -168,7 +168,7 @@ export default function ChannelStep() {
               {selectedChannels.map((channelId) => {
                 const channel = channels.find(c => c.id === channelId)
                 return channel ? (
-                  <Badge key={channelId} variant="default">
+                  <Badge key={channelId} variant="outline">
                     {channel.name}
                   </Badge>
                 ) : null

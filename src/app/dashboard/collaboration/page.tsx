@@ -147,7 +147,7 @@ export default function CollaborationPage() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-purple-400">203</div>
-            <p className="text-xs text-purple-200/60 mt-1">Total missions</p>
+            <p className="text-xs text-gray-400 mt-1">Total missions</p>
           </CardContent>
         </Card>
       </div>
@@ -214,7 +214,7 @@ export default function CollaborationPage() {
                   
                   <div className="flex items-center justify-between pt-2">
                     <span className="text-xs text-gray-400">{member.missions} missions</span>
-                    <Button size="sm" variant="ghost" className="h-7 text-blue-400 hover:text-blue-300">
+                    <Button size="sm" variant="ghost" className="h-7 text-gray-400 hover:text-white">
                       <MessageSquare className="h-3 w-3 mr-1" />
                       Message
                     </Button>
@@ -350,7 +350,7 @@ export default function CollaborationPage() {
                       <div key={j} className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 border-2 border-black" />
                     ))}
                   </div>
-                  <Button size="sm" variant="ghost" className="h-7 text-blue-400 hover:text-blue-300">
+                  <Button size="sm" variant="ghost" className="h-7 text-gray-400 hover:text-white">
                     Join
                   </Button>
                 </div>

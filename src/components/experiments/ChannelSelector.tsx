@@ -386,12 +386,14 @@ export function ChannelSelector({
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-blue-100 rounded-lg">
-                            <TemplateIcon className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <div>
-                            <h4 className="font-semibold">{template.name}</h4>
-                            <p className="text-sm text-muted-foreground">{template.description}</p>
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-gray-800 rounded-lg">
+                              <TemplateIcon className="h-5 w-5 text-gray-400" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold">{template.name}</h4>
+                              <p className="text-sm text-muted-foreground">{template.description}</p>
+                            </div>
                           </div>
                         </div>
                         <Badge variant="outline" className={getDifficultyColor(template.difficulty)}>
@@ -471,8 +473,8 @@ export function ChannelSelector({
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                          <ChannelIcon className="h-5 w-5 text-blue-600" />
+                        <div className="p-2 bg-gray-800 rounded-lg">
+                          <ChannelIcon className="h-5 w-5 text-gray-400" />
                         </div>
                         <div>
                           <h4 className="font-semibold">{channel.name}</h4>
@@ -508,7 +510,7 @@ export function ChannelSelector({
 
                     {/* Budget Editor */}
                     {isEditing && (
-                      <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                      <div className="mb-4 p-3 bg-gray-900/50 border border-gray-700 rounded-lg">
                         <Label htmlFor={`budget_${index}`}>Allocated Budget</Label>
                         <div className="flex items-center gap-2 mt-1">
                           <div className="relative flex-1">

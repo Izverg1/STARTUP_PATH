@@ -431,7 +431,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
 
       {/* Gate Summary */}
       {gates.length > 0 && (
-        <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+        <div className="mt-4 p-3 bg-gray-900/50 border border-gray-700 rounded-lg">
           <div className="text-sm text-muted-foreground">
             <strong>{gates.length}</strong> gates configured
             {gates.some(g => g.is_critical) && (

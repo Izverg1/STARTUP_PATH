@@ -63,19 +63,19 @@ export function SpaceStationVisualization({ detailed = false }: Props) {
           {/* Main station body - 3D enhanced */}
           <div className="w-48 h-48 relative">
             {/* Outer shell with depth */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-3xl shadow-2xl transform-gpu"
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 rounded-3xl shadow-2xl transform-gpu"
                  style={{ 
                    transform: 'rotateX(15deg) rotateY(20deg)',
-                   boxShadow: '0 25px 50px rgba(147, 51, 234, 0.5), 0 0 80px rgba(99, 102, 241, 0.3)',
+                   boxShadow: '0 25px 50px rgba(255, 255, 255, 0.1), 0 0 80px rgba(255, 255, 255, 0.05)',
                  }}>
               
-              {/* Inner core with holographic glow */}
-              <div className="absolute inset-3 bg-gradient-to-br from-black/50 to-purple-900/30 rounded-2xl backdrop-blur-sm border border-purple-400/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/20 to-blue-500/20 rounded-2xl animate-pulse" />
+              {/* Inner core with agent glow */}
+              <div className="absolute inset-3 bg-gradient-to-br from-black/80 to-black/60 rounded-2xl backdrop-blur-sm border border-[#ff00aa]/30">
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#ff00aa]/10 to-transparent rounded-2xl animate-pulse" />
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-white mb-1" style={{ textShadow: '0 0 20px rgba(147, 51, 234, 0.8)' }}>Startup_Path</div>
-                    <div className="text-xs text-cyan-400 mt-1">ONLINE</div>
+                    <div className="text-3xl font-bold text-white mb-1" style={{ textShadow: '0 0 20px rgba(255, 0, 170, 0.8)' }}>SOL:GEN</div>
+                    <div className="text-xs text-gray-400 mt-1">ONLINE</div>
                   </div>
                 </div>
               </div>

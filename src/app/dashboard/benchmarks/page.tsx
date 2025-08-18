@@ -98,7 +98,7 @@ export default function BenchmarksPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-cyan-400">12ms</div>
-            <p className="text-xs text-cyan-200/60 mt-1">Average response time</p>
+            <p className="text-xs text-gray-400 mt-1">Average response time</p>
             <Progress value={88} className="mt-2 h-1" />
           </CardContent>
         </Card>
@@ -128,9 +128,9 @@ export default function BenchmarksPage() {
                     <Badge 
                       variant="outline" 
                       className={
-                        metric.status === 'excellent' ? 'text-green-400 border-green-400/30' :
-                        metric.status === 'good' ? 'text-blue-400 border-blue-400/30' :
-                        'text-yellow-400 border-yellow-400/30'
+                        metric.status === 'excellent' ? 'text-gray-300 border-gray-700' :
+                        metric.status === 'good' ? 'text-gray-300 border-gray-700' :
+                        'text-gray-300 border-gray-700'
                       }
                     >
                       {metric.value}%
@@ -174,9 +174,9 @@ export default function BenchmarksPage() {
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className={`w-2 h-2 rounded-full mt-1.5 ${
-                    item.type === 'success' ? 'bg-green-400' :
-                    item.type === 'warning' ? 'bg-yellow-400' :
-                    'bg-blue-400'
+                    item.type === 'success' ? 'bg-gray-500' :
+                    item.type === 'warning' ? 'bg-gray-500' :
+                    'bg-gray-500'
                   }`} />
                   <div className="flex-1">
                     <p className="text-sm text-white">{item.event}</p>
@@ -216,7 +216,7 @@ export default function BenchmarksPage() {
                     <p className="text-sm text-white">{alert.message}</p>
                   </div>
                   {alert.action && (
-                    <Button size="sm" variant="ghost" className="text-blue-400 hover:text-blue-300">
+                    <Button size="sm" variant="ghost" className="text-gray-400 hover:text-white">
                       {alert.action}
                     </Button>
                   )}
