@@ -8,12 +8,12 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="card"
       className={cn(
         "cyber-card relative flex flex-col gap-6 rounded-xl py-6 shadow-lg",
-        "bg-black/40 backdrop-blur-md border border-cyan-500/30",
-        "shadow-cyan-500/10 hover:shadow-cyan-500/20 hover:border-cyan-400/50",
+        "bg-black/60 backdrop-blur-md border border-cyan-500/20 neon-border",
+        "shadow-cyan-500/10 hover:shadow-cyan-500/30 hover:border-cyan-400/60",
         "transition-all duration-300 group overflow-hidden",
         "before:absolute before:inset-0 before:rounded-xl before:p-[1px]",
-        "before:bg-gradient-to-r before:from-transparent before:via-cyan-400/20 before:to-transparent",
-        "before:animate-pulse before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
+        "before:bg-gradient-to-r before:from-transparent before:via-red-400/20 before:to-transparent",
+        "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
         className
       )}
       {...props}

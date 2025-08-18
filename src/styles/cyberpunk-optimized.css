@@ -1,0 +1,263 @@
+/* STARTUP_PATH Optimized Cyberpunk CSS Architecture */
+
+/* ================================
+   PERFORMANCE-AWARE ANIMATIONS
+   ================================ */
+
+/* Core cyberpunk effects - always enabled */
+@keyframes neon-pulse {
+  0%, 100% { 
+    text-shadow: 0 0 5px rgb(var(--cyber-glow)),
+                 0 0 10px rgb(var(--cyber-glow)),
+                 0 0 15px rgb(var(--cyber-glow));
+    opacity: 1;
+  }
+  50% { 
+    text-shadow: 0 0 2px rgb(var(--cyber-glow)),
+                 0 0 5px rgb(var(--cyber-glow)),
+                 0 0 8px rgb(var(--cyber-glow));
+    opacity: 0.8;
+  }
+}
+
+@keyframes electric-border {
+  0%, 100% { 
+    box-shadow: 0 0 5px rgb(var(--cyber-glow) / 0.3),
+                inset 0 0 5px rgb(var(--cyber-glow) / 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 15px rgb(var(--cyber-glow) / 0.6),
+                inset 0 0 15px rgb(var(--cyber-glow) / 0.2);
+  }
+}
+
+@keyframes cyber-scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Medium performance level animations */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .perf-medium {
+    --enable-medium-animations: 1;
+  }
+
+  @keyframes hologram-flicker {
+    0%, 100% { opacity: 1; }
+    98% { opacity: 1; }
+    99% { opacity: 0.9; }
+  }
+
+  @keyframes matrix-rain {
+    0% { transform: translateY(-100vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+}
+
+/* High performance level animations */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .perf-high {
+    --enable-high-animations: 1;
+  }
+
+  @keyframes particle-float {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+    25% { transform: translate(-10px, -10px) scale(1.2); opacity: 0.7; }
+    50% { transform: translate(5px, -20px) scale(0.8); opacity: 1; }
+    75% { transform: translate(10px, -5px) scale(1.1); opacity: 0.5; }
+  }
+
+  @keyframes data-stream {
+    0% { transform: translateX(-100%); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.8; }
+    100% { transform: translateX(100vw); opacity: 0; }
+  }
+
+  @keyframes electric-grid-flow {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+  }
+}
+
+/* ================================
+   PERFORMANCE UTILITY CLASSES
+   ================================ */
+
+.cyber-text-basic {
+  color: rgb(6, 182, 212);
+}
+
+.cyber-text-glow {
+  color: rgb(6, 182, 212);
+  animation: neon-pulse 2s ease-in-out infinite alternate;
+}
+
+.cyber-border-basic {
+  border: 1px solid rgb(6, 182, 212, 0.3);
+}
+
+.cyber-border-animated {
+  border: 1px solid rgb(6, 182, 212, 0.5);
+  animation: electric-border 2s ease-in-out infinite;
+}
+
+.electric-grid {
+  background-image: 
+    linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .electric-grid-animated {
+    animation: electric-grid-flow 20s linear infinite;
+  }
+}
+
+/* ================================
+   COMPONENT-SPECIFIC OPTIMIZATIONS
+   ================================ */
+
+/* Cards */
+.cyber-card-basic {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.cyber-card-interactive {
+  transition: all 0.3s ease;
+}
+
+.cyber-card-interactive:hover {
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1);
+}
+
+/* Buttons */
+.cyber-button-primary {
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  border: 2px solid rgba(6, 182, 212, 0.5);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.cyber-button-primary:hover {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Agent-specific theming */
+.agent-primary {
+  --agent-color: 255, 0, 170; /* Magenta */
+}
+
+.agent-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(var(--agent-color), 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.agent-button {
+  background: linear-gradient(135deg, rgb(var(--agent-color)), #9333ea);
+  border: 2px solid rgba(var(--agent-color), 0.5);
+  color: white;
+}
+
+/* ================================
+   RESPONSIVE PERFORMANCE SCALING
+   ================================ */
+
+/* Mobile - minimal animations */
+@media (max-width: 767px) {
+  * {
+    animation-duration: 0.15s !important;
+    transition-duration: 0.15s !important;
+  }
+  
+  .particle-effects,
+  .complex-animations {
+    display: none !important;
+  }
+}
+
+/* Tablet - medium animations */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .high-performance-only {
+    display: none !important;
+  }
+}
+
+/* Desktop - full animations */
+@media (min-width: 1024px) {
+  .performance-optimized {
+    will-change: transform, opacity;
+  }
+}
+
+/* ================================
+   ACCESSIBILITY & REDUCED MOTION
+   ================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .cyber-text-glow {
+    animation: none;
+    text-shadow: 0 0 5px rgb(6, 182, 212);
+  }
+  
+  .cyber-border-animated {
+    animation: none;
+    border-color: rgb(6, 182, 212, 0.5);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .cyber-text-glow,
+  .cyber-border-animated {
+    --cyber-glow: 0, 255, 255;
+  }
+  
+  .agent-card,
+  .agent-button {
+    --agent-color: 255, 100, 200;
+  }
+}
+
+/* ================================
+   PERFORMANCE MONITORING
+   ================================ */
+
+.performance-debug::after {
+  content: attr(data-perf-mode);
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #00ff00;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: monospace;
+  z-index: 9999;
+  display: none;
+}
+
+.performance-debug.show-perf::after {
+  display: block;
+}

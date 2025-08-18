@@ -7,6 +7,7 @@ import { NavigationTransition } from "./NavigationTransition";
 import { Button } from "@/components/ui/button";
 import { PanelLeftOpen, PanelLeftClose, PanelRightOpen, PanelRightClose } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePerformanceMode, AnimatedComponent } from "@/hooks/usePerformanceMode";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -14,17 +15,25 @@ interface MainLayoutProps {
 }
 
 export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) {
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(true); // State for right sidebar
-  const [isLeftSidebarExpanded, setIsLeftSidebarExpanded] = useState(false); // State for left sidebar
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(true);
+  const [isLeftSidebarExpanded, setIsLeftSidebarExpanded] = useState(false);
+  const [performanceMode, config] = usePerformanceMode();
 
   return (
-    <div className="flex h-screen bg-black electric-grid relative overflow-hidden">
-      {/* Cyberpunk background effects */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-red-600/10 rounded-full filter blur-[120px]" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-600/8 rounded-full filter blur-[150px]" />
-        <div className="absolute top-1/2 left-1/2 w-[600px] h-[300px] bg-blue-600/5 rounded-full filter blur-[100px]" />
-      </div>
+    <div className={cn(
+      "flex h-screen bg-black relative overflow-hidden",
+      config.backgroundEffects && "electric-grid"
+    )}>
+      {/* Performance-aware cyberpunk background effects */}
+      <AnimatedComponent requiredLevel="medium" fallback={
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
+      }>
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-red-600/10 rounded-full filter blur-[120px]" />
+          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-600/8 rounded-full filter blur-[150px]" />
+          <div className="absolute top-1/2 left-1/2 w-[600px] h-[300px] bg-blue-600/5 rounded-full filter blur-[100px]" />
+        </div>
+      </AnimatedComponent>
       
       {/* Navigation - Left Sidebar (expandable) */}
       <div className={cn(

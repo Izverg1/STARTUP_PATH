@@ -78,10 +78,10 @@
   --electric-blue: #0080ff;
   --cyber-orange: #ff8000;
   
-  /* Agent-specific magenta colors */
-  --agent-primary: #ff00aa;
-  --agent-secondary: #e6009a;
-  --agent-muted: rgba(255, 0, 170, 0.1);
+  /* Agent-specific red colors (matching landing page) */
+  --agent-primary: #ff0040;
+  --agent-secondary: #e60039;
+  --agent-muted: rgba(255, 0, 64, 0.1);
   
   /* Charts - using neutral colors except for agent data */
   --chart-1: #fafafa;
@@ -117,26 +117,26 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
-  /* Magenta accent for agents ONLY */
+  /* Red accent for agents (matching landing page) */
   .accent-agents {
-    color: var(--accent-agents);
+    color: var(--agent-primary);
   }
   
   .bg-accent-agents {
-    background-color: var(--accent-agents);
+    background-color: var(--agent-primary);
   }
   
   .border-accent-agents {
-    border-color: var(--accent-agents);
+    border-color: var(--agent-primary);
   }
   
   .hover\:bg-accent-agents:hover {
-    background-color: var(--accent-agents-hover);
+    background-color: var(--agent-secondary);
   }
   
-  /* Agent glow effects */
+  /* Agent glow effects (red instead of magenta) */
   .glow-agents {
-    box-shadow: 0 0 20px rgba(255, 0, 170, 0.3), 0 0 40px rgba(255, 0, 170, 0.1);
+    box-shadow: 0 0 20px rgba(255, 0, 64, 0.3), 0 0 40px rgba(255, 0, 64, 0.1);
   }
   
   /* High contrast focus states */
@@ -261,12 +261,22 @@
   }
   
   .neon-glow {
-    text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3), 0 0 30px rgba(0, 255, 255, 0.2);
   }
   
   .neon-border {
-    border: 1px solid var(--neon-red);
-    box-shadow: 0 0 10px var(--neon-red), inset 0 0 10px rgba(255, 0, 64, 0.1);
+    border: 1px solid rgba(255, 0, 64, 0.5);
+    box-shadow: 0 0 10px rgba(255, 0, 64, 0.3), inset 0 0 10px rgba(255, 0, 64, 0.1);
+  }
+  
+  .cyber-flicker {
+    animation: cyber-flicker 0.15s linear infinite alternate;
+  }
+  
+  .hologram-effect {
+    background: linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.1) 50%, transparent 70%);
+    background-size: 20px 20px;
+    animation: hologram-scan 4s linear infinite;
   }
   
   .data-stream {
