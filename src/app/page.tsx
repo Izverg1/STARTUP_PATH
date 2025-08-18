@@ -721,7 +721,6 @@ export default function SpaceLandingPage() {
                 /> than any single optimization
               </div>
             </div>
-            </div>
           </div>
         </div>
 
