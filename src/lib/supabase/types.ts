@@ -1,6 +1,6 @@
-// TypeScript types generated from Supabase schema
-// This file should be regenerated whenever the database schema changes
-// Run: npx supabase gen types typescript --project-id YOUR_PROJECT_ID --schema public > src/lib/supabase/types.ts
+// TypeScript types for STARTUP_PATH Platform - SPATH_ prefixed tables
+// This file defines the database schema with SPATH_ prefix for KSON_DB
+// All tables use SPATH_ prefix to stand out from other tables in the database
 
 export type Json =
   | string
@@ -13,6 +13,208 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      SPATH_organizations: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          domain: string | null
+          owner_id: string | null
+          subscription_tier: 'demo' | 'starter' | 'growth' | 'enterprise'
+          settings: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          domain?: string | null
+          owner_id?: string | null
+          subscription_tier?: 'demo' | 'starter' | 'growth' | 'enterprise'
+          settings?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          domain?: string | null
+          owner_id?: string | null
+          subscription_tier?: 'demo' | 'starter' | 'growth' | 'enterprise'
+          settings?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      SPATH_users: {
+        Row: {
+          id: string
+          email: string
+          name: string
+          avatar_url: string | null
+          org_id: string | null
+          role: 'owner' | 'admin' | 'contributor' | 'viewer'
+          is_active: boolean
+          last_login: string | null
+          onboarding_completed: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          email: string
+          name: string
+          avatar_url?: string | null
+          org_id?: string | null
+          role?: 'owner' | 'admin' | 'contributor' | 'viewer'
+          is_active?: boolean
+          last_login?: string | null
+          onboarding_completed?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          name?: string
+          avatar_url?: string | null
+          org_id?: string | null
+          role?: 'owner' | 'admin' | 'contributor' | 'viewer'
+          is_active?: boolean
+          last_login?: string | null
+          onboarding_completed?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SPATH_users_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_organizations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      SPATH_projects: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          org_id: string
+          owner_id: string
+          status: 'draft' | 'active' | 'paused' | 'completed' | 'archived'
+          mode: 'simulation' | 'connected'
+          settings: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          org_id: string
+          owner_id: string
+          status?: 'draft' | 'active' | 'paused' | 'completed' | 'archived'
+          mode?: 'simulation' | 'connected'
+          settings?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          org_id?: string
+          owner_id?: string
+          status?: 'draft' | 'active' | 'paused' | 'completed' | 'archived'
+          mode?: 'simulation' | 'connected'
+          settings?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SPATH_projects_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "SPATH_projects_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      SPATH_experiments: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          hypothesis: string | null
+          project_id: string
+          status: 'draft' | 'running' | 'paused' | 'completed' | 'killed'
+          budget_allocated: number
+          target_cpqm: number | null
+          max_cac_payback_months: number | null
+          icp: Json
+          success_criteria: Json | null
+          start_date: string | null
+          end_date: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          hypothesis?: string | null
+          project_id: string
+          status?: 'draft' | 'running' | 'paused' | 'completed' | 'killed'
+          budget_allocated?: number
+          target_cpqm?: number | null
+          max_cac_payback_months?: number | null
+          icp?: Json
+          success_criteria?: Json | null
+          start_date?: string | null
+          end_date?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          hypothesis?: string | null
+          project_id?: string
+          status?: 'draft' | 'running' | 'paused' | 'completed' | 'killed'
+          budget_allocated?: number
+          target_cpqm?: number | null
+          max_cac_payback_months?: number | null
+          icp?: Json
+          success_criteria?: Json | null
+          start_date?: string | null
+          end_date?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SPATH_experiments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_projects"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       sg_agents: {
         Row: {
           config: Json

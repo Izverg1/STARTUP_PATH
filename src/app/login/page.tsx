@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
-import { Rocket, Lock, Mail, TrendingUp, DollarSign, BarChart3, Zap, Target, Brain } from 'lucide-react'
+import { Rocket, Lock, Mail, TrendingUp, DollarSign, BarChart3, Zap, Target, Brain, AlertCircle } from 'lucide-react'
 import { LoadingTransition } from '@/components/LoadingTransition'
+import { useAuth } from '@/hooks/useAuth'
 
 // Channel logo components
 const GoogleAdsLogo = () => (
@@ -63,41 +64,36 @@ const WebinarLogo = () => (
 
 export default function LoginPage() {
   const router = useRouter()
+  const { login, error, isLoading, clearError, isAuthenticated } = useAuth()
   const [email, setEmail] = useState('user@startuppath.ai')
   const [password, setPassword] = useState('demo123')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
   const [isClient, setIsClient] = useState(false)
   const [showTransition, setShowTransition] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
-  }, [])
+    
+    // Redirect if already authenticated
+    if (isAuthenticated) {
+      setShowTransition(true)
+    }
+    
+    // Clear any existing errors when component mounts
+    clearError()
+  }, [isAuthenticated, clearError])
 
-  // Demo credentials for professional platform
-  const DEMO_USER = {
-    email: 'user@startuppath.ai',
-    password: 'demo123'
-  }
-
+  // Professional authentication flow
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-    setIsLoading(true)
-
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    if (email === DEMO_USER.email && password === DEMO_USER.password) {
-      // Store auth in localStorage
-      localStorage.setItem('isAuthenticated', 'true')
-      localStorage.setItem('userEmail', email)
-      
-      // Show loading transition with professional messaging
+    clearError()
+    
+    try {
+      await login(email, password)
+      // Success - show professional transition
       setShowTransition(true)
-    } else {
-      setError('Invalid credentials. Use demo credentials: user@startuppath.ai / demo123')
-      setIsLoading(false)
+    } catch (err) {
+      // Error handling is managed by useAuth hook
+      console.error('Login failed:', err)
     }
   }
 
@@ -357,8 +353,9 @@ export default function LoginPage() {
               </div>
 
               {error && (
-                <div className="text-red-300 text-sm text-center bg-gray-800/50 p-3 rounded-lg border border-gray-700">
-                  {error}
+                <div className="text-red-300 text-sm text-center bg-red-900/20 p-3 rounded-lg border border-red-500/30 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                  <span>{error}</span>
                 </div>
               )}
 
