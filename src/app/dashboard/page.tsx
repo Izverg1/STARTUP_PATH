@@ -40,9 +40,10 @@ export default function DashboardPage() {
   useEffect(() => {
     // Check if tutorial has been completed
     const tutorialCompleted = localStorage.getItem('tutorialCompleted')
-    if (!tutorialCompleted) {
-      setShowTutorial(true)
-    }
+    // Disable auto-tutorial for better dashboard visibility
+    // if (!tutorialCompleted) {
+    //   setShowTutorial(true)
+    // }
 
     // Simulate live data updates
     const interval = setInterval(() => {
@@ -67,27 +68,27 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex">
+    <div className="min-h-screen bg-gray-900 flex">
       {/* Tutorial Overlay */}
       {showTutorial && <Tutorial onComplete={() => setShowTutorial(false)} />}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="bg-gray-950 border-b border-gray-800 px-6 py-4">
+        <header className="bg-gray-800 border-b border-gray-600 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white">GTM Command Center</h1>
-              <p className="text-gray-400 mt-1">Real-time optimization matrix • Live channel performance</p>
+              <p className="text-gray-200 mt-1">Real-time optimization matrix • Live channel performance</p>
             </div>
             <div className="flex items-center gap-3">
-              <button className="p-2 text-gray-400 hover:text-white transition-colors">
+              <button className="p-2 text-gray-200 hover:text-white transition-colors">
                 <Bell className="w-5 h-5" />
               </button>
-              <div className="w-px h-8 bg-gray-800" />
+              <div className="w-px h-8 bg-gray-500" />
               <div className="text-right">
                 <p className="text-sm text-white font-medium">Demo User</p>
-                <p className="text-xs text-gray-400">demo@startuply.space</p>
+                <p className="text-xs text-gray-200">demo@startuply.space</p>
               </div>
             </div>
           </div>
@@ -96,74 +97,74 @@ export default function DashboardPage() {
         {/* Dashboard Content */}
         <div className="flex-1 p-6 overflow-auto">
           {/* Live Analytics Bar */}
-          <div className="live-analytics mb-6 bg-gray-950 border border-gray-800 rounded-lg p-4">
+          <div className="live-analytics mb-6 bg-gray-700 border border-gray-500 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Live Analytics</h2>
+              <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Live Analytics</h2>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-xs text-gray-500">Real-time GTM optimization data streams here</span>
+                <span className="text-xs text-gray-200">Real-time GTM optimization data streams here</span>
               </div>
             </div>
-            <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-red-600 to-red-500 animate-pulse" style={{ width: '60%' }} />
+            <div className="h-1 bg-gray-600 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-red-500 to-red-400 animate-pulse" style={{ width: '60%' }} />
             </div>
           </div>
 
           {/* Metrics Cards */}
           <div className="metrics-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <Card className="bg-gray-950 border-gray-800 p-4">
+            <Card className="bg-gray-700 border-gray-500 p-4">
               <div className="flex items-start justify-between mb-3">
-                <div className="p-2 bg-green-500/10 rounded-lg">
-                  <DollarSign className="w-5 h-5 text-green-500" />
+                <div className="p-2 bg-green-500/30 rounded-lg">
+                  <DollarSign className="w-5 h-5 text-green-300" />
                 </div>
-                <span className="text-xs text-green-500 flex items-center gap-1">
+                <span className="text-xs text-green-300 flex items-center gap-1">
                   <ArrowUp className="w-3 h-3" />
                   +12.5% (30d)
                 </span>
               </div>
-              <p className="text-xs text-gray-400 mb-1">Total Revenue</p>
+              <p className="text-xs text-gray-200 mb-1">Total Revenue</p>
               <p className="text-2xl font-bold text-white">{formatCurrency(liveData.revenue)}</p>
             </Card>
 
-            <Card className="bg-gray-950 border-gray-800 p-4">
+            <Card className="bg-gray-700 border-gray-500 p-4">
               <div className="flex items-start justify-between mb-3">
-                <div className="p-2 bg-red-500/10 rounded-lg">
-                  <Users className="w-5 h-5 text-red-500" />
+                <div className="p-2 bg-blue-500/30 rounded-lg">
+                  <Users className="w-5 h-5 text-blue-300" />
                 </div>
-                <span className="text-xs text-red-500 flex items-center gap-1">
+                <span className="text-xs text-blue-300 flex items-center gap-1">
                   <ArrowUp className="w-3 h-3" />
                   +5.2% (30d)
                 </span>
               </div>
-              <p className="text-xs text-gray-400 mb-1">New Customers</p>
+              <p className="text-xs text-gray-200 mb-1">New Customers</p>
               <p className="text-2xl font-bold text-white">{liveData.customers}</p>
             </Card>
 
-            <Card className="bg-gray-950 border-gray-800 p-4">
+            <Card className="bg-gray-700 border-gray-500 p-4">
               <div className="flex items-start justify-between mb-3">
-                <div className="p-2 bg-cyan-500/10 rounded-lg">
-                  <Target className="w-5 h-5 text-cyan-500" />
+                <div className="p-2 bg-cyan-500/30 rounded-lg">
+                  <Target className="w-5 h-5 text-cyan-300" />
                 </div>
-                <span className="text-xs text-cyan-500 flex items-center gap-1">
+                <span className="text-xs text-cyan-300 flex items-center gap-1">
                   <ArrowUp className="w-3 h-3" />
                   +8.1% (30d)
                 </span>
               </div>
-              <p className="text-xs text-gray-400 mb-1">Conversion Rate</p>
+              <p className="text-xs text-gray-200 mb-1">Conversion Rate</p>
               <p className="text-2xl font-bold text-white">{liveData.conversion.toFixed(1)}%</p>
             </Card>
 
-            <Card className="bg-gray-950 border-gray-800 p-4">
+            <Card className="bg-gray-700 border-gray-500 p-4">
               <div className="flex items-start justify-between mb-3">
-                <div className="p-2 bg-gray-700/20 rounded-lg">
-                  <TrendingUp className="w-5 h-5 text-gray-400" />
+                <div className="p-2 bg-purple-500/30 rounded-lg">
+                  <TrendingUp className="w-5 h-5 text-purple-300" />
                 </div>
-                <span className="text-xs text-gray-400 flex items-center gap-1">
+                <span className="text-xs text-purple-300 flex items-center gap-1">
                   <ArrowUp className="w-3 h-3" />
                   +15.3% (30d)
                 </span>
               </div>
-              <p className="text-xs text-gray-400 mb-1">Avg Deal Size</p>
+              <p className="text-xs text-gray-200 mb-1">Avg Deal Size</p>
               <p className="text-2xl font-bold text-white">{formatCurrency(liveData.dealSize)}</p>
             </Card>
           </div>
@@ -171,43 +172,43 @@ export default function DashboardPage() {
           {/* Analysis Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* CPQM Analysis */}
-            <Card className="cpqm-analysis bg-gray-950 border-gray-800 p-6">
+            <Card className="cpqm-analysis bg-gray-700 border-gray-500 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                   CPQM Analysis
                   <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                 </h3>
-                <TrendingDown className="w-5 h-5 text-red-500" />
+                <TrendingDown className="w-5 h-5 text-red-300" />
               </div>
               
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">Cost Per Qualified Meeting</p>
+                  <p className="text-sm text-gray-200 mb-1">Cost Per Qualified Meeting</p>
                   <div className="flex items-baseline gap-3">
                     <p className="text-3xl font-bold text-white">$485</p>
-                    <span className="text-sm text-red-500">↓ -8.5%</span>
+                    <span className="text-sm text-red-300">↓ -8.5%</span>
                   </div>
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Current:</span>
+                    <span className="text-gray-200">Current:</span>
                     <span className="text-white font-medium">$485</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-200">Target:</span>
-                    <span className="text-green-500 font-medium">$400</span>
+                    <span className="text-green-300 font-medium">$400</span>
                   </div>
-                  <div className="w-full bg-gray-800 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-red-600 to-red-500 h-2 rounded-full" style={{ width: '65%' }} />
+                  <div className="w-full bg-gray-600 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-red-500 to-red-400 h-2 rounded-full" style={{ width: '65%' }} />
                   </div>
                 </div>
                 
-                <div className="pt-3 border-t border-gray-800">
+                <div className="pt-3 border-t border-gray-500">
                   <p className="text-xs text-gray-200">Benchmark Range</p>
                   <div className="flex items-center gap-2 mt-2">
-                    <div className="flex-1 bg-gray-800 rounded h-1">
-                      <div className="bg-gray-500 h-1 rounded" style={{ width: '30%' }} />
+                    <div className="flex-1 bg-gray-600 rounded h-1">
+                      <div className="bg-gray-400 h-1 rounded" style={{ width: '30%' }} />
                     </div>
                     <span className="text-xs text-gray-200">$350-$750</span>
                   </div>
@@ -216,39 +217,39 @@ export default function DashboardPage() {
             </Card>
 
             {/* CAC Analysis */}
-            <Card className="cac-analysis bg-gray-950 border-gray-800 p-6">
+            <Card className="cac-analysis bg-gray-700 border-gray-500 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                   CAC Analysis
                   <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                 </h3>
-                <TrendingUp className="w-5 h-5 text-green-500" />
+                <TrendingUp className="w-5 h-5 text-green-300" />
               </div>
               
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">Customer Acquisition Cost</p>
+                  <p className="text-sm text-gray-200 mb-1">Customer Acquisition Cost</p>
                   <div className="flex items-baseline gap-3">
                     <p className="text-3xl font-bold text-white">$1,850</p>
-                    <span className="text-sm text-green-500">↑ 5.2%</span>
+                    <span className="text-sm text-green-300">↑ 5.2%</span>
                   </div>
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Current:</span>
+                    <span className="text-gray-200">Current:</span>
                     <span className="text-white font-medium">$1,850</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-200">Target:</span>
-                    <span className="text-green-500 font-medium">$1,500</span>
+                    <span className="text-green-300 font-medium">$1,500</span>
                   </div>
-                  <div className="w-full bg-gray-800 rounded-full h-2">
-                    <div className="bg-gray-400 h-2 rounded-full" style={{ width: '75%' }} />
+                  <div className="w-full bg-gray-600 rounded-full h-2">
+                    <div className="bg-blue-400 h-2 rounded-full" style={{ width: '75%' }} />
                   </div>
                 </div>
                 
-                <div className="pt-3 border-t border-gray-800">
+                <div className="pt-3 border-t border-gray-500">
                   <p className="text-xs text-gray-200">Payback Analysis</p>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-sm text-white font-medium">8.5 months</span>
@@ -259,44 +260,44 @@ export default function DashboardPage() {
             </Card>
 
             {/* Payback Period */}
-            <Card className="bg-gray-950 border-gray-800 p-6">
+            <Card className="bg-gray-700 border-gray-500 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white">Payback Period</h3>
-                <Zap className="w-5 h-5 text-yellow-500" />
+                <Zap className="w-5 h-5 text-yellow-300" />
               </div>
               
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">CAC Payback</p>
+                  <p className="text-sm text-gray-200 mb-1">CAC Payback</p>
                   <div className="flex items-baseline gap-3">
                     <p className="text-3xl font-bold text-white">8.5mo</p>
-                    <span className="text-sm text-yellow-500">→ 0.8%</span>
+                    <span className="text-sm text-yellow-300">→ 0.8%</span>
                   </div>
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Current:</span>
+                    <span className="text-gray-200">Current:</span>
                     <span className="text-white font-medium">8.5 months</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-200">Target:</span>
-                    <span className="text-green-500 font-medium">6.0 months</span>
+                    <span className="text-green-300 font-medium">6.0 months</span>
                   </div>
-                  <div className="w-full bg-gray-800 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-yellow-600 to-orange-500 h-2 rounded-full" style={{ width: '85%' }} />
+                  <div className="w-full bg-gray-600 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-yellow-500 to-orange-400 h-2 rounded-full" style={{ width: '85%' }} />
                   </div>
                 </div>
                 
-                <div className="pt-3 border-t border-gray-800">
+                <div className="pt-3 border-t border-gray-500">
                   <p className="text-xs text-gray-200 mb-2">Risk Factors</p>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full" />
+                      <div className="w-2 h-2 bg-yellow-300 rounded-full" />
                       <span className="text-xs text-gray-200">Rising acquisition costs</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gray-500 rounded-full" />
+                      <div className="w-2 h-2 bg-gray-300 rounded-full" />
                       <span className="text-xs text-gray-200">Longer sales cycles</span>
                     </div>
                   </div>

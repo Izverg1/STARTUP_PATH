@@ -161,7 +161,7 @@ export function Tutorial({ onComplete }: { onComplete: () => void }) {
   return (
     <>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/80 z-[9998]" />
+      <div className="fixed inset-0 bg-black/20 z-[9998]" />
       
       {/* Highlight target element */}
       {isVisible && (

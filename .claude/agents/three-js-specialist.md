@@ -1,12 +1,8 @@
 ---
 name: three-js-specialist
 description: |
-  Specialized Three.js and React Three Fiber expert for SOL:GEN's 3D visualizations.
-  Handles hero animations, channel orbit diagrams, agent card micro-animations, and WebGL optimization.
-  PROACTIVELY use for any Three.js, WebGL, 3D graphics, animation performance, or visual optimization tasks.
-  Expert in orbital mechanics, particle systems, performance optimization, and fallback strategies.
-  MUST BE USED for Three.js development, WebGL debugging, animation performance, and 3D visualization tasks.
 tools: file_editor, terminal, web_search
+color: yellow
 ---
 
 # Three.js & 3D Visualization Specialist

@@ -45,7 +45,7 @@
 }
 
 :root {
-  /* SOL:GEN™ Blade Runner Cyberpunk Theme */
+  /* STARTUP_PATH™ Blade Runner Cyberpunk Theme */
   --radius: 0.5rem;
   
   /* Cyberpunk background */
@@ -973,4 +973,379 @@
 
 .animate-vortex-spin {
   animation: vortex-spin 35s linear infinite;
+}
+
+/* Factory Conveyor Belt System Animations */
+.animate-conveyor-belt {
+  animation: conveyor-belt 3s linear infinite;
+}
+
+.animate-data-packet {
+  animation: data-packet 3s linear infinite;
+}
+
+.animate-factory-input {
+  animation: factory-input 2s ease-in-out infinite;
+}
+
+.animate-machine-pulse {
+  animation: machine-pulse 1.5s ease-in-out infinite;
+}
+
+.animate-data-stream {
+  animation: data-stream 0.8s ease-in-out infinite;
+}
+
+.animate-mechanical-rotate {
+  animation: mechanical-rotate 2s linear infinite;
+}
+
+.animate-processing-chamber {
+  animation: processing-chamber 2s ease-in-out infinite;
+}
+
+.animate-data-processing {
+  animation: data-processing 1.8s ease-in-out infinite;
+}
+
+.animate-text-scan {
+  animation: text-scan 3s ease-in-out infinite;
+}
+
+.animate-metric-highlight {
+  animation: metric-highlight 2s ease-in-out infinite;
+}
+
+.animate-ai-thinking {
+  animation: ai-thinking 2.5s ease-in-out infinite;
+}
+
+.animate-brain-pulse {
+  animation: brain-pulse 2s ease-in-out infinite;
+}
+
+.animate-ai-process {
+  animation: ai-process 4s ease-in-out infinite;
+}
+
+.animate-ai-spark {
+  animation: ai-spark 3s ease-in-out infinite;
+}
+
+.animate-real-time {
+  animation: real-time 1s ease-in-out infinite;
+}
+
+.animate-output-flow {
+  animation: output-flow 2s ease-in-out infinite;
+}
+
+.animate-production-line {
+  animation: production-line 1.2s ease-in-out infinite;
+}
+
+.animate-metric-output {
+  animation: metric-output 2.5s ease-out forwards;
+}
+
+.animate-stamp {
+  animation: stamp 0.5s ease-out infinite;
+}
+
+.animate-output-stream {
+  animation: output-stream 1.5s ease-in-out infinite;
+}
+
+.animate-steam {
+  animation: steam 4s ease-in-out infinite;
+}
+
+.factory-station {
+  animation: factory-hum 3s ease-in-out infinite;
+}
+
+@keyframes conveyor-belt {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 0;
+  }
+}
+
+@keyframes data-packet {
+  0% {
+    transform: translateX(-120px) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw + 120px)) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes factory-input {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(5px) scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes machine-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(255, 100, 100, 0.3);
+  }
+  50% {
+    transform: scale(1.3);
+    box-shadow: 0 0 15px rgba(255, 100, 100, 0.7);
+  }
+}
+
+@keyframes data-stream {
+  0%, 100% {
+    transform: scaleX(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleX(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes mechanical-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes processing-chamber {
+  0%, 100% {
+    background: linear-gradient(to bottom, rgba(251, 191, 36, 0.3), transparent);
+    transform: scaleY(1);
+  }
+  50% {
+    background: linear-gradient(to bottom, rgba(251, 191, 36, 0.6), transparent);
+    transform: scaleY(1.2);
+  }
+}
+
+@keyframes data-processing {
+  0%, 100% {
+    transform: scale(1) rotateY(0deg);
+    filter: brightness(1);
+  }
+  25% {
+    transform: scale(1.1) rotateY(90deg);
+    filter: brightness(1.3);
+  }
+  50% {
+    transform: scale(1.05) rotateY(180deg);
+    filter: brightness(1.1);
+  }
+  75% {
+    transform: scale(1.15) rotateY(270deg);
+    filter: brightness(1.4);
+  }
+}
+
+@keyframes text-scan {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(3px);
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+  }
+}
+
+@keyframes metric-highlight {
+  0%, 100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+  50% {
+    background-color: rgba(251, 191, 36, 0.1);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes ai-thinking {
+  0%, 100% {
+    background: linear-gradient(to bottom, rgba(34, 211, 238, 0.3), transparent);
+    transform: scaleY(1) scaleX(1);
+  }
+  33% {
+    background: linear-gradient(to bottom, rgba(34, 211, 238, 0.6), transparent);
+    transform: scaleY(1.3) scaleX(1.1);
+  }
+  66% {
+    background: linear-gradient(to bottom, rgba(34, 211, 238, 0.4), transparent);
+    transform: scaleY(0.9) scaleX(0.95);
+  }
+}
+
+@keyframes brain-pulse {
+  0%, 100% {
+    transform: scale(1) rotateZ(0deg);
+    filter: brightness(1) hue-rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotateZ(5deg);
+    filter: brightness(1.3) hue-rotate(10deg);
+  }
+  50% {
+    transform: scale(1.05) rotateZ(-3deg);
+    filter: brightness(1.1) hue-rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.15) rotateZ(2deg);
+    filter: brightness(1.4) hue-rotate(15deg);
+  }
+}
+
+@keyframes ai-process {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-2px);
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateY(1px);
+  }
+  75% {
+    opacity: 1;
+    transform: translateY(-1px);
+    text-shadow: 0 0 12px rgba(34, 211, 238, 0.8);
+  }
+}
+
+@keyframes ai-spark {
+  0%, 90%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  5%, 15% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  10% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
+@keyframes real-time {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+  }
+}
+
+@keyframes output-flow {
+  0%, 100% {
+    background: linear-gradient(to bottom, rgba(34, 197, 94, 0.3), transparent);
+    transform: scaleY(1);
+  }
+  50% {
+    background: linear-gradient(to bottom, rgba(34, 197, 94, 0.7), transparent);
+    transform: scaleY(1.4);
+  }
+}
+
+@keyframes production-line {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+  }
+  50% {
+    transform: scale(1.4);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.8);
+  }
+}
+
+@keyframes metric-output {
+  0% {
+    transform: translateX(20px) scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-5px) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes stamp {
+  0%, 70%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  80%, 90% {
+    transform: translateY(-3px) scale(1.1);
+  }
+}
+
+@keyframes output-stream {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(10px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes steam {
+  0% {
+    transform: translateY(0) scaleX(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-10px) scaleX(1.5);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-20px) scaleX(2);
+    opacity: 0;
+  }
+}
+
+@keyframes factory-hum {
+  0%, 100% {
+    transform: translateY(0);
+    filter: brightness(1);
+  }
+  50% {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
 }

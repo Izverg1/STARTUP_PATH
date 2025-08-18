@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   Home,
   FlaskConical,
@@ -11,6 +12,7 @@ import {
   TrendingUp,
   Bot,
   Settings,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -68,6 +70,7 @@ const navigationItems = [
 
 export function Navigation() {
   const pathname = usePathname();
+  const [loadingRoute, setLoadingRoute] = useState<string | null>(null);
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -84,29 +87,46 @@ export function Navigation() {
             const Icon = item.icon;
             const isActive = pathname === item.href || 
               (item.href !== "/" && pathname.startsWith(item.href));
+            const isLoading = loadingRoute === item.href;
 
             return (
               <Tooltip key={item.id}>
                 <TooltipTrigger asChild>
                   <Link
                     href={item.href}
+                    onClick={() => {
+                      if (!isActive) {
+                        setLoadingRoute(item.href);
+                        setTimeout(() => setLoadingRoute(null), 1000);
+                      }
+                    }}
                     className={cn(
-                      "group relative flex h-12 w-full items-center justify-center rounded-xl transition-all duration-300",
+                      "group relative flex h-12 w-full items-center justify-center rounded-xl transition-all duration-300 hover:scale-105",
                       isActive ? 
                         "bg-gradient-to-r from-blue-600/20 to-indigo-600/20 border border-blue-500/30 shadow-lg shadow-blue-500/10" : 
-                        "hover:bg-white/5 hover:border hover:border-white/10",
-                      !isActive && "text-blue-200/70 hover:text-white"
+                        "hover:bg-white/5 hover:border hover:border-white/10 hover:shadow-lg hover:shadow-white/5",
+                      !isActive && "text-blue-200/70 hover:text-white",
+                      isLoading && "animate-pulse"
                     )}
                     aria-label={item.label}
                   >
                     {isActive && (
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 rounded-xl animate-pulse" />
                     )}
+                    
+                    {/* Loading spinner overlay */}
+                    {isLoading && (
+                      <div className="absolute inset-0 bg-white/10 rounded-xl flex items-center justify-center">
+                        <Loader2 className="h-4 w-4 animate-spin text-blue-400" />
+                      </div>
+                    )}
+                    
                     <Icon 
                       className={cn(
                         "h-5 w-5 transition-all duration-300 relative z-10",
                         isActive && "text-blue-400 scale-110",
-                        !isActive && item.id === "assistant" && "text-cyan-400"
+                        !isActive && item.id === "assistant" && "text-cyan-400",
+                        isLoading && "opacity-50"
                       )} 
                     />
                   </Link>

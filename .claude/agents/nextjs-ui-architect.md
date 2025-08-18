@@ -1,11 +1,6 @@
 ---
 name: nextjs-ui-architect
 description: |
-  Next.js 15 and React specialist for SOL:GEN's complex UI architecture.
-  Expert in App Router, Tailwind CSS v4, shadcn/ui, responsive design, and accessibility.
-  PROACTIVELY use for component architecture, layout systems, routing, form handling, and UI optimization.
-  Specializes in agent dock layout, dashboard widgets, onboarding flows, and Karlson dark theme.
-  MUST BE USED for frontend architecture, component design, routing, and UI/UX development tasks.
 tools: file_editor, terminal, web_search
 ---
 

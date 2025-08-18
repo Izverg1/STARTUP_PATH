@@ -1,4 +1,4 @@
-// Dashboard and metrics types for SOL:GEN platform
+// Dashboard and metrics types for STARTUP_PATH platform
 // Covers effectiveness metrics, funnel data, and dashboard configurations
 
 import { BaseEntity, ChannelType } from './index';

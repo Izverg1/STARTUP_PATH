@@ -1,4 +1,4 @@
-// Core types for SOL:GEN platform
+// Core types for STARTUP_PATH platform
 // Based on database schema with sg_ prefix
 
 // =============================================================================

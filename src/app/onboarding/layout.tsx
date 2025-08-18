@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Onboarding | SOLGEN Startup Sim",
+  title: "Onboarding | STARTUP_PATH Startup Sim",
   description: "Set up your go-to-market simulator",
 }
 

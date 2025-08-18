@@ -1,4 +1,4 @@
-// Agent types for SOL:GEN platform
+// Agent types for STARTUP_PATH platform
 // Covers Agent states, configurations, and artifact types
 
 import { BaseEntity } from './index';

@@ -169,7 +169,7 @@ export default function SpaceLandingPage() {
               <div className="absolute inset-0 hologram-effect rounded" />
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold text-white neon-glow font-mono tracking-wider">SOL:GEN</span>
+              <span className="text-2xl font-bold text-white neon-glow font-mono tracking-wider">STARTUP_PATH</span>
               <span className="text-xs text-cyan-400 font-mono tracking-widest opacity-80">GTM PLATFORM</span>
             </div>
           </div>
@@ -316,7 +316,7 @@ export default function SpaceLandingPage() {
           {/* Bottom Stats */}
           <div className="absolute bottom-24 left-1/2 -translate-x-1/2 flex items-center gap-3 text-cyan-400 text-lg">
             <Sparkles className="w-5 h-5" />
-            <span>MVP simulation platform for startups</span>
+            <span>STARTUP_PATH simulation platform</span>
           </div>
         </div>
 

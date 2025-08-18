@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**SOL:GEN for startups™** - A simulated MVP platform for Go-To-Market (GTM) testing and experimentation. This platform helps startups validate distribution channels, optimize CAC payback, and make data-driven GTM decisions through intelligent simulation and real-time analytics.
+**STARTUP_PATH for startups™** - A simulated MVP platform for Go-To-Market (GTM) testing and experimentation. This platform helps startups validate distribution channels, optimize CAC payback, and make data-driven GTM decisions through intelligent simulation and real-time analytics.
 
 © Karlson LLC. All rights reserved.
 
@@ -157,3 +157,4 @@ The application is designed to be deployed on Vercel with Supabase as the backen
 - Keep micro-animations under 120ms
 - Ensure 4.5:1 contrast ratio minimum
 - after you are done with a task, always show the link to the site
+- The platform is now called STARTUP_PATH (renamed from SOL:GEN)

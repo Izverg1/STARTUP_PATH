@@ -1,4 +1,4 @@
-// Business rules types for SOL:GEN platform
+// Business rules types for STARTUP_PATH platform
 // Covers rule conditions, actions, versioning, and approval workflows
 
 import { BaseEntity, AgentKey, ChannelType } from './index';

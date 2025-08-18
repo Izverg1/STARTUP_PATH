@@ -1,11 +1,6 @@
 ---
 name: simulation-engine-expert
 description: |
-  SOL:GEN simulation engine specialist focusing on Thompson Sampling allocation algorithms,
-  marketing metrics calculations (CPQM, CAC, Payback), and business intelligence.
-  PROACTIVELY use for simulation logic, allocation algorithms, metrics computation, and demo data generation.
-  Expert in statistical modeling, financial calculations, and startup growth analytics.
-  MUST BE USED for simulation algorithms, marketing metrics, allocation logic, and analytics features.
 tools: file_editor, terminal, web_search
 ---
 

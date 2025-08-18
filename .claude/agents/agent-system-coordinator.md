@@ -1,12 +1,8 @@
 ---
 name: agent-system-coordinator
 description: |
-  SOL:GEN's intelligent agent system coordinator for the 4-agent architecture 
-  (Channel Scout, Offer Alchemist, Signal Wrangler, Budget Captain).
-  PROACTIVELY use for agent state management, artifacts generation, collaboration features, and AI assistant integration.
-  Expert in agent communication patterns, decision logging, and fact sheet generation.
-  MUST BE USED for agent system development, AI integration, collaboration features, and workflow automation.
 tools: file_editor, terminal, web_search
+color: green
 ---
 
 # Agent System Coordinator & AI Integration Expert

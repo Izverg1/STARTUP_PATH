@@ -74,7 +74,7 @@ export function SpaceStationVisualization({ detailed = false }: Props) {
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#ff00aa]/10 to-transparent rounded-2xl animate-pulse" />
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-white mb-1" style={{ textShadow: '0 0 20px rgba(255, 0, 170, 0.8)' }}>SOL:GEN</div>
+                    <div className="text-3xl font-bold text-white mb-1" style={{ textShadow: '0 0 20px rgba(255, 0, 170, 0.8)' }}>STARTUP_PATH</div>
                     <div className="text-xs text-gray-400 mt-1">ONLINE</div>
                   </div>
                 </div>

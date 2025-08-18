@@ -321,7 +321,7 @@ export default function LoginPage() {
             {/* Title */}
             <div className="text-center mb-6">
               <h1 className="text-3xl font-bold text-white mb-2 neon-glow">
-                SOL:GEN Platform
+                STARTUP_PATH Platform
               </h1>
               <p className="text-gray-400">Access your optimization dashboard</p>
             </div>
