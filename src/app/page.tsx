@@ -432,7 +432,7 @@ export default function SpaceLandingPage() {
                 <span className="text-white">WHY THIS</span> 
                 <span className="text-orange-500 neon-glow">HAPPENS</span>
               </h2>
-              <p className="text-2xl text-gray-300 max-w-4xl mx-auto">
+              <div className="text-2xl text-gray-300 max-w-4xl mx-auto">
                 Your marketing data is scattered across{" "}
                 <MetricPopup 
                   metric="Average Marketing Tools"
@@ -443,7 +443,7 @@ export default function SpaceLandingPage() {
                   sourceUrl="https://www.hubspot.com/state-of-marketing"
                   className="text-orange-500 font-bold"
                 />, creating impossible optimization decisions
-              </p>
+              </div>
             </div>
 
             {/* Scattered Data Visualization */}
