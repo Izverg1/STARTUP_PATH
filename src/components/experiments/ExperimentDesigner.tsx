@@ -93,30 +93,33 @@ export function ExperimentDesigner() {
   ];
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col">
-      <div className="flex-1 overflow-x-auto overflow-y-hidden px-4 py-6">
-        <div className="min-w-[1400px] space-y-6">
+    <div className="h-full flex flex-col p-6 overflow-y-auto">
+      <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <FlaskConical className="h-8 w-8 text-red-400" />
-            <span className="bg-gradient-to-r from-red-400 to-white bg-clip-text text-transparent">
-              Experiment Designer
-            </span>
-          </h1>
-          <p className="text-gray-300 mt-2">
-            Design and configure your marketing experiment with channels and success gates
-          </p>
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+          <span className="text-sm text-red-400 font-medium">Experiment Designer</span>
         </div>
+        <h1 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
+          <FlaskConical className="h-6 w-6 text-red-400" />
+          Experiment Designer
+        </h1>
+        <p className="text-gray-400 text-sm">
+          Design and configure your marketing experiment with channels and success gates
+        </p>
+      </div>
+
+      <div className="flex items-center justify-between mb-6">
+        <div></div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="border-red-500/30 text-red-300 hover:bg-red-500/10">
+          <Button variant="outline" className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50">
             <Save className="h-4 w-4 mr-2" />
             Save Draft
           </Button>
           <Button 
             disabled={selectedChannels.length === 0 || !config.name}
-            className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+            className="bg-red-600 hover:bg-red-700 text-white"
           >
             <Play className="h-4 w-4 mr-2" />
             Launch Experiment
@@ -125,7 +128,7 @@ export function ExperimentDesigner() {
       </div>
 
       {/* Progress Steps */}
-      <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-red-900/20 to-black/60 border border-red-500/30 rounded-lg backdrop-blur-sm">
+      <div className="flex items-center gap-4 p-4 bg-black/40 border border-red-500/30 rounded-lg">
         {steps.map((step, index) => {
           const StepIcon = step.icon;
           const isActive = step.id === activeStep;
@@ -158,7 +161,7 @@ export function ExperimentDesigner() {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {activeStep === 'setup' && (
-            <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
+            <Card className="bg-black/40 border border-red-500/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
                   <Settings className="h-5 w-5 text-red-400" />
@@ -280,7 +283,7 @@ export function ExperimentDesigner() {
                 <div className="flex justify-end">
                   <Button 
                     onClick={() => setActiveStep('channels')}
-                    className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                    className="bg-red-600 hover:bg-red-700 text-white"
                   >
                     Continue to Channels
                   </Button>
@@ -299,7 +302,7 @@ export function ExperimentDesigner() {
           )}
 
           {activeStep === 'review' && (
-            <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
+            <Card className="bg-black/40 border border-red-500/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
                   <FlaskConical className="h-5 w-5 text-red-400" />
@@ -374,7 +377,7 @@ export function ExperimentDesigner() {
                   </Button>
                   <Button 
                     disabled={selectedChannels.length === 0 || budgetRemaining < 0}
-                    className="ml-auto bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                    className="ml-auto bg-red-600 hover:bg-red-700 text-white"
                   >
                     <Play className="h-4 w-4 mr-2" />
                     Launch Experiment
@@ -388,7 +391,7 @@ export function ExperimentDesigner() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Budget Overview */}
-          <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
+          <Card className="bg-black/40 border border-red-500/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-sm text-white">
                 <DollarSign className="h-4 w-4 text-red-400" />
@@ -443,7 +446,7 @@ export function ExperimentDesigner() {
           )}
 
           {/* Quick Tips */}
-          <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
+          <Card className="bg-black/40 border border-red-500/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-sm text-white">
                 <Info className="h-4 w-4 text-red-400" />
@@ -461,7 +464,9 @@ export function ExperimentDesigner() {
           </Card>
         </div>
       </div>
-        </div>
+      
+      {/* Bottom Spacing */}
+      <div className="pb-8"></div>
       </div>
     </div>
   );

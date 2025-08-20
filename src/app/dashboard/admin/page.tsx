@@ -94,22 +94,23 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col">
-      <div className="flex-1 overflow-x-auto overflow-y-hidden px-4 py-6">
-        <div className="min-w-[1200px] space-y-6">
+    <div className="h-full flex flex-col p-6 overflow-y-auto">
+      <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-            <DemoIndicator />
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+            <span className="text-sm text-red-400 font-medium">System Administration</span>
           </div>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-2xl font-bold text-white mb-2">Admin Dashboard</h1>
+          <p className="text-gray-400 text-sm">
             System administration and demo mode controls
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={handleRefreshData} disabled={isLoading}>
+          <DemoIndicator />
+          <Button variant="outline" size="sm" onClick={handleRefreshData} disabled={isLoading} className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50">
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
@@ -191,17 +192,17 @@ export default function AdminPage() {
 
           {/* Demo Status Alert */}
           {isDemoEnabled ? (
-            <Alert className="border-purple-200 bg-purple-50">
-              <CheckCircle2 className="h-4 w-4 text-purple-600" />
-              <AlertDescription className="text-purple-800">
+            <Alert className="bg-black/40 border border-purple-500/20">
+              <CheckCircle2 className="h-4 w-4 text-purple-400" />
+              <AlertDescription className="text-gray-300">
                 Demo mode is active. All data shown in the dashboard is synthetic and deterministic.
                 Current dataset was generated on {new Date(demoState.lastGenerated).toLocaleDateString()}.
               </AlertDescription>
             </Alert>
           ) : (
-            <Alert className="border-blue-200 bg-blue-50">
-              <Info className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-blue-800">
+            <Alert className="bg-black/40 border border-blue-500/20">
+              <Info className="h-4 w-4 text-blue-400" />
+              <AlertDescription className="text-gray-300">
                 Live data mode is active. All metrics reflect real performance data from connected sources.
               </AlertDescription>
             </Alert>
@@ -416,9 +417,9 @@ export default function AdminPage() {
 
               {/* All Good */}
               {dataValidation.errors.length === 0 && dataValidation.warnings.length === 0 && (
-                <Alert className="border-green-200 bg-green-50">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-green-800">
+                <Alert className="bg-black/40 border border-green-500/20">
+                  <CheckCircle2 className="h-4 w-4 text-green-400" />
+                  <AlertDescription className="text-gray-300">
                     All validation checks passed. Demo data is consistent and ready for use.
                   </AlertDescription>
                 </Alert>
@@ -516,7 +517,9 @@ export default function AdminPage() {
           </div>
         </TabsContent>
       </Tabs>
-        </div>
+      
+      {/* Bottom Spacing */}
+      <div className="pb-8"></div>
       </div>
     </div>
   );

@@ -47,12 +47,23 @@ export default function AssistantPage() {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col p-6 overflow-y-auto">
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+          <span className="text-sm text-red-400 font-medium">GTM Strategy Assistant</span>
+        </div>
+        <p className="text-gray-400 text-sm">
+          Get AI-powered recommendations to optimize your go-to-market strategy
+        </p>
+      </div>
+
       {/* Hero Section */}
       <div className="text-center py-8 px-4">
         <div className="flex justify-center mb-4">
           <div className="relative">
-            <div className="w-16 h-16 bg-gradient-to-br from-red-600/20 to-black/60 border border-red-500/30 rounded-2xl flex items-center justify-center">
+            <div className="w-16 h-16 bg-black/40 border border-red-500/30 rounded-2xl flex items-center justify-center">
               <Sparkles className="h-8 w-8 text-red-400" />
             </div>
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
@@ -79,7 +90,7 @@ export default function AssistantPage() {
             >
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-red-600/20 to-black/60 border border-red-500/30 rounded-lg flex items-center justify-center text-red-400 group-hover:text-red-300">
+                  <div className="w-10 h-10 bg-black/60 border border-red-500/30 rounded-lg flex items-center justify-center text-red-400 group-hover:text-red-300">
                     {action.icon}
                   </div>
                   <div className="flex-1">
@@ -113,7 +124,7 @@ export default function AssistantPage() {
 
       {/* Start Chat */}
       <div className="px-4 mt-auto pb-8">
-        <Card className="bg-gradient-to-r from-red-900/20 to-black/60 border border-red-500/30">
+        <Card className="bg-black/40 border border-red-500/30">
           <CardContent className="p-6 text-center">
             <div className="flex justify-center mb-4">
               <MessageSquare className="h-8 w-8 text-red-400" />
@@ -124,13 +135,16 @@ export default function AssistantPage() {
             </p>
             <Button 
               onClick={() => setChatStarted(true)}
-              className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
+              className="bg-red-600 hover:bg-red-700 text-white"
             >
               Start Strategy Session
             </Button>
           </CardContent>
         </Card>
       </div>
+      
+      {/* Bottom Spacing */}
+      <div className="pb-8"></div>
     </div>
   );
 }
