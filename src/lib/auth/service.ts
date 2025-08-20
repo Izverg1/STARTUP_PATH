@@ -29,17 +29,102 @@ class AuthService {
   // Professional login flow
   async login(email: string, password: string): Promise<AuthUser> {
     try {
-      // Demo mode validation
-      if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
-        return this.handleDemoLogin(email, password)
+      // Check if this is demo user credentials
+      const { DEMO_USER, DEV } = AUTH_CONFIG
+      if (email === DEMO_USER.email && password === DEMO_USER.password) {
+        // Try Supabase first, fall back to demo mode if it fails
+        try {
+          return await this.handleDemoUserSupabaseLogin(email, password)
+        } catch (supabaseError) {
+          console.warn('Supabase auth failed, using fallback demo mode:', (supabaseError as Error).message)
+          
+          // Use fallback demo authentication in development
+          if (DEV.useFallbackAuth && process.env.NODE_ENV === 'development') {
+            console.log('🔄 Using fallback demo authentication for development')
+            return this.handleDemoLogin(email, password)
+          }
+          
+          // Re-throw the original error if not in fallback mode
+          throw supabaseError
+        }
       }
 
-      // Real Supabase authentication
+      // Real Supabase authentication for other users
       return this.handleSupabaseLogin(email, password)
     } catch (error) {
       if (error instanceof AuthError) throw error
       throw new AuthError('Login failed', 'network_error')
     }
+  }
+
+
+  // Demo user authentication through real Supabase
+  private async handleDemoUserSupabaseLogin(email: string, password: string): Promise<AuthUser> {
+    if (!this.supabase) {
+      throw new AuthError('Supabase client not initialized', 'network_error')
+    }
+
+    // Only try to sign in - no auto-registration for security
+    const { data: signInData, error: signInError } = await this.supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+
+    if (signInError) {
+      throw new AuthError(
+        signInError.message || 'Authentication failed. Demo user must be created manually.',
+        'invalid_credentials'
+      )
+    }
+
+    if (!signInData.user) {
+      throw new AuthError('No user data received', 'invalid_credentials')
+    }
+
+    return this.createUserSession(signInData.user, signInData.session)
+  }
+
+  // Helper to create user session from Supabase data
+  private async createUserSession(user: any, session: any): Promise<AuthUser> {
+    // Get user profile from users table (using actual table name)
+    const { data: userProfile, error: profileError } = await this.supabase!
+      .from('users')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError) {
+      console.error('Error fetching user profile:', profileError)
+      // Don't throw error if profile doesn't exist, just continue without it
+      console.warn('Profile error but continuing with auth user data only - this is expected for demo users')
+    }
+
+    // Create professional user session from Supabase user and profile
+    const authUser: AuthUser = {
+      id: user.id,
+      email: user.email || user.email,
+      name: userProfile?.name || user.user_metadata?.name || 'Demo User',
+      role: (userProfile?.role as UserRole) || 'owner',
+      orgId: userProfile?.org_id || 'demo-org',
+      orgName: 'STARTUP_PATH Demo', // Simplified - can fetch org separately if needed
+      avatarUrl: userProfile?.avatar_url || user.user_metadata?.avatar_url,
+      lastLogin: new Date().toISOString(),
+      onboardingCompleted: true // Default to true since field doesn't exist in schema
+    }
+
+    // Create session with Supabase session data
+    this.session = {
+      user: authUser,
+      token: session?.access_token || this.generateDemoToken(),
+      expiresAt: session?.expires_at ? session.expires_at * 1000 : Date.now() + AUTH_CONFIG.SESSION.duration,
+      refreshToken: session?.refresh_token
+    }
+
+    // Store in localStorage for persistence
+    this.storeSession()
+    this.notifyListeners(authUser)
+
+    return authUser
   }
 
   // Demo authentication for professional platform
@@ -104,15 +189,15 @@ class AuthService {
       throw new AuthError('No user data received', 'invalid_credentials')
     }
 
-    // Get user profile from SPATH_users table
+    // Get user profile from users table  
     const { data: userProfile, error: profileError } = await this.supabase
-      .from('SPATH_users')
+      .from('users')
       .select(`
         *,
-        SPATH_organizations (
+        organizations (
           id,
           name,
-          slug
+          domain
         )
       `)
       .eq('id', data.user.id)
@@ -129,7 +214,7 @@ class AuthService {
       name: userProfile?.name || data.user.user_metadata?.name || 'User',
       role: (userProfile?.role as UserRole) || 'owner',
       orgId: userProfile?.org_id || 'default-org',
-      orgName: userProfile?.SPATH_organizations?.name || 'STARTUP_PATH',
+      orgName: userProfile?.organizations?.name || 'STARTUP_PATH',
       avatarUrl: userProfile?.avatar_url || data.user.user_metadata?.avatar_url,
       lastLogin: new Date().toISOString(),
       onboardingCompleted: userProfile?.onboarding_completed || false

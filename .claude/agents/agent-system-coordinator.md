@@ -1,7 +1,6 @@
 ---
 name: agent-system-coordinator
 description: |
-tools: file_editor, terminal, web_search
 color: green
 ---
 

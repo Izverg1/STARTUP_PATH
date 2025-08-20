@@ -558,12 +558,12 @@ export default function SpaceLandingPage() {
         <div className="min-w-full h-full flex-shrink-0 flex items-center px-16 relative overflow-hidden">
           <div className="w-full max-w-7xl mx-auto">
             {/* Title Section */}
-            <div className="mb-12 text-center">
-              <h2 className="text-4xl font-bold tracking-wider mb-6">
+            <div className="mb-6 text-center">
+              <h2 className="text-3xl font-bold tracking-wider mb-4">
                 <span className="text-white">OUR</span> 
                 <span className="text-cyan-500 neon-glow">APPROACH</span>
               </h2>
-              <div className="text-2xl text-gray-300 max-w-4xl mx-auto">
+              <div className="text-lg text-gray-300 max-w-4xl mx-auto">
                 STARTUP_PATH unifies all your marketing data into{" "}
                 <MetricPopup 
                   metric="Unified Intelligence Platform"
@@ -577,26 +577,25 @@ export default function SpaceLandingPage() {
             </div>
 
             {/* The 4-Agent Team */}
-            <div className="grid grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
+            <div className="grid grid-cols-2 gap-3 max-w-4xl mx-auto mb-4">
               
               {/* Agent 1: Channel Discovery Engine */}
-              <Card className="bg-black/60 border border-cyan-500/30 p-6 hover:border-cyan-500/50 transition-all duration-300">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center">
-                    <Satellite className="w-6 h-6 text-cyan-400" />
+              <Card className="bg-black/60 border border-cyan-500/30 p-3 hover:border-cyan-500/50 transition-all duration-300">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                    <Satellite className="w-4 h-4 text-cyan-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-cyan-400">Channel Discovery Engine</h3>
-                    <p className="text-sm text-gray-400">Identifies & validates marketing opportunities</p>
+                    <h3 className="text-sm font-bold text-cyan-400">Channel Discovery Engine</h3>
+                    <p className="text-xs text-gray-400">Identifies & validates opportunities</p>
                   </div>
                 </div>
-                <div className="space-y-3 text-sm text-gray-300">
-                  <div>• Scans 50+ potential marketing channels weekly</div>
-                  <div>• Tests micro-budgets ($100-500) to validate fit</div>
-                  <div>• Analyzes competitor channel performance</div>
+                <div className="space-y-1 text-xs text-gray-300">
+                  <div>• Scans 50+ channels weekly</div>
+                  <div>• Tests micro-budgets to validate</div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-700">
-                  <div className="text-lg font-bold text-cyan-400">
+                <div className="mt-2 pt-2 border-t border-gray-700">
+                  <div className="text-xs font-bold text-cyan-400">
                     <MetricPopup 
                       metric="Channel Discovery Rate"
                       value="3-5 validated channels/month"
@@ -606,28 +605,26 @@ export default function SpaceLandingPage() {
                       className="text-cyan-400 font-bold"
                     />
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">vs 0.5/quarter manually</p>
                 </div>
               </Card>
 
               {/* Agent 2: Campaign Optimization Engine */}
-              <Card className="bg-black/60 border border-red-500/30 p-6 hover:border-red-500/50 transition-all duration-300">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center">
-                    <Target className="w-6 h-6 text-red-400" />
+              <Card className="bg-black/60 border border-red-500/30 p-3 hover:border-red-500/50 transition-all duration-300">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
+                    <Target className="w-4 h-4 text-red-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-red-400">Campaign Optimization Engine</h3>
-                    <p className="text-sm text-gray-400">Optimizes messaging & creative performance</p>
+                    <h3 className="text-sm font-bold text-red-400">Campaign Optimization Engine</h3>
+                    <p className="text-xs text-gray-400">Optimizes messaging & creative</p>
                   </div>
                 </div>
-                <div className="space-y-3 text-sm text-gray-300">
-                  <div>• A/B tests 20+ message variations simultaneously</div>
-                  <div>• Optimizes creative assets and landing pages</div>
-                  <div>• Personalizes offers by audience segment</div>
+                <div className="space-y-1 text-xs text-gray-300">
+                  <div>• A/B tests 20+ message variations</div>
+                  <div>• Optimizes creative assets</div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-700">
-                  <div className="text-lg font-bold text-red-400">
+                <div className="mt-2 pt-2 border-t border-gray-700">
+                  <div className="text-xs font-bold text-red-400">
                     <MetricPopup 
                       metric="Conversion Rate Improvement"
                       value="40-85% CTR increase"
@@ -638,28 +635,26 @@ export default function SpaceLandingPage() {
                       className="text-red-400 font-bold"
                     />
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">vs 15% manual optimization</p>
                 </div>
               </Card>
 
               {/* Agent 3: Performance Analytics Engine */}
-              <Card className="bg-black/60 border border-green-500/30 p-6 hover:border-green-500/50 transition-all duration-300">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
-                    <BarChart3 className="w-6 h-6 text-green-400" />
+              <Card className="bg-black/60 border border-green-500/30 p-3 hover:border-green-500/50 transition-all duration-300">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                    <BarChart3 className="w-4 h-4 text-green-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-green-400">Performance Analytics Engine</h3>
-                    <p className="text-sm text-gray-400">Real-time performance monitoring & analysis</p>
+                    <h3 className="text-sm font-bold text-green-400">Performance Analytics Engine</h3>
+                    <p className="text-xs text-gray-400">Real-time monitoring & analysis</p>
                   </div>
                 </div>
-                <div className="space-y-3 text-sm text-gray-300">
-                  <div>• Monitors 500K+ data points across all channels</div>
-                  <div>• Detects performance trends in real-time</div>
-                  <div>• Identifies optimization opportunities instantly</div>
+                <div className="space-y-1 text-xs text-gray-300">
+                  <div>• Monitors 500K+ data points</div>
+                  <div>• Detects trends in real-time</div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-700">
-                  <div className="text-lg font-bold text-green-400">
+                <div className="mt-2 pt-2 border-t border-gray-700">
+                  <div className="text-xs font-bold text-green-400">
                     <MetricPopup 
                       metric="Trend Detection Speed"
                       value="2-4 hours vs 6+ weeks"
@@ -669,28 +664,26 @@ export default function SpaceLandingPage() {
                       className="text-green-400 font-bold"
                     />
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">Real-time optimization alerts</p>
                 </div>
               </Card>
 
               {/* Agent 4: Budget Allocation Engine */}
-              <Card className="bg-black/60 border border-purple-500/30 p-6 hover:border-purple-500/50 transition-all duration-300">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-purple-400" />
+              <Card className="bg-black/60 border border-purple-500/30 p-3 hover:border-purple-500/50 transition-all duration-300">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-purple-400">Budget Allocation Engine</h3>
-                    <p className="text-sm text-gray-400">Automated spend optimization & reallocation</p>
+                    <h3 className="text-sm font-bold text-purple-400">Budget Allocation Engine</h3>
+                    <p className="text-xs text-gray-400">Automated spend optimization</p>
                   </div>
                 </div>
-                <div className="space-y-3 text-sm text-gray-300">
-                  <div>• Moves budget from losers to winners daily</div>
-                  <div>• Uses Thompson Sampling for allocation</div>
-                  <div>• Maximizes ROAS across entire portfolio</div>
+                <div className="space-y-1 text-xs text-gray-300">
+                  <div>• Moves budget to winners daily</div>
+                  <div>• Uses Thompson Sampling</div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-700">
-                  <div className="text-lg font-bold text-purple-400">
+                <div className="mt-2 pt-2 border-t border-gray-700">
+                  <div className="text-xs font-bold text-purple-400">
                     <MetricPopup 
                       metric="ROAS Improvement"
                       value="65-120% better ROAS"
@@ -701,15 +694,14 @@ export default function SpaceLandingPage() {
                       className="text-purple-400 font-bold"
                     />
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">vs manual reallocation</p>
                 </div>
               </Card>
             </div>
 
             {/* The Key Advantage */}
-            <div className="text-center bg-gray-900/30 rounded-lg p-8 border border-cyan-500/20">
-              <h3 className="text-2xl font-bold text-cyan-500 mb-4">The Key Advantage: They Work Together</h3>
-              <div className="text-lg text-gray-300 max-w-4xl mx-auto">
+            <div className="text-center bg-gray-900/30 rounded-lg p-4 border border-cyan-500/20">
+              <h3 className="text-lg font-bold text-cyan-500 mb-2">The Key Advantage: They Work Together</h3>
+              <div className="text-sm text-gray-300 max-w-3xl mx-auto">
                 Unlike disconnected tools, these 4 agents share data and coordinate decisions in real-time, creating{" "}
                 <MetricPopup 
                   metric="Compound Optimization Effect"

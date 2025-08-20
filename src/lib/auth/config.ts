@@ -38,6 +38,12 @@ export const AUTH_CONFIG = {
     sso: false, // Future enterprise feature
     inviteFlow: true, // Team collaboration
     roleBasedAccess: true
+  },
+
+  // Temporary development configuration - REMOVE IN PRODUCTION
+  DEV: {
+    bypassSupabaseAuth: process.env.NODE_ENV === 'development',
+    useFallbackAuth: true // Fall back to demo mode if Supabase auth fails
   }
 }
 

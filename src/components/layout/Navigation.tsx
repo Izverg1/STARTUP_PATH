@@ -21,26 +21,32 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 const navigationItems = [
   {
+    id: "command-center",
+    label: "Command Center",
+    href: "/dashboard",
+    icon: Home,
+  },
+  {
     id: "experiments",
-    label: "Missions",
+    label: "Experiments",
     href: "/dashboard/experiments",
     icon: FlaskConical,
   },
   {
     id: "benchmarks",
-    label: "Telemetry",
+    label: "Analytics",
     href: "/dashboard/benchmarks",
     icon: BarChart3,
   },
   {
     id: "rules",
-    label: "Protocols",
+    label: "Rules",
     href: "/dashboard/rules",
     icon: Shield,
   },
   {
     id: "collab",
-    label: "Crew",
+    label: "Team",
     href: "/dashboard/collaboration",
     icon: Users,
   },
@@ -52,13 +58,13 @@ const navigationItems = [
   },
   {
     id: "assistant",
-    label: "Co-Pilot",
+    label: "Assistant",
     href: "/dashboard/assistant",
     icon: Bot,
   },
   {
     id: "admin",
-    label: "Command",
+    label: "Settings",
     href: "/dashboard/admin",
     icon: Settings,
   },
@@ -76,19 +82,23 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
   return (
     <TooltipProvider delayDuration={300}>
       <nav className="flex flex-col h-full p-3">
-        {/* Header with Logo and Toggle */}
+        {/* Header with Toggle */}
         <div className="flex items-center justify-between mb-6 py-2">
           <div className={cn(
             "flex items-center gap-3 transition-all duration-300",
             !isExpanded && "justify-center w-full"
           )}>
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 flex-shrink-0">
-              <span className="text-white font-bold text-lg">S</span>
-            </div>
             {isExpanded && (
               <div className="flex flex-col">
-                <span className="text-white font-bold text-sm">STARTUP</span>
-                <span className="text-blue-300 text-xs tracking-wider">PATH</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-white font-bold text-lg neon-glow">STARTUP_PATH</span>
+                </div>
+                <span className="text-red-400 text-sm">Navigation</span>
+              </div>
+            )}
+            {!isExpanded && (
+              <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-black rounded-xl flex items-center justify-center shadow-lg shadow-red-500/20 flex-shrink-0">
+                <span className="text-white font-bold text-lg">SP</span>
               </div>
             )}
           </div>
@@ -97,7 +107,7 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
           <button
             onClick={onToggle}
             className={cn(
-              "p-1.5 rounded-lg text-blue-200 hover:text-white hover:bg-white/10 transition-all duration-300",
+              "p-1.5 rounded-lg text-red-200 hover:text-white hover:bg-white/10 transition-all duration-300",
               !isExpanded && "hidden"
             )}
             aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
@@ -114,7 +124,7 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
         {!isExpanded && (
           <button
             onClick={onToggle}
-            className="p-1.5 rounded-lg text-blue-200 hover:text-white hover:bg-white/10 transition-all duration-300 mb-4 mx-auto"
+            className="p-1.5 rounded-lg text-red-200 hover:text-white hover:bg-white/10 transition-all duration-300 mb-4 mx-auto"
             aria-label="Expand sidebar"
           >
             <ChevronRight className="h-4 w-4" />
@@ -143,29 +153,29 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                       "group relative flex h-12 w-full items-center rounded-xl transition-all duration-300 hover:scale-105",
                       isExpanded ? "justify-start px-3 gap-3" : "justify-center",
                       isActive ? 
-                        "bg-gradient-to-r from-blue-600/20 to-indigo-600/20 border border-blue-500/30 shadow-lg shadow-blue-500/10" : 
+                        "bg-gradient-to-r from-red-600/20 to-black/20 border border-red-500/30 shadow-lg shadow-red-500/10" : 
                         "hover:bg-white/5 hover:border hover:border-white/10 hover:shadow-lg hover:shadow-white/5",
-                      !isActive && "text-blue-200/70 hover:text-white",
+                      !isActive && "text-red-200/70 hover:text-white",
                       isLoading && "animate-pulse"
                     )}
                     aria-label={item.label}
                   >
                     {isActive && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 rounded-xl animate-pulse" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 to-black/10 rounded-xl animate-pulse" />
                     )}
                     
                     {/* Loading spinner overlay */}
                     {isLoading && (
                       <div className="absolute inset-0 bg-white/10 rounded-xl flex items-center justify-center">
-                        <Loader2 className="h-4 w-4 animate-spin text-blue-400" />
+                        <Loader2 className="h-4 w-4 animate-spin text-red-400" />
                       </div>
                     )}
                     
                     <Icon 
                       className={cn(
                         "h-5 w-5 transition-all duration-300 relative z-10 flex-shrink-0",
-                        isActive && "text-blue-400 scale-110",
-                        !isActive && item.id === "assistant" && "text-cyan-400",
+                        isActive && "text-red-400 scale-110",
+                        !isActive && item.id === "assistant" && "text-red-400",
                         isLoading && "opacity-50"
                       )} 
                     />
@@ -174,8 +184,8 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                     {isExpanded && (
                       <span className={cn(
                         "text-sm font-medium transition-all duration-300 relative z-10",
-                        isActive && "text-blue-200",
-                        !isActive && "text-blue-200/70 group-hover:text-white",
+                        isActive && "text-red-200",
+                        !isActive && "text-red-200/70 group-hover:text-white",
                         isLoading && "opacity-50"
                       )}>
                         {item.label}

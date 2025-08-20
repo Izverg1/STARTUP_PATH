@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Rocket, Lock, Mail, TrendingUp, DollarSign, BarChart3, Zap, Target, Brain, AlertCircle } from 'lucide-react'
 import { LoadingTransition } from '@/components/LoadingTransition'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/contexts/AuthContext'
 
 // Channel logo components
 const GoogleAdsLogo = () => (
@@ -64,7 +64,8 @@ const WebinarLogo = () => (
 
 export default function LoginPage() {
   const router = useRouter()
-  const { login, error, isLoading, clearError, isAuthenticated } = useAuth()
+  const { login, isAuthenticated, loading } = useAuth()
+  const [error, setError] = useState<string | null>(null)
   const [email, setEmail] = useState('user@startuppath.ai')
   const [password, setPassword] = useState('demo123')
   const [isClient, setIsClient] = useState(false)
@@ -79,20 +80,20 @@ export default function LoginPage() {
     }
     
     // Clear any existing errors when component mounts
-    clearError()
-  }, [isAuthenticated, clearError])
+    setError(null)
+  }, [isAuthenticated])
 
   // Professional authentication flow
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    clearError()
+    setError(null)
     
     try {
       await login(email, password)
       // Success - show professional transition
       setShowTransition(true)
     } catch (err) {
-      // Error handling is managed by useAuth hook
+      setError((err as Error).message || 'Login failed')
       console.error('Login failed:', err)
     }
   }
@@ -361,10 +362,10 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                disabled={isLoading}
+                disabled={loading}
                 className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg border border-red-500/30 hover:border-red-400/50 transition-all duration-300 neon-border"
               >
-                {isLoading ? (
+                {loading ? (
                   <div className="flex items-center justify-center">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                     Authenticating...

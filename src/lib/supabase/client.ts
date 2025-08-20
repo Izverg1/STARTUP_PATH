@@ -135,7 +135,7 @@ export async function getUserProfile() {
     .from('SPATH_users')
     .select(`
       *,
-      SPATH_orgs:org_id (
+      SPATH_organizations:org_id (
         id,
         name,
         slug,

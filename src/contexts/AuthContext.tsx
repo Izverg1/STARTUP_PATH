@@ -2,59 +2,90 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import { authService } from '@/lib/auth/service'
+import { AuthUser } from '@/lib/auth/config'
 
 interface AuthContextType {
   isAuthenticated: boolean
-  userEmail: string | null
-  login: (email: string) => void
-  logout: () => void
+  user: AuthUser | null
+  login: (email: string, password: string) => Promise<void>
+  register: (email: string, password: string, name: string) => Promise<void>
+  logout: () => Promise<void>
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [user, setUser] = useState<AuthUser | null>(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
-    // Check localStorage on mount
-    const authStatus = localStorage.getItem('isAuthenticated')
-    const email = localStorage.getItem('userEmail')
-    
-    if (authStatus === 'true' && email) {
-      setIsAuthenticated(true)
-      setUserEmail(email)
-    }
+    // Subscribe to auth changes
+    const unsubscribe = authService.onAuthChange((user) => {
+      setUser(user)
+      setLoading(false)
+      
+      // Redirect logic
+      const publicPaths = ['/', '/login', '/auth/register', '/auth/reset-password']
+      const isPublicPath = publicPaths.some(path => pathname.startsWith(path))
+      
+      if (!user && !isPublicPath) {
+        router.push('/login')
+      } else if (user && pathname === '/login') {
+        router.push('/dashboard')
+      }
+    })
 
-    // Redirect logic
-    const publicPaths = ['/', '/login']
-    const isPublicPath = publicPaths.includes(pathname)
-    
-    if (!authStatus && !isPublicPath) {
-      router.push('/login')
-    }
+    return unsubscribe
   }, [pathname, router])
 
-  const login = (email: string) => {
-    localStorage.setItem('isAuthenticated', 'true')
-    localStorage.setItem('userEmail', email)
-    setIsAuthenticated(true)
-    setUserEmail(email)
-    router.push('/dashboard')
+  const login = async (email: string, password: string) => {
+    setLoading(true)
+    try {
+      await authService.login(email, password)
+      // User state will be updated via the auth change listener
+    } catch (error) {
+      setLoading(false)
+      throw error
+    }
   }
 
-  const logout = () => {
-    localStorage.removeItem('isAuthenticated')
-    localStorage.removeItem('userEmail')
-    setIsAuthenticated(false)
-    setUserEmail(null)
-    router.push('/login')
+  const register = async (email: string, password: string, name: string) => {
+    setLoading(true)
+    try {
+      await authService.register(email, password, name)
+      // User state will be updated via the auth change listener
+    } catch (error) {
+      setLoading(false)
+      throw error
+    }
   }
+
+  const logout = async () => {
+    setLoading(true)
+    try {
+      await authService.logout()
+      // User state will be updated via the auth change listener
+    } catch (error) {
+      setLoading(false)
+      throw error
+    }
+  }
+
+  const isAuthenticated = !!user
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userEmail, login, logout }}>
+    <AuthContext.Provider value={{ 
+      isAuthenticated, 
+      user, 
+      login, 
+      register,
+      logout, 
+      loading 
+    }}>
       {children}
     </AuthContext.Provider>
   )

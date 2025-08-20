@@ -22,17 +22,30 @@ export default function RulesPage() {
   };
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col">
-      <div className="flex-1 overflow-x-auto overflow-y-hidden px-4 py-6">
-        <div className="min-w-[1200px]">
-          <RulesBuilder
-            projectId="demo-project"
-            onRuleCreate={handleRuleCreate}
-            onRuleUpdate={handleRuleUpdate}
-            onRuleDelete={handleRuleDelete}
-          />
+    <div className="h-full flex flex-col p-6 overflow-y-auto">
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+          <span className="text-sm text-orange-400 font-medium">Business Rules Engine</span>
         </div>
+        <p className="text-gray-400 text-sm">
+          Build intelligent automation rules to optimize your GTM strategy
+        </p>
       </div>
+
+      {/* Rules Builder */}
+      <div className="flex-1">
+        <RulesBuilder
+          projectId="demo-project"
+          onRuleCreate={handleRuleCreate}
+          onRuleUpdate={handleRuleUpdate}
+          onRuleDelete={handleRuleDelete}
+        />
+      </div>
+
+      {/* Bottom Spacing */}
+      <div className="pb-8"></div>
     </div>
   );
 }

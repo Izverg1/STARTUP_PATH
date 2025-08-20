@@ -14,7 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Install dependencies
 npm install
 
-# Run development server
+# Run development server (runs on port 1010)
 npm run dev
 
 # Build for production
@@ -156,5 +156,5 @@ The application is designed to be deployed on Vercel with Supabase as the backen
 - Respect prefers-reduced-motion for accessibility
 - Keep micro-animations under 120ms
 - Ensure 4.5:1 contrast ratio minimum
-- after you are done with a task, always show the link to the site
+- after you are done with a task, always show the link to the site (http://localhost:1010)
 - The platform is now called STARTUP_PATH (renamed from SOL:GEN)

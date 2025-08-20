@@ -1,7 +1,6 @@
 ---
 name: three-js-specialist
 description: |
-tools: file_editor, terminal, web_search
 color: yellow
 ---
 

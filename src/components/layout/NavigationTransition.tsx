@@ -2,47 +2,74 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { PageLoader } from '@/components/ui/page-loader';
+import { LoadingPopup } from '@/components/ui/LoadingPopup';
+import { AnimatePresence } from 'framer-motion';
 
 interface NavigationTransitionProps {
   children: React.ReactNode;
 }
 
+const getLoadingMessage = (pathname: string) => {
+  if (pathname.includes('/experiments')) {
+    return {
+      message: "Loading Experiment Lab",
+      submessage: "Preparing channel validation tools..."
+    };
+  } else if (pathname.includes('/benchmarks')) {
+    return {
+      message: "Loading Benchmarks",
+      submessage: "Fetching industry traction data..."
+    };
+  } else if (pathname.includes('/rules')) {
+    return {
+      message: "Loading Rules Engine",
+      submessage: "Configuring automation logic..."
+    };
+  } else if (pathname.includes('/collaboration')) {
+    return {
+      message: "Loading Collaboration",
+      submessage: "Syncing team workspace..."
+    };
+  } else if (pathname.includes('/effectiveness')) {
+    return {
+      message: "Loading Analytics",
+      submessage: "Calculating performance metrics..."
+    };
+  } else if (pathname.includes('/assistant')) {
+    return {
+      message: "Loading GTM Assistant",
+      submessage: "Initializing strategy recommendations..."
+    };
+  } else if (pathname.includes('/admin')) {
+    return {
+      message: "Loading Settings",
+      submessage: "Configuring platform preferences..."
+    };
+  } else {
+    return {
+      message: "Loading Command Center",
+      submessage: "Optimizing GTM performance matrix..."
+    };
+  }
+};
+
 export function NavigationTransition({ children }: NavigationTransitionProps) {
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
-  const [loaderType, setLoaderType] = useState<'experiments' | 'benchmarks' | 'rules' | 'collaboration' | 'effectiveness' | 'assistant' | 'admin' | 'default'>('default');
+  const [loadingContent, setLoadingContent] = useState(getLoadingMessage(pathname));
   const [previousPath, setPreviousPath] = useState(pathname);
 
   useEffect(() => {
     // Only show loader when navigating between different dashboard pages
     if (pathname !== previousPath && pathname.startsWith('/dashboard')) {
       setIsLoading(true);
-      
-      // Determine loader type based on route
-      if (pathname.includes('/experiments')) {
-        setLoaderType('experiments');
-      } else if (pathname.includes('/benchmarks')) {
-        setLoaderType('benchmarks');
-      } else if (pathname.includes('/rules')) {
-        setLoaderType('rules');
-      } else if (pathname.includes('/collaboration')) {
-        setLoaderType('collaboration');
-      } else if (pathname.includes('/effectiveness')) {
-        setLoaderType('effectiveness');
-      } else if (pathname.includes('/assistant')) {
-        setLoaderType('assistant');
-      } else if (pathname.includes('/admin')) {
-        setLoaderType('admin');
-      } else {
-        setLoaderType('default');
-      }
+      setLoadingContent(getLoadingMessage(pathname));
 
       // Hide loader after a short delay to allow page to load
       const timer = setTimeout(() => {
         setIsLoading(false);
         setPreviousPath(pathname);
-      }, 800 + Math.random() * 400); // 800-1200ms
+      }, 600 + Math.random() * 200); // 600-800ms (faster than before)
 
       return () => clearTimeout(timer);
     }
@@ -50,7 +77,14 @@ export function NavigationTransition({ children }: NavigationTransitionProps) {
 
   return (
     <>
-      {isLoading && <PageLoader type={loaderType} />}
+      <AnimatePresence>
+        {isLoading && (
+          <LoadingPopup 
+            message={loadingContent.message}
+            submessage={loadingContent.submessage}
+          />
+        )}
+      </AnimatePresence>
       <div className={isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}>
         {children}
       </div>

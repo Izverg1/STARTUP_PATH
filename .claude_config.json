@@ -1,0 +1,41 @@
+{
+  "mcpServers": {
+    "desktop-commander": {
+      "command": "node",
+      "args": [
+        "/Users/izverg/projects/AI_UTILS/MCP_SERVERS/DesktopCommanderMCP/dist/index.js"
+      ],
+      "env": {}
+    },
+    "MCP_DOCKER": {
+      "command": "docker",
+      "args": [
+        "mcp",
+        "gateway",
+        "run"
+      ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/izverg/Projects"
+      ],
+      "env": {}
+    },
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "sbp_59abfd7f2445ca411d1ce680f58c6ac2387e4e09"
+      ]
+    }
+  },
+  "environmentVariables": {
+    "STARTUP_DB_PROJECT_ID": "oftpmcfukkidmjvzeqfc",
+    "SUPABASE_PROJECT_ID": "oftpmcfukkidmjvzeqfc"
+  }
+}

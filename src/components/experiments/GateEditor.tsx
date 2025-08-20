@@ -160,23 +160,24 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
           const benchmark = getBenchmarkComparison(gate);
           
           return (
-            <div key={gate.id} className="border rounded-lg p-4 bg-white">
+            <div key={gate.id} className="border border-red-500/30 rounded-lg p-4 bg-white/5">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   {isEditing ? (
                     <div className="space-y-3">
                       <div>
-                        <Label htmlFor={`name_${gate.id}`}>Gate Name</Label>
+                        <Label htmlFor={`name_${gate.id}`} className="text-white">Gate Name</Label>
                         <Input
                           id={`name_${gate.id}`}
                           value={gate.name}
                           onChange={(e) => updateGate(gate.id, { name: e.target.value })}
+                          className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                         />
                       </div>
                       
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <Label htmlFor={`threshold_${gate.id}`}>Threshold Value</Label>
+                          <Label htmlFor={`threshold_${gate.id}`} className="text-white">Threshold Value</Label>
                           <Input
                             id={`threshold_${gate.id}`}
                             type="number"
@@ -185,18 +186,19 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                             onChange={(e) => updateGate(gate.id, { 
                               threshold_value: parseFloat(e.target.value) || 0 
                             })}
+                            className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                           />
                         </div>
                         
                         <div>
-                          <Label htmlFor={`operator_${gate.id}`}>Operator</Label>
+                          <Label htmlFor={`operator_${gate.id}`} className="text-white">Operator</Label>
                           <select
                             id={`operator_${gate.id}`}
                             value={gate.operator}
                             onChange={(e) => updateGate(gate.id, { 
                               operator: e.target.value as 'gte' | 'lte' 
                             })}
-                            className="w-full px-3 py-2 border border-input rounded-md bg-background"
+                            className="w-full px-3 py-2 border border-red-500/30 rounded-md bg-white/5 text-white"
                           >
                             <option value="gte">Greater than or equal (≥)</option>
                             <option value="lte">Less than or equal (≤)</option>
@@ -212,19 +214,24 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                           onChange={(e) => updateGate(gate.id, { is_critical: e.target.checked })}
                           className="rounded"
                         />
-                        <Label htmlFor={`critical_${gate.id}`} className="text-sm">
+                        <Label htmlFor={`critical_${gate.id}`} className="text-sm text-white">
                           Critical gate (failure triggers immediate review)
                         </Label>
                       </div>
                       
                       <div className="flex items-center gap-2">
-                        <Button size="sm" onClick={() => setEditingGate(null)}>
+                        <Button 
+                          size="sm" 
+                          onClick={() => setEditingGate(null)}
+                          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                        >
                           Save
                         </Button>
                         <Button 
                           variant="outline" 
                           size="sm" 
                           onClick={() => setEditingGate(null)}
+                          className="border-red-500/30 text-red-300 hover:bg-red-500/10"
                         >
                           Cancel
                         </Button>
@@ -233,19 +240,19 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                   ) : (
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-medium">{gate.name}</h4>
+                        <h4 className="font-medium text-white">{gate.name}</h4>
                         {gate.is_critical && (
-                          <Badge variant="destructive" className="text-xs">
+                          <Badge variant="destructive" className="text-xs bg-red-900/20 text-red-300 border-red-500/30">
                             Critical
                           </Badge>
                         )}
-                        <Badge variant="outline" className={`text-xs ${getStatusColor(status)}`}>
+                        <Badge variant="outline" className="text-xs border-red-500/30 text-red-300">
                           {getStatusIcon(status)}
                           <span className="ml-1 capitalize">{status}</span>
                         </Badge>
                       </div>
                       
-                      <div className="text-sm text-muted-foreground mb-2">
+                      <div className="text-sm text-gray-300 mb-2">
                         <span className="font-medium">{gate.metric.replace('_', ' ')}</span>
                         <span className="mx-2">
                           {gate.operator === 'gte' ? '≥' : '≤'}
@@ -258,13 +265,13 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                       {gate.benchmark_value && benchmark && (
                         <div className="flex items-center gap-2 text-xs">
                           <div className="flex items-center gap-1">
-                            <Info className="h-3 w-3 text-muted-foreground" />
-                            <span className="text-muted-foreground">
+                            <Info className="h-3 w-3 text-gray-400" />
+                            <span className="text-gray-400">
                               Benchmark: {formatValue(gate.benchmark_value, gate.metric)}
                             </span>
                           </div>
                           <div className={`flex items-center gap-1 ${
-                            benchmark.isAboveBenchmark ? 'text-green-600' : 'text-yellow-600'
+                            benchmark.isAboveBenchmark ? 'text-green-400' : 'text-yellow-400'
                           }`}>
                             {benchmark.isAboveBenchmark ? (
                               <TrendingUp className="h-3 w-3" />
@@ -287,6 +294,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                       variant="ghost"
                       size="sm"
                       onClick={() => setEditingGate(gate.id)}
+                      className="text-gray-300 hover:text-red-400 hover:bg-red-500/10"
                     >
                       <Edit className="h-3 w-3" />
                     </Button>
@@ -294,6 +302,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                       variant="ghost"
                       size="sm"
                       onClick={() => removeGate(gate.id)}
+                      className="text-gray-300 hover:text-red-400 hover:bg-red-500/10"
                     >
                       <Trash2 className="h-3 w-3" />
                     </Button>
@@ -307,22 +316,23 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
 
       {/* Add New Gate */}
       {showAddForm ? (
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-          <h4 className="font-medium mb-3">Add New Gate</h4>
+        <div className="border-2 border-dashed border-red-500/30 rounded-lg p-4 bg-red-900/10">
+          <h4 className="font-medium mb-3 text-white">Add New Gate</h4>
           <div className="space-y-3">
             <div>
-              <Label htmlFor="new_gate_name">Gate Name</Label>
+              <Label htmlFor="new_gate_name" className="text-white">Gate Name</Label>
               <Input
                 id="new_gate_name"
                 value={newGate.name || ''}
                 onChange={(e) => setNewGate({ ...newGate, name: e.target.value })}
                 placeholder="e.g., Click-Through Rate"
+                className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
               />
             </div>
             
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label htmlFor="new_gate_metric">Metric</Label>
+                <Label htmlFor="new_gate_metric" className="text-white">Metric</Label>
                 <select
                   id="new_gate_metric"
                   value={newGate.metric || ''}
@@ -335,7 +345,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                       benchmark_value: benchmark?.value
                     });
                   }}
-                  className="w-full px-3 py-2 border border-input rounded-md bg-background"
+                  className="w-full px-3 py-2 border border-red-500/30 rounded-md bg-white/5 text-white"
                 >
                   <option value="">Select metric...</option>
                   <option value="click_through_rate">Click-Through Rate</option>
@@ -352,7 +362,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
               </div>
               
               <div>
-                <Label htmlFor="new_gate_operator">Operator</Label>
+                <Label htmlFor="new_gate_operator" className="text-white">Operator</Label>
                 <select
                   id="new_gate_operator"
                   value={newGate.operator || 'gte'}
@@ -360,7 +370,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                     ...newGate, 
                     operator: e.target.value as 'gte' | 'lte' 
                   })}
-                  className="w-full px-3 py-2 border border-input rounded-md bg-background"
+                  className="w-full px-3 py-2 border border-red-500/30 rounded-md bg-white/5 text-white"
                 >
                   <option value="gte">Greater than or equal (≥)</option>
                   <option value="lte">Less than or equal (≤)</option>
@@ -369,7 +379,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
             </div>
             
             <div>
-              <Label htmlFor="new_gate_threshold">Threshold Value</Label>
+              <Label htmlFor="new_gate_threshold" className="text-white">Threshold Value</Label>
               <Input
                 id="new_gate_threshold"
                 type="number"
@@ -380,9 +390,10 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                   threshold_value: parseFloat(e.target.value) || 0 
                 })}
                 placeholder="Enter threshold value"
+                className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
               />
               {newGate.metric && benchmarks[newGate.metric] && (
-                <div className="text-xs text-muted-foreground mt-1">
+                <div className="text-xs text-gray-400 mt-1">
                   Industry benchmark: {formatValue(benchmarks[newGate.metric].value, newGate.metric)}
                 </div>
               )}
@@ -396,13 +407,17 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                 onChange={(e) => setNewGate({ ...newGate, is_critical: e.target.checked })}
                 className="rounded"
               />
-              <Label htmlFor="new_gate_critical" className="text-sm">
+              <Label htmlFor="new_gate_critical" className="text-sm text-white">
                 Critical gate (failure triggers immediate review)
               </Label>
             </div>
             
             <div className="flex items-center gap-2">
-              <Button onClick={addGate} size="sm">
+              <Button 
+                onClick={addGate} 
+                size="sm"
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+              >
                 Add Gate
               </Button>
               <Button 
@@ -412,6 +427,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
                   setShowAddForm(false);
                   setNewGate({});
                 }}
+                className="border-red-500/30 text-red-300 hover:bg-red-500/10"
               >
                 Cancel
               </Button>
@@ -422,7 +438,7 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
         <Button
           variant="outline"
           onClick={() => setShowAddForm(true)}
-          className="w-full border-dashed"
+          className="w-full border-dashed border-red-500/30 text-red-300 hover:bg-red-500/10"
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Custom Gate
@@ -431,14 +447,14 @@ export function GateEditor({ gates, onGatesChange, benchmarks }: GateEditorProps
 
       {/* Gate Summary */}
       {gates.length > 0 && (
-        <div className="mt-4 p-3 bg-gray-900/50 border border-gray-700 rounded-lg">
-          <div className="text-sm text-muted-foreground">
+        <div className="mt-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+          <div className="text-sm text-gray-300">
             <strong>{gates.length}</strong> gates configured
             {gates.some(g => g.is_critical) && (
               <span> • <strong>{gates.filter(g => g.is_critical).length}</strong> critical</span>
             )}
           </div>
-          <div className="text-xs text-muted-foreground mt-1">
+          <div className="text-xs text-gray-400 mt-1">
             Critical gate failures will automatically pause the channel for review
           </div>
         </div>

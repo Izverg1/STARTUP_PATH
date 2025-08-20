@@ -344,10 +344,10 @@ export function ChannelSelector({
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-white">
+            <Target className="h-5 w-5 text-red-400" />
             Channel Selection
           </CardTitle>
         </CardHeader>
@@ -355,18 +355,18 @@ export function ChannelSelector({
           {/* Search and Filters */}
           <div className="flex items-center gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search channels..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9"
+                className="pl-9 bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
               />
             </div>
             <select
               value={filterDifficulty}
               onChange={(e) => setFilterDifficulty(e.target.value)}
-              className="px-3 py-2 border border-input rounded-md bg-background"
+              className="px-3 py-2 border border-red-500/30 rounded-md bg-white/5 text-white"
             >
               <option value="all">All Difficulties</option>
               <option value="easy">Easy</option>
@@ -377,40 +377,40 @@ export function ChannelSelector({
 
           {/* Available Channels */}
           <div>
-            <h3 className="font-medium mb-4">Available Channels ({filteredTemplates.length})</h3>
+            <h3 className="font-medium mb-4 text-white">Available Channels ({filteredTemplates.length})</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredTemplates.map((template, index) => {
                 const TemplateIcon = template.icon;
                 return (
-                  <Card key={template.type} className="hover:shadow-md transition-shadow">
+                  <Card key={template.type} className="bg-white/5 border-red-500/30 hover:bg-white/10 transition-all">
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className="flex items-center gap-3">
-                            <div className="p-2 bg-gray-800 rounded-lg">
-                              <TemplateIcon className="h-5 w-5 text-gray-400" />
+                            <div className="p-2 bg-red-900/30 rounded-lg">
+                              <TemplateIcon className="h-5 w-5 text-red-400" />
                             </div>
                             <div>
-                              <h4 className="font-semibold">{template.name}</h4>
-                              <p className="text-sm text-muted-foreground">{template.description}</p>
+                              <h4 className="font-semibold text-white">{template.name}</h4>
+                              <p className="text-sm text-gray-300">{template.description}</p>
                             </div>
                           </div>
                         </div>
-                        <Badge variant="outline" className={getDifficultyColor(template.difficulty)}>
+                        <Badge variant="outline" className="border-red-500/30 text-red-300">
                           {template.difficulty}
                         </Badge>
                       </div>
 
                       {/* Benchmarks */}
                       <div className="mb-4">
-                        <h5 className="text-xs font-medium text-muted-foreground mb-2">INDUSTRY BENCHMARKS</h5>
+                        <h5 className="text-xs font-medium text-gray-300 mb-2">INDUSTRY BENCHMARKS</h5>
                         <div className="grid grid-cols-3 gap-2">
                           {Object.entries(template.benchmarks).slice(0, 3).map(([key, benchmark]) => (
                             <div key={key} className="text-center">
-                              <div className="text-xs text-muted-foreground capitalize">
+                              <div className="text-xs text-gray-400 capitalize">
                                 {key.replace('_', ' ')}
                               </div>
-                              <div className="font-medium text-sm">
+                              <div className="font-medium text-sm text-white">
                                 {benchmark.unit === '%' ? 
                                   `${(benchmark.value * 100).toFixed(1)}%` : 
                                   benchmark.unit === '$' ? 
@@ -424,7 +424,7 @@ export function ChannelSelector({
                       </div>
 
                       {/* Setup Info */}
-                      <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                      <div className="flex items-center justify-between text-sm text-gray-300 mb-4">
                         <div className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           <span>{template.estimatedSetupTime}</span>
@@ -438,7 +438,7 @@ export function ChannelSelector({
                       <Button 
                         onClick={() => addChannel(template)}
                         disabled={remainingBudget < template.recommendedBudget.min}
-                        className="w-full"
+                        className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
                         size="sm"
                       >
                         <Plus className="h-3 w-3 mr-1" />
@@ -455,10 +455,10 @@ export function ChannelSelector({
 
       {/* Selected Channels */}
       {selectedChannels.length > 0 && (
-        <Card>
+        <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <CheckCircle className="h-5 w-5 text-green-400" />
               Selected Channels ({selectedChannels.length})
             </CardTitle>
           </CardHeader>
@@ -469,16 +469,16 @@ export function ChannelSelector({
               const isEditing = editingChannel === `${index}`;
               
               return (
-                <Card key={`${channel.type}_${index}`} className="border-l-4 border-l-blue-500">
+                <Card key={`${channel.type}_${index}`} className="border-l-4 border-l-red-500 bg-white/5 border-red-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gray-800 rounded-lg">
-                          <ChannelIcon className="h-5 w-5 text-gray-400" />
+                        <div className="p-2 bg-red-900/30 rounded-lg">
+                          <ChannelIcon className="h-5 w-5 text-red-400" />
                         </div>
                         <div>
-                          <h4 className="font-semibold">{channel.name}</h4>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <h4 className="font-semibold text-white">{channel.name}</h4>
+                          <div className="flex items-center gap-4 text-sm text-gray-300">
                             <span>{channel.gates.length} gates configured</span>
                             <span>•</span>
                             <span>${channel.allocated_budget.toLocaleString()} allocated</span>
@@ -489,6 +489,7 @@ export function ChannelSelector({
                         <Button
                           variant="outline"
                           size="sm"
+                          className="border-red-500/30 text-red-300 hover:bg-red-500/10"
                           onClick={() => {
                             setEditingChannel(isEditing ? null : `${index}`);
                             if (!isEditing) {
@@ -501,6 +502,7 @@ export function ChannelSelector({
                         <Button
                           variant="outline"
                           size="sm"
+                          className="border-red-500/30 text-red-300 hover:bg-red-500/10"
                           onClick={() => removeChannel(index)}
                         >
                           Remove
@@ -510,11 +512,11 @@ export function ChannelSelector({
 
                     {/* Budget Editor */}
                     {isEditing && (
-                      <div className="mb-4 p-3 bg-gray-900/50 border border-gray-700 rounded-lg">
-                        <Label htmlFor={`budget_${index}`}>Allocated Budget</Label>
+                      <div className="mb-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+                        <Label htmlFor={`budget_${index}`} className="text-white">Allocated Budget</Label>
                         <div className="flex items-center gap-2 mt-1">
                           <div className="relative flex-1">
-                            <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                             <Input
                               id={`budget_${index}`}
                               type="number"
@@ -523,11 +525,12 @@ export function ChannelSelector({
                                 ...editingBudget,
                                 [`${index}`]: parseInt(e.target.value) || 0
                               })}
-                              className="pl-9"
+                              className="pl-9 bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                             />
                           </div>
                           <Button
                             size="sm"
+                            className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
                             onClick={() => updateChannelBudget(index, editingBudget[`${index}`] || channel.allocated_budget)}
                           >
                             Save
@@ -539,8 +542,8 @@ export function ChannelSelector({
                     {/* Gates */}
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <h5 className="font-medium">Success Gates</h5>
-                        <Badge variant="outline" className="text-xs">
+                        <h5 className="font-medium text-white">Success Gates</h5>
+                        <Badge variant="outline" className="text-xs border-red-500/30 text-red-300">
                           {channel.gates.filter(g => g.is_critical).length} critical gates
                         </Badge>
                       </div>

@@ -1,11 +1,6 @@
 ---
 name: supabase-db-architect
 description: |
-  Supabase database architect specializing in SOL:GEN's complex schema with sg_ prefix tables.
-  Expert in PostgreSQL, RLS policies, real-time subscriptions, migrations, and multi-tenant architecture.
-  PROACTIVELY use for database design, query optimization, auth policies, and data modeling tasks.
-  Handles agent state management, simulation results, and business rules persistence.
-  MUST BE USED for database schema changes, RLS policies, real-time features, and data architecture decisions.
 tools: file_editor, terminal, web_search
 ---
 

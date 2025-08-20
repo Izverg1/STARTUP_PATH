@@ -100,19 +100,24 @@ export function ExperimentDesigner() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <FlaskConical className="h-8 w-8 text-blue-600" />
-            Experiment Designer
+            <FlaskConical className="h-8 w-8 text-red-400" />
+            <span className="bg-gradient-to-r from-red-400 to-white bg-clip-text text-transparent">
+              Experiment Designer
+            </span>
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-gray-300 mt-2">
             Design and configure your marketing experiment with channels and success gates
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline">
+          <Button variant="outline" className="border-red-500/30 text-red-300 hover:bg-red-500/10">
             <Save className="h-4 w-4 mr-2" />
             Save Draft
           </Button>
-          <Button disabled={selectedChannels.length === 0 || !config.name}>
+          <Button 
+            disabled={selectedChannels.length === 0 || !config.name}
+            className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+          >
             <Play className="h-4 w-4 mr-2" />
             Launch Experiment
           </Button>
@@ -120,7 +125,7 @@ export function ExperimentDesigner() {
       </div>
 
       {/* Progress Steps */}
-      <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+      <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-red-900/20 to-black/60 border border-red-500/30 rounded-lg backdrop-blur-sm">
         {steps.map((step, index) => {
           const StepIcon = step.icon;
           const isActive = step.id === activeStep;
@@ -132,17 +137,17 @@ export function ExperimentDesigner() {
                 onClick={() => setActiveStep(step.id as any)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
                   isActive 
-                    ? 'bg-blue-100 text-blue-700' 
+                    ? 'bg-red-500/20 text-red-300 border border-red-500/30' 
                     : isCompleted 
-                    ? 'bg-green-100 text-green-700 hover:bg-green-200' 
-                    : 'text-gray-600 hover:bg-gray-200'
+                    ? 'bg-green-500/20 text-green-300 hover:bg-green-500/30 border border-green-500/30' 
+                    : 'text-gray-300 hover:bg-white/10 border border-gray-500/30'
                 }`}
               >
                 <StepIcon className="h-4 w-4" />
                 <span className="font-medium">{step.name}</span>
               </button>
               {index < steps.length - 1 && (
-                <div className={`h-px w-8 ${isCompleted ? 'bg-green-300' : 'bg-gray-300'}`} />
+                <div className={`h-px w-8 ${isCompleted ? 'bg-green-400' : 'bg-gray-500'}`} />
               )}
             </React.Fragment>
           );
@@ -153,101 +158,106 @@ export function ExperimentDesigner() {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {activeStep === 'setup' && (
-            <Card>
+            <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Settings className="h-5 w-5 text-red-400" />
                   Experiment Configuration
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2">
-                    <Label htmlFor="name">Experiment Name</Label>
+                    <Label htmlFor="name" className="text-white">Experiment Name</Label>
                     <Input
                       id="name"
                       value={config.name}
                       onChange={(e) => updateConfig('name', e.target.value)}
                       placeholder="e.g., LinkedIn vs. Google Ads Q4 Test"
+                      className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                     />
                   </div>
                   
                   <div className="md:col-span-2">
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description" className="text-white">Description</Label>
                     <Textarea
                       id="description"
                       value={config.description}
                       onChange={(e) => updateConfig('description', e.target.value)}
                       placeholder="Brief description of the experiment goals..."
                       rows={3}
+                      className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <Label htmlFor="hypothesis">Hypothesis</Label>
+                    <Label htmlFor="hypothesis" className="text-white">Hypothesis</Label>
                     <Textarea
                       id="hypothesis"
                       value={config.hypothesis}
                       onChange={(e) => updateConfig('hypothesis', e.target.value)}
                       placeholder="We believe that... because... and we'll measure this by..."
                       rows={3}
+                      className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="budget">Total Budget</Label>
+                    <Label htmlFor="budget" className="text-white">Total Budget</Label>
                     <div className="relative">
-                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <Input
                         id="budget"
                         type="number"
                         value={config.budget}
                         onChange={(e) => updateConfig('budget', parseInt(e.target.value))}
-                        className="pl-9"
+                        className="pl-9 bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="duration">Duration (Days)</Label>
+                    <Label htmlFor="duration" className="text-white">Duration (Days)</Label>
                     <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <Input
                         id="duration"
                         type="number"
                         value={config.duration_days}
                         onChange={(e) => updateConfig('duration_days', parseInt(e.target.value))}
-                        className="pl-9"
+                        className="pl-9 bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="primary_metric">Primary Metric</Label>
+                    <Label htmlFor="primary_metric" className="text-white">Primary Metric</Label>
                     <Input
                       id="primary_metric"
                       value={config.primary_metric}
                       onChange={(e) => updateConfig('primary_metric', e.target.value)}
+                      className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="target_value">Target Value</Label>
+                    <Label htmlFor="target_value" className="text-white">Target Value</Label>
                     <Input
                       id="target_value"
                       type="number"
                       value={config.target_value}
                       onChange={(e) => updateConfig('target_value', parseFloat(e.target.value))}
+                      className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="confidence">Confidence Level</Label>
+                    <Label htmlFor="confidence" className="text-white">Confidence Level</Label>
                     <select
                       id="confidence"
                       value={config.confidence_level}
                       onChange={(e) => updateConfig('confidence_level', parseFloat(e.target.value))}
-                      className="w-full px-3 py-2 border border-input rounded-md bg-background"
+                      className="w-full px-3 py-2 border border-red-500/30 rounded-md bg-white/5 text-white"
                     >
                       <option value={0.90}>90%</option>
                       <option value={0.95}>95%</option>
@@ -256,18 +266,22 @@ export function ExperimentDesigner() {
                   </div>
 
                   <div>
-                    <Label htmlFor="payback">Max CAC Payback (Months)</Label>
+                    <Label htmlFor="payback" className="text-white">Max CAC Payback (Months)</Label>
                     <Input
                       id="payback"
                       type="number"
                       value={config.max_cac_payback_months}
                       onChange={(e) => updateConfig('max_cac_payback_months', parseInt(e.target.value))}
+                      className="bg-white/5 border-red-500/30 text-white placeholder:text-gray-400"
                     />
                   </div>
                 </div>
 
                 <div className="flex justify-end">
-                  <Button onClick={() => setActiveStep('channels')}>
+                  <Button 
+                    onClick={() => setActiveStep('channels')}
+                    className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                  >
                     Continue to Channels
                   </Button>
                 </div>
@@ -285,51 +299,51 @@ export function ExperimentDesigner() {
           )}
 
           {activeStep === 'review' && (
-            <Card>
+            <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FlaskConical className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <FlaskConical className="h-5 w-5 text-red-400" />
                   Review & Launch
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-semibold mb-2">Experiment Summary</h3>
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                    <h3 className="font-semibold mb-2 text-white">Experiment Summary</h3>
+                    <div className="bg-white/5 border border-red-500/30 p-4 rounded-lg space-y-2">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Name:</span>
-                        <span className="font-medium">{config.name}</span>
+                        <span className="text-gray-300">Name:</span>
+                        <span className="font-medium text-white">{config.name}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Duration:</span>
-                        <span className="font-medium">{config.duration_days} days</span>
+                        <span className="text-gray-300">Duration:</span>
+                        <span className="font-medium text-white">{config.duration_days} days</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Total Budget:</span>
-                        <span className="font-medium">${config.budget.toLocaleString()}</span>
+                        <span className="text-gray-300">Total Budget:</span>
+                        <span className="font-medium text-white">${config.budget.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Primary Metric:</span>
-                        <span className="font-medium">{config.primary_metric}</span>
+                        <span className="text-gray-300">Primary Metric:</span>
+                        <span className="font-medium text-white">{config.primary_metric}</span>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="font-semibold mb-2">Selected Channels ({selectedChannels.length})</h3>
+                    <h3 className="font-semibold mb-2 text-white">Selected Channels ({selectedChannels.length})</h3>
                     <div className="space-y-2">
                       {selectedChannels.map((channel, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div key={index} className="flex items-center justify-between p-3 bg-white/5 border border-red-500/30 rounded-lg">
                           <div>
-                            <span className="font-medium">{channel.name}</span>
-                            <div className="text-sm text-muted-foreground">
+                            <span className="font-medium text-white">{channel.name}</span>
+                            <div className="text-sm text-gray-300">
                               {channel.gates.length} gates configured
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="font-medium">${channel.allocated_budget.toLocaleString()}</div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className="font-medium text-white">${channel.allocated_budget.toLocaleString()}</div>
+                            <div className="text-sm text-gray-300">
                               {((channel.allocated_budget / config.budget) * 100).toFixed(0)}% of budget
                             </div>
                           </div>
@@ -339,8 +353,8 @@ export function ExperimentDesigner() {
                   </div>
 
                   {budgetRemaining !== 0 && (
-                    <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                      <div className="flex items-center gap-2 text-yellow-800">
+                    <div className="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+                      <div className="flex items-center gap-2 text-yellow-300">
                         <Info className="h-4 w-4" />
                         <span className="font-medium">
                           Budget Warning: ${Math.abs(budgetRemaining).toLocaleString()} {budgetRemaining > 0 ? 'unallocated' : 'over budget'}
@@ -351,12 +365,16 @@ export function ExperimentDesigner() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <Button variant="outline" onClick={() => setActiveStep('channels')}>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setActiveStep('channels')}
+                    className="border-red-500/30 text-red-300 hover:bg-red-500/10"
+                  >
                     Back to Channels
                   </Button>
                   <Button 
                     disabled={selectedChannels.length === 0 || budgetRemaining < 0}
-                    className="ml-auto"
+                    className="ml-auto bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
                   >
                     <Play className="h-4 w-4 mr-2" />
                     Launch Experiment
@@ -370,41 +388,41 @@ export function ExperimentDesigner() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Budget Overview */}
-          <Card>
+          <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-sm">
-                <DollarSign className="h-4 w-4" />
+              <CardTitle className="flex items-center gap-2 text-sm text-white">
+                <DollarSign className="h-4 w-4 text-red-400" />
                 Budget Overview
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Total Budget:</span>
-                  <span className="font-medium">${config.budget.toLocaleString()}</span>
+                  <span className="text-sm text-gray-300">Total Budget:</span>
+                  <span className="font-medium text-white">${config.budget.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Allocated:</span>
-                  <span className="font-medium">${totalAllocatedBudget.toLocaleString()}</span>
+                  <span className="text-sm text-gray-300">Allocated:</span>
+                  <span className="font-medium text-white">${totalAllocatedBudget.toLocaleString()}</span>
                 </div>
-                <Separator />
+                <Separator className="bg-red-500/30" />
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Remaining:</span>
-                  <span className={`font-medium ${budgetRemaining < 0 ? 'text-gray-400' : 'text-gray-400'}`}>
+                  <span className="text-sm text-gray-300">Remaining:</span>
+                  <span className={`font-medium ${budgetRemaining < 0 ? 'text-red-400' : 'text-white'}`}>
                     ${Math.abs(budgetRemaining).toLocaleString()}
                   </span>
                 </div>
                 
                 {totalAllocatedBudget > 0 && (
                   <div className="space-y-2 mt-4">
-                    <div className="text-xs text-muted-foreground">Budget Allocation</div>
+                    <div className="text-xs text-gray-300">Budget Allocation</div>
                     <div className="space-y-1">
                       {selectedChannels.map((channel, index) => {
                         const percentage = (channel.allocated_budget / config.budget) * 100;
                         return (
                           <div key={index} className="flex items-center gap-2">
-                            <div className="text-xs flex-1 truncate">{channel.name}</div>
-                            <div className="text-xs font-medium">{percentage.toFixed(0)}%</div>
+                            <div className="text-xs flex-1 truncate text-gray-300">{channel.name}</div>
+                            <div className="text-xs font-medium text-white">{percentage.toFixed(0)}%</div>
                           </div>
                         );
                       })}
@@ -425,15 +443,15 @@ export function ExperimentDesigner() {
           )}
 
           {/* Quick Tips */}
-          <Card>
+          <Card className="bg-gradient-to-br from-red-900/20 to-black/60 border-red-500/30 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-sm">
-                <Info className="h-4 w-4" />
+              <CardTitle className="flex items-center gap-2 text-sm text-white">
+                <Info className="h-4 w-4 text-red-400" />
                 Quick Tips
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3 text-sm text-muted-foreground">
+              <div className="space-y-3 text-sm text-gray-300">
                 <div>• Set conservative gates initially - you can adjust them during the experiment</div>
                 <div>• Allocate 60-70% budget to your best-performing channel, 30-40% to test new ones</div>
                 <div>• Plan for at least 30 days to reach statistical significance</div>
