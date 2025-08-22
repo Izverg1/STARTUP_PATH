@@ -472,6 +472,9 @@ export function ArtifactTabs() {
       setIsLoading(true)
       const supabase = createClient()
       
+      console.log('🔍 Loading artifacts from Supabase...')
+      console.log('- Supabase client created:', !!supabase)
+      
       // Query artifacts from the database
       const { data: artifacts, error } = await supabase
         .from('sg_artifacts')
@@ -479,22 +482,31 @@ export function ArtifactTabs() {
         .order('created_at', { ascending: false })
         .limit(50)
       
+      console.log('📊 Query result:')
+      console.log('- Data:', artifacts)
+      console.log('- Error:', error)
+      
       if (error) {
-        console.error('Error loading artifacts from database:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        })
+        console.error('Error loading artifacts from database:')
+        console.error('- Message:', error.message || 'No message')
+        console.error('- Code:', error.code || 'No code')
+        console.error('- Details:', error.details || 'No details')
+        console.error('- Hint:', error.hint || 'No hint')
+        console.error('- Full error object:', error)
+        console.error('- Error keys:', Object.keys(error))
         setRealArtifacts([])
       } else {
         setRealArtifacts(artifacts || [])
       }
     } catch (error) {
-      console.error('Error loading artifacts (unexpected):', {
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined
-      })
+      console.error('Error loading artifacts (unexpected):')
+      console.error('- Error:', error)
+      console.error('- Error type:', typeof error)
+      console.error('- Error constructor:', error?.constructor?.name)
+      if (error instanceof Error) {
+        console.error('- Message:', error.message)
+        console.error('- Stack:', error.stack)
+      }
       // Fallback to mock data if real data fails
       setRealArtifacts([])
     } finally {
