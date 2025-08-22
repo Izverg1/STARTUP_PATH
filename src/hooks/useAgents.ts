@@ -9,17 +9,17 @@ import {
 } from '@/types/agents'
 import { 
   createAllAgents, 
-  ChannelScoutAgent, 
-  OfferAlchemistAgent, 
-  SignalWranglerAgent, 
-  BudgetCaptainAgent 
+  ChannelDiscoveryEngineAgent, 
+  CampaignOptimizationEngineAgent, 
+  PerformanceAnalyticsEngineAgent, 
+  BudgetAllocationEngineAgent 
 } from '@/lib/agents'
 
 type AgentInstance = 
-  | ChannelScoutAgent 
-  | OfferAlchemistAgent 
-  | SignalWranglerAgent 
-  | BudgetCaptainAgent
+  | ChannelDiscoveryEngineAgent 
+  | CampaignOptimizationEngineAgent 
+  | PerformanceAnalyticsEngineAgent 
+  | BudgetAllocationEngineAgent
 
 interface AgentState {
   agents: Record<AgentKey, AgentInstance>
@@ -201,15 +201,15 @@ export function useAgents(): UseAgentsReturn {
 }
 
 // Specialized hooks for individual agents
-export function useChannelScout() {
+export function useChannelDiscoveryEngine() {
   const { agents, statuses, executeAgent, resetAgent, getArtifactsByAgent } = useAgents()
   
   return {
-    agent: agents.channel_scout as ChannelScoutAgent,
-    status: statuses.channel_scout,
-    artifacts: getArtifactsByAgent('channel_scout'),
-    execute: (input?: any) => executeAgent('channel_scout', input),
-    reset: () => resetAgent('channel_scout'),
+    agent: agents.channel_discovery_engine as ChannelDiscoveryEngineAgent,
+    status: statuses.channel_discovery_engine,
+    artifacts: getArtifactsByAgent('channel_discovery_engine'),
+    execute: (input?: any) => executeAgent('channel_discovery_engine', input),
+    reset: () => resetAgent('channel_discovery_engine'),
     
     // Specialized methods
     getChannelRecommendations: async (criteria: {
@@ -217,26 +217,26 @@ export function useChannelScout() {
       budget_range: [number, number]
       target_audience: string
     }) => {
-      const agent = agents.channel_scout as ChannelScoutAgent
+      const agent = agents.channel_discovery_engine as ChannelDiscoveryEngineAgent
       return agent.getChannelRecommendations(criteria)
     },
     
     analyzeChannel: async (channelName: string) => {
-      const agent = agents.channel_scout as ChannelScoutAgent
+      const agent = agents.channel_discovery_engine as ChannelDiscoveryEngineAgent
       return agent.analyzeChannel(channelName)
     }
   }
 }
 
-export function useOfferAlchemist() {
+export function useCampaignOptimizationEngine() {
   const { agents, statuses, executeAgent, resetAgent, getArtifactsByAgent } = useAgents()
   
   return {
-    agent: agents.offer_alchemist as OfferAlchemistAgent,
-    status: statuses.offer_alchemist,
-    artifacts: getArtifactsByAgent('offer_alchemist'),
-    execute: (input?: any) => executeAgent('offer_alchemist', input),
-    reset: () => resetAgent('offer_alchemist'),
+    agent: agents.campaign_optimization_engine as CampaignOptimizationEngineAgent,
+    status: statuses.campaign_optimization_engine,
+    artifacts: getArtifactsByAgent('campaign_optimization_engine'),
+    execute: (input?: any) => executeAgent('campaign_optimization_engine', input),
+    reset: () => resetAgent('campaign_optimization_engine'),
     
     // Specialized methods
     generateCopy: async (params: {
@@ -246,7 +246,7 @@ export function useOfferAlchemist() {
       tone?: 'professional' | 'casual' | 'urgent' | 'consultative' | 'friendly'
       variant_count?: number
     }) => {
-      const agent = agents.offer_alchemist as OfferAlchemistAgent
+      const agent = agents.campaign_optimization_engine as CampaignOptimizationEngineAgent
       return agent.generateCopy(params)
     },
     
@@ -258,49 +258,49 @@ export function useOfferAlchemist() {
         click_rate?: number 
       }
     ) => {
-      const agent = agents.offer_alchemist as OfferAlchemistAgent
+      const agent = agents.campaign_optimization_engine as CampaignOptimizationEngineAgent
       return agent.optimizeCopy(originalCopy, performanceData)
     }
   }
 }
 
-export function useSignalWrangler() {
+export function usePerformanceAnalyticsEngine() {
   const { agents, statuses, executeAgent, resetAgent, getArtifactsByAgent } = useAgents()
   
   return {
-    agent: agents.signal_wrangler as SignalWranglerAgent,
-    status: statuses.signal_wrangler,
-    artifacts: getArtifactsByAgent('signal_wrangler'),
-    execute: (input?: any) => executeAgent('signal_wrangler', input),
-    reset: () => resetAgent('signal_wrangler'),
+    agent: agents.performance_analytics_engine as PerformanceAnalyticsEngineAgent,
+    status: statuses.performance_analytics_engine,
+    artifacts: getArtifactsByAgent('performance_analytics_engine'),
+    execute: (input?: any) => executeAgent('performance_analytics_engine', input),
+    reset: () => resetAgent('performance_analytics_engine'),
     
     // Specialized methods
     calculateMetric: async (
       metricType: 'cpqm' | 'cac' | 'ltv' | 'roi' | 'mer',
       data: any
     ) => {
-      const agent = agents.signal_wrangler as SignalWranglerAgent
+      const agent = agents.performance_analytics_engine as PerformanceAnalyticsEngineAgent
       return agent.calculateMetric(metricType, data)
     },
     
     monitorPerformance: async (
       metrics: Array<{ name: string; value: number; timestamp: string }>
     ) => {
-      const agent = agents.signal_wrangler as SignalWranglerAgent
+      const agent = agents.performance_analytics_engine as PerformanceAnalyticsEngineAgent
       return agent.monitorPerformance(metrics)
     }
   }
 }
 
-export function useBudgetCaptain() {
+export function useBudgetAllocationEngine() {
   const { agents, statuses, executeAgent, resetAgent, getArtifactsByAgent } = useAgents()
   
   return {
-    agent: agents.budget_captain as BudgetCaptainAgent,
-    status: statuses.budget_captain,
-    artifacts: getArtifactsByAgent('budget_captain'),
-    execute: (input?: any) => executeAgent('budget_captain', input),
-    reset: () => resetAgent('budget_captain'),
+    agent: agents.budget_allocation_engine as BudgetAllocationEngineAgent,
+    status: statuses.budget_allocation_engine,
+    artifacts: getArtifactsByAgent('budget_allocation_engine'),
+    execute: (input?: any) => executeAgent('budget_allocation_engine', input),
+    reset: () => resetAgent('budget_allocation_engine'),
     
     // Specialized methods
     optimizeBudget: async (params: {
@@ -309,7 +309,7 @@ export function useBudgetCaptain() {
       channels?: Array<{ id: string; name: string; performance_data: any }>
       constraints?: any
     }) => {
-      const agent = agents.budget_captain as BudgetCaptainAgent
+      const agent = agents.budget_allocation_engine as BudgetAllocationEngineAgent
       return agent.optimizeBudget(params)
     },
     
@@ -317,7 +317,7 @@ export function useBudgetCaptain() {
       currentAllocation: any[],
       performanceChanges: Array<{ channel_id: string; performance_delta: number }>
     ) => {
-      const agent = agents.budget_captain as BudgetCaptainAgent
+      const agent = agents.budget_allocation_engine as BudgetAllocationEngineAgent
       return agent.rebalanceAllocation(currentAllocation, performanceChanges)
     },
     
@@ -328,7 +328,7 @@ export function useBudgetCaptain() {
         changes: Array<{ channel_id: string; weight_change: number }>
       }>
     ) => {
-      const agent = agents.budget_captain as BudgetCaptainAgent
+      const agent = agents.budget_allocation_engine as BudgetAllocationEngineAgent
       return agent.simulateScenarios(baseAllocation, scenarios)
     }
   }
@@ -354,33 +354,33 @@ export function useAgentsDemo() {
       // Wait a bit for reset
       await new Promise(resolve => setTimeout(resolve, 500))
       
-      // Execute Channel Scout
-      console.log('Executing Channel Scout...')
-      await executeAgent('channel_scout', {
+      // Execute Channel Discovery Engine
+      console.log('Executing Channel Discovery Engine...')
+      await executeAgent('channel_discovery_engine', {
         vertical: 'SaaS',
         target_audience: 'B2B Decision Makers',
         budget_range: [20000, 50000]
       })
       
-      // Execute Offer Alchemist
-      console.log('Executing Offer Alchemist...')
-      await executeAgent('offer_alchemist', {
+      // Execute Campaign Optimization Engine
+      console.log('Executing Campaign Optimization Engine...')
+      await executeAgent('campaign_optimization_engine', {
         channel_type: 'email',
         copy_type: 'subject_line',
         target_audience: 'Enterprise CTOs',
         tone: 'professional'
       })
       
-      // Execute Signal Wrangler
-      console.log('Executing Signal Wrangler...')
-      await executeAgent('signal_wrangler', {
+      // Execute Performance Analytics Engine
+      console.log('Executing Performance Analytics Engine...')
+      await executeAgent('performance_analytics_engine', {
         metric_type: 'cpqm',
         time_period: '30d'
       })
       
-      // Execute Budget Captain
-      console.log('Executing Budget Captain...')
-      await executeAgent('budget_captain', {
+      // Execute Budget Allocation Engine
+      console.log('Executing Budget Allocation Engine...')
+      await executeAgent('budget_allocation_engine', {
         total_budget: 50000,
         strategy: 'thompson_sampling'
       })

@@ -1,0 +1,110 @@
+{
+  "id": "finops_midmarket",
+  "title": "FinOps SaaS \u2014 Midmarket",
+  "seed": 11873,
+  "icp": {
+    "persona": "FinOps Lead",
+    "company_size": "200-2000",
+    "geo": "NA/EU"
+  },
+  "economics": {
+    "acv": 18000,
+    "gross_margin": 0.7,
+    "mrr_per_customer": 1500
+  },
+  "window_days": 14,
+  "channels": [
+    {
+      "type": "search",
+      "label": "Google Search",
+      "budget_per_day": 400,
+      "base": {
+        "impressions": 12000,
+        "ctr": 0.035,
+        "cpc": 4.2,
+        "lp_cvr": 0.14,
+        "lead_to_meeting": 0.25,
+        "meeting_to_opp": 0.45,
+        "opp_to_win": 0.25
+      },
+      "variability": {
+        "impressions": 0.1,
+        "rates": 0.15,
+        "cpc": 0.1
+      },
+      "lags": {
+        "meeting_days": [
+          0,
+          0
+        ],
+        "opp_days": [
+          2,
+          5
+        ],
+        "win_days": [
+          7,
+          21
+        ]
+      }
+    },
+    {
+      "type": "linkedin_inmail",
+      "label": "LinkedIn InMail",
+      "sends_per_day": 800,
+      "cost_per_send": 0.3,
+      "base": {
+        "reply_rate": 0.035,
+        "meet_given_reply": 0.3,
+        "opp_given_meeting": 0.35,
+        "win_given_opp": 0.25
+      },
+      "variability": {
+        "rates": 0.2
+      },
+      "lags": {
+        "meeting_days": [
+          0,
+          1
+        ],
+        "opp_days": [
+          2,
+          6
+        ],
+        "win_days": [
+          7,
+          21
+        ]
+      }
+    },
+    {
+      "type": "webinar",
+      "label": "Webinar",
+      "regs_per_day": 110,
+      "cost_per_reg": 75,
+      "base": {
+        "reg_to_attend": 0.4,
+        "attend_to_meeting": 0.16,
+        "opp_given_meeting": 0.35,
+        "win_given_opp": 0.2
+      },
+      "variability": {
+        "rates": 0.15,
+        "regs": 0.1
+      },
+      "lags": {
+        "meeting_days": [
+          0,
+          2
+        ],
+        "opp_days": [
+          2,
+          7
+        ],
+        "win_days": [
+          10,
+          28
+        ]
+      }
+    }
+  ]
+}

@@ -251,7 +251,7 @@ const formatPercentage = (value: number): string => {
 
 function ChannelPerformanceChart({ data }: { data: any[] }) {
   return (
-    <Card className="bg-black/40 border border-gray-500/30">
+    <Card className="bg-black border border-red-500/30">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-white">
           <BarChart3 className="h-5 w-5 text-blue-400" />
@@ -308,7 +308,7 @@ function SpendAllocationChart({ data }: { data: any[] }) {
   }));
 
   return (
-    <Card className="bg-black/40 border border-gray-500/30">
+    <Card className="bg-black border border-red-500/30">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-white">
           <PieChartIcon className="h-5 w-5 text-purple-400" />
@@ -324,7 +324,7 @@ function SpendAllocationChart({ data }: { data: any[] }) {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }) => `${name} ${percent ? (percent * 100).toFixed(0) : 0}%`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -344,7 +344,7 @@ function SpendAllocationChart({ data }: { data: any[] }) {
 
 function TrendAnalysisChart({ data }: { data: any[] }) {
   return (
-    <Card className="bg-black/40 border border-gray-500/30">
+    <Card className="bg-black border border-red-500/30">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-white">
           <TrendingUp className="h-5 w-5 text-green-400" />
@@ -424,7 +424,7 @@ function OptimizationOpportunities({ opportunities }: { opportunities: any[] }) 
   };
 
   return (
-    <Card className="bg-black/40 border border-gray-500/30">
+    <Card className="bg-black border border-red-500/30">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-white">
           <Zap className="h-5 w-5 text-yellow-400" />
@@ -435,7 +435,7 @@ function OptimizationOpportunities({ opportunities }: { opportunities: any[] }) 
         {opportunities
           .sort((a, b) => b.estimated_roi - a.estimated_roi)
           .map((opportunity, index) => (
-            <div key={index} className="border border-gray-600/30 bg-black/20 rounded-lg p-4 hover:border-gray-500/50 transition-colors">
+            <div key={index} className="border border-red-500/30 bg-zinc-900 rounded-lg p-4 hover:border-red-500/50 transition-colors">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                   <h4 className="font-medium capitalize mb-1 text-white">
@@ -473,8 +473,8 @@ function OptimizationOpportunities({ opportunities }: { opportunities: any[] }) 
                 </div>
               </div>
               
-              <div className="mt-3 pt-3 border-t border-gray-600/30 flex justify-end">
-                <Button size="sm" variant="outline" className="bg-black/40 border-yellow-500/20 text-yellow-200 hover:bg-yellow-900/20">
+              <div className="mt-3 pt-3 border-t border-red-500/30 flex justify-end">
+                <Button size="sm" variant="outline" className="bg-zinc-900 border-yellow-500/30 text-yellow-200 hover:bg-yellow-900/20">
                   Implement
                 </Button>
               </div>
@@ -492,223 +492,229 @@ export default function EffectivenessPage() {
   const data = mockEffectivenessData;
 
   return (
-    <div className="h-full flex flex-col p-6 overflow-y-auto">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-              <span className="text-sm text-blue-400 font-medium">Marketing Effectiveness</span>
-            </div>
-            <p className="text-gray-400 text-sm">
-              Analyze channel performance, ROI, and optimization opportunities
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Select value={timeRange} onValueChange={setTimeRange}>
-              <SelectTrigger className="w-40 bg-black/40 border-gray-500/30 text-gray-300">
-                <Calendar className="h-4 w-4 mr-2" />
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-gray-900 border-gray-700">
-                <SelectItem value="last_7_days">Last 7 days</SelectItem>
-                <SelectItem value="last_30_days">Last 30 days</SelectItem>
-                <SelectItem value="last_90_days">Last 90 days</SelectItem>
-                <SelectItem value="last_12_months">Last 12 months</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" size="sm" className="bg-black/40 border-blue-500/20 text-blue-200 hover:bg-blue-900/20">
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Performance Metrics */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-          Performance Overview
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <MetricCard
-          title="Efficiency Score"
-          value={data.overview.overall_efficiency_score}
-          subtitle="Out of 10"
-          status="good"
-          trend={{
-            direction: 'up',
-            magnitude: 4.2,
-            period_days: 30,
-            statistical_significance: 0.85,
-            volatility: 'low'
-          }}
-          tooltip="Overall marketing effectiveness score"
-        />
-        
-        <MetricCard
-          title="MER"
-          value={data.overview.mer}
-          subtitle="Marketing Efficiency Ratio"
-          status="good"
-          trend={{
-            direction: 'up',
-            magnitude: 8.5,
-            period_days: 30,
-            statistical_significance: 0.92,
-            volatility: 'low'
-          }}
-          tooltip="Revenue generated per dollar spent on marketing"
-        />
-        
-        <MetricCard
-          title="ROAS"
-          value={data.overview.roas}
-          subtitle="Return on Ad Spend"
-          status="excellent"
-          trend={{
-            direction: 'up',
-            magnitude: 5.2,
-            period_days: 30,
-            statistical_significance: 0.89,
-            volatility: 'medium'
-          }}
-          tooltip="Revenue returned for every dollar spent on advertising"
-        />
-        
-        <MetricCard
-          title="Blended CAC"
-          value={data.overview.blended_cac}
-          format="currency"
-          status="acceptable"
-          trend={{
-            direction: 'down',
-            magnitude: 3.1,
-            period_days: 30,
-            statistical_significance: 0.76,
-            volatility: 'low'
-          }}
-          tooltip="Average cost to acquire a customer across all channels"
-        />
-        
-        <MetricCard
-          title="LTV:CAC"
-          value={data.overview.ltv_cac_ratio}
-          subtitle="Ratio"
-          status="excellent"
-          trend={{
-            direction: 'up',
-            magnitude: 12.3,
-            period_days: 30,
-            statistical_significance: 0.94,
-            volatility: 'low'
-          }}
-          tooltip="Lifetime value to customer acquisition cost ratio"
-        />
-        </div>
-      </div>
-
-      {/* Detailed Analytics */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-          Detailed Analytics
-        </h2>
-        
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-black/40 border border-gray-500/30">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">Overview</TabsTrigger>
-            <TabsTrigger value="channels" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">Channels</TabsTrigger>
-            <TabsTrigger value="funnel" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">Funnel Analysis</TabsTrigger>
-            <TabsTrigger value="optimization" className="data-[state=active]:bg-red-600 data-[state=active]:text-white">Optimization</TabsTrigger>
+    <div className="h-full flex flex-col">
+      {/* Effectiveness Content with Horizontal Tabs */}
+      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
+        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 flex flex-col">
+          <TabsList className="bg-zinc-800 border-2 border-zinc-500 p-1 m-6 mb-0 shrink-0 shadow-xl">
+            <TabsTrigger 
+              value="overview" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
+            >
+              📊 Performance Overview
+            </TabsTrigger>
+            <TabsTrigger 
+              value="channels" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
+            >
+              📈 Channel Analysis
+            </TabsTrigger>
+            <TabsTrigger 
+              value="funnel" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
+            >
+              🔄 Funnel Analysis
+            </TabsTrigger>
+            <TabsTrigger 
+              value="optimization" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
+            >
+              ⚡ Optimization
+            </TabsTrigger>
           </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            <TrendAnalysisChart data={data.timeSeriesData} />
-            <SpendAllocationChart data={data.channelPerformance} />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="channels" className="space-y-6">
-          <ChannelPerformanceChart data={data.channelPerformance} />
-          
-          {/* Channel Details Table */}
-          <Card className="bg-black/40 border border-gray-500/30">
-            <CardHeader>
-              <CardTitle className="text-white">Channel Performance Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-gray-600/30">
-                      <th className="text-left p-2 text-gray-300">Channel</th>
-                      <th className="text-right p-2 text-gray-300">Spend</th>
-                      <th className="text-right p-2 text-gray-300">Revenue</th>
-                      <th className="text-right p-2 text-gray-300">Customers</th>
-                      <th className="text-right p-2 text-gray-300">CAC</th>
-                      <th className="text-right p-2 text-gray-300">ROAS</th>
-                      <th className="text-right p-2 text-gray-300">Efficiency</th>
-                      <th className="text-center p-2 text-gray-300">Trend</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.channelPerformance
-                      .sort((a, b) => b.efficiency_score - a.efficiency_score)
-                      .map((channel, index) => (
-                        <tr key={index} className="border-b border-gray-700/30 hover:bg-black/20">
-                          <td className="p-2 font-medium text-white">{channel.channel}</td>
-                          <td className="p-2 text-right text-gray-300">{formatCurrency(channel.spend)}</td>
-                          <td className="p-2 text-right text-gray-300">{formatCurrency(channel.revenue)}</td>
-                          <td className="p-2 text-right text-gray-300">{channel.customers}</td>
-                          <td className="p-2 text-right text-gray-300">{formatCurrency(channel.cac)}</td>
-                          <td className="p-2 text-right text-gray-300">{channel.roas.toFixed(1)}x</td>
-                          <td className="p-2 text-right">
-                            <Badge 
-                              variant="outline"
-                              className={
-                                channel.efficiency_score >= 8 ? 'text-green-300 bg-green-900/20 border-green-500/30' :
-                                channel.efficiency_score >= 6 ? 'text-yellow-300 bg-yellow-900/20 border-yellow-500/30' :
-                                'text-red-300 bg-red-900/20 border-red-500/30'
-                              }
-                            >
-                              {channel.efficiency_score.toFixed(1)}/10
-                            </Badge>
-                          </td>
-                          <td className="p-2 text-center">
-                            {channel.trend === 'up' && <TrendingUp className="h-4 w-4 text-green-400 mx-auto" />}
-                            {channel.trend === 'down' && <TrendingDown className="h-4 w-4 text-red-400 mx-auto" />}
-                            {channel.trend === 'flat' && <div className="h-1 w-4 bg-yellow-400 mx-auto" />}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+          {/* Performance Overview Tab */}
+          <TabsContent value="overview" className="flex-1 overflow-y-auto p-6">
+            {/* Header Controls */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white">Marketing Effectiveness</h2>
+                <p className="text-sm text-blue-400 font-medium">Performance Analytics Dashboard</p>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+              <div className="flex items-center gap-3">
+                <Select value={timeRange} onValueChange={setTimeRange}>
+                  <SelectTrigger className="w-40 bg-zinc-900 border-red-500/30 text-gray-300">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-900 border-gray-700">
+                    <SelectItem value="last_7_days">Last 7 days</SelectItem>
+                    <SelectItem value="last_30_days">Last 30 days</SelectItem>
+                    <SelectItem value="last_90_days">Last 90 days</SelectItem>
+                    <SelectItem value="last_12_months">Last 12 months</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button variant="outline" size="sm" className="bg-zinc-900 border-blue-500/30 text-blue-200 hover:bg-blue-900/20">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export
+                </Button>
+              </div>
+            </div>
 
-        <TabsContent value="funnel" className="space-y-6">
-          <FunnelChart 
-            data={data.funnelData}
-            title="Conversion Funnel Analysis"
-            showDropOffAnalysis={true}
-            showOptimizations={true}
-          />
-        </TabsContent>
+            {/* Performance Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+              <MetricCard
+                title="Efficiency Score"
+                value={data.overview.overall_efficiency_score}
+                subtitle="Out of 10"
+                status="good"
+                trend={{
+                  direction: 'up',
+                  magnitude: 4.2,
+                  period_days: 30,
+                  statistical_significance: 0.85,
+                  volatility: 'low'
+                }}
+                tooltip="Overall marketing effectiveness score"
+              />
+              
+              <MetricCard
+                title="MER"
+                value={data.overview.mer}
+                subtitle="Marketing Efficiency Ratio"
+                status="good"
+                trend={{
+                  direction: 'up',
+                  magnitude: 8.5,
+                  period_days: 30,
+                  statistical_significance: 0.92,
+                  volatility: 'low'
+                }}
+                tooltip="Revenue generated per dollar spent on marketing"
+              />
+              
+              <MetricCard
+                title="ROAS"
+                value={data.overview.roas}
+                subtitle="Return on Ad Spend"
+                status="excellent"
+                trend={{
+                  direction: 'up',
+                  magnitude: 5.2,
+                  period_days: 30,
+                  statistical_significance: 0.89,
+                  volatility: 'medium'
+                }}
+                tooltip="Revenue returned for every dollar spent on advertising"
+              />
+              
+              <MetricCard
+                title="Blended CAC"
+                value={data.overview.blended_cac}
+                format="currency"
+                status="acceptable"
+                trend={{
+                  direction: 'down',
+                  magnitude: 3.1,
+                  period_days: 30,
+                  statistical_significance: 0.76,
+                  volatility: 'low'
+                }}
+                tooltip="Average cost to acquire a customer across all channels"
+              />
+              
+              <MetricCard
+                title="LTV:CAC"
+                value={data.overview.ltv_cac_ratio}
+                subtitle="Ratio"
+                status="excellent"
+                trend={{
+                  direction: 'up',
+                  magnitude: 12.3,
+                  period_days: 30,
+                  statistical_significance: 0.94,
+                  volatility: 'low'
+                }}
+                tooltip="Lifetime value to customer acquisition cost ratio"
+              />
+            </div>
 
-        <TabsContent value="optimization" className="space-y-6">
-          <OptimizationOpportunities opportunities={data.optimizationOpportunities} />
-        </TabsContent>
+            {/* Overview Charts */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              <TrendAnalysisChart data={data.timeSeriesData} />
+              <SpendAllocationChart data={data.channelPerformance} />
+            </div>
+          </TabsContent>
+
+          {/* Channel Analysis Tab */}
+          <TabsContent value="channels" className="flex-1 overflow-y-auto p-6">
+            <div className="space-y-6">
+              <ChannelPerformanceChart data={data.channelPerformance} />
+              
+              {/* Channel Details Table */}
+              <Card className="bg-black border border-red-500/30">
+                <CardHeader>
+                  <CardTitle className="text-white">Channel Performance Details</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-600/30">
+                          <th className="text-left p-2 text-gray-300">Channel</th>
+                          <th className="text-right p-2 text-gray-300">Spend</th>
+                          <th className="text-right p-2 text-gray-300">Revenue</th>
+                          <th className="text-right p-2 text-gray-300">Customers</th>
+                          <th className="text-right p-2 text-gray-300">CAC</th>
+                          <th className="text-right p-2 text-gray-300">ROAS</th>
+                          <th className="text-right p-2 text-gray-300">Efficiency</th>
+                          <th className="text-center p-2 text-gray-300">Trend</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.channelPerformance
+                          .sort((a, b) => b.efficiency_score - a.efficiency_score)
+                          .map((channel, index) => (
+                            <tr key={index} className="border-b border-gray-700/30 hover:bg-black/20">
+                              <td className="p-2 font-medium text-white">{channel.channel}</td>
+                              <td className="p-2 text-right text-gray-300">{formatCurrency(channel.spend)}</td>
+                              <td className="p-2 text-right text-gray-300">{formatCurrency(channel.revenue)}</td>
+                              <td className="p-2 text-right text-gray-300">{channel.customers}</td>
+                              <td className="p-2 text-right text-gray-300">{formatCurrency(channel.cac)}</td>
+                              <td className="p-2 text-right text-gray-300">{channel.roas.toFixed(1)}x</td>
+                              <td className="p-2 text-right">
+                                <Badge 
+                                  variant="outline"
+                                  className={
+                                    channel.efficiency_score >= 8 ? 'text-green-300 bg-green-900/20 border-green-500/30' :
+                                    channel.efficiency_score >= 6 ? 'text-yellow-300 bg-yellow-900/20 border-yellow-500/30' :
+                                    'text-red-300 bg-red-900/20 border-red-500/30'
+                                  }
+                                >
+                                  {channel.efficiency_score.toFixed(1)}/10
+                                </Badge>
+                              </td>
+                              <td className="p-2 text-center">
+                                {channel.trend === 'up' && <TrendingUp className="h-4 w-4 text-green-400 mx-auto" />}
+                                {channel.trend === 'down' && <TrendingDown className="h-4 w-4 text-red-400 mx-auto" />}
+                                {channel.trend === 'flat' && <div className="h-1 w-4 bg-yellow-400 mx-auto" />}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Funnel Analysis Tab */}
+          <TabsContent value="funnel" className="flex-1 overflow-y-auto p-6">
+            <FunnelChart 
+              data={data.funnelData}
+              title="Conversion Funnel Analysis"
+              showDropOffAnalysis={true}
+              showOptimizations={true}
+            />
+          </TabsContent>
+
+          {/* Optimization Tab */}
+          <TabsContent value="optimization" className="flex-1 overflow-y-auto p-6">
+            <OptimizationOpportunities opportunities={data.optimizationOpportunities} />
+          </TabsContent>
         </Tabs>
       </div>
-
-      {/* Bottom Spacing */}
-      <div className="pb-8"></div>
     </div>
   );
 }

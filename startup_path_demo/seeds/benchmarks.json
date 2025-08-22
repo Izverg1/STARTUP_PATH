@@ -1,0 +1,114 @@
+{
+  "version": "0.1",
+  "updated_at": "2025-08-21",
+  "notes": "Illustrative, no-integration seed ranges. Present as ranges + source labels; tighten later with specific vendor citations.",
+  "finance": {
+    "payback_good_months": [
+      12,
+      18
+    ],
+    "gross_margin_default": 0.7
+  },
+  "channels": {
+    "search": {
+      "lp_cvr_range": [
+        0.1,
+        0.2
+      ],
+      "click_cvr_range": [
+        0.03,
+        0.12
+      ],
+      "cpc_range": [
+        2.0,
+        8.0
+      ],
+      "cpl_range": [
+        40,
+        220
+      ],
+      "meet_rate_range": [
+        0.18,
+        0.35
+      ],
+      "opp_rate_given_meeting_range": [
+        0.35,
+        0.55
+      ],
+      "win_rate_given_opp_range": [
+        0.18,
+        0.35
+      ],
+      "source_label": "Industry ads benchmarks (WordStream/LocaliQ 2024\u20132025, synthesized)"
+    },
+    "linkedin_inmail": {
+      "reply_rate_range": [
+        0.015,
+        0.05
+      ],
+      "meet_rate_given_reply_range": [
+        0.2,
+        0.4
+      ],
+      "opp_rate_given_meeting_range": [
+        0.3,
+        0.5
+      ],
+      "win_rate_given_opp_range": [
+        0.18,
+        0.35
+      ],
+      "cpqm_range": [
+        200,
+        450
+      ],
+      "source_label": "B2B cold outreach studies (GMass/Martal/Belkins 2024\u20132025)"
+    },
+    "cold_email": {
+      "reply_rate_range": [
+        0.01,
+        0.06
+      ],
+      "meet_rate_given_reply_range": [
+        0.15,
+        0.35
+      ],
+      "opp_rate_given_meeting_range": [
+        0.25,
+        0.45
+      ],
+      "win_rate_given_opp_range": [
+        0.15,
+        0.3
+      ],
+      "cpqm_range": [
+        150,
+        400
+      ],
+      "source_label": "B2B cold email studies (GMass/Martal/Belkins 2024\u20132025)"
+    },
+    "webinar": {
+      "reg_to_attend_range": [
+        0.35,
+        0.45
+      ],
+      "attend_to_meeting_range": [
+        0.1,
+        0.2
+      ],
+      "opp_rate_given_meeting_range": [
+        0.3,
+        0.5
+      ],
+      "win_rate_given_opp_range": [
+        0.15,
+        0.3
+      ],
+      "cpl_range": [
+        50,
+        150
+      ],
+      "source_label": "Webinar benchmarks (ON24/DemandSage 2025, synthesized)"
+    }
+  }
+}

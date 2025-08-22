@@ -30,7 +30,7 @@ export interface AgentStatus extends BaseEntity {
   estimated_completion?: string;
 }
 
-export type AgentKey = 'channel_scout' | 'offer_alchemist' | 'signal_wrangler' | 'budget_captain';
+export type AgentKey = 'channel_discovery_engine' | 'campaign_optimization_engine' | 'performance_analytics_engine' | 'budget_allocation_engine';
 
 // =============================================================================
 // Agent Configurations
@@ -58,14 +58,14 @@ export interface AgentConstraints {
 }
 
 // =============================================================================
-// Channel Scout Agent
+// Channel Discovery Engine
 // =============================================================================
 
-export interface ChannelScoutConfig extends AgentConfiguration {
-  parameters: ChannelScoutParameters;
+export interface ChannelDiscoveryEngineConfig extends AgentConfiguration {
+  parameters: ChannelDiscoveryEngineParameters;
 }
 
-export interface ChannelScoutParameters extends AgentParameters {
+export interface ChannelDiscoveryEngineParameters extends AgentParameters {
   benchmark_sources: string[];
   confidence_threshold: number;
   max_channels_to_suggest: number;
@@ -74,19 +74,19 @@ export interface ChannelScoutParameters extends AgentParameters {
   performance_history_weight: number;
 }
 
-export interface ChannelScoutCapability extends AgentCapability {
+export interface ChannelDiscoveryEngineCapability extends AgentCapability {
   type: 'channel_discovery' | 'gate_recommendation' | 'benchmark_analysis';
 }
 
 // =============================================================================
-// Offer Alchemist Agent
+// Campaign Optimization Engine
 // =============================================================================
 
-export interface OfferAlchemistConfig extends AgentConfiguration {
-  parameters: OfferAlchemistParameters;
+export interface CampaignOptimizationEngineConfig extends AgentConfiguration {
+  parameters: CampaignOptimizationEngineParameters;
 }
 
-export interface OfferAlchemistParameters extends AgentParameters {
+export interface CampaignOptimizationEngineParameters extends AgentParameters {
   copy_variants_per_test: number;
   tone_preferences: TonePreference[];
   include_personalization: boolean;
@@ -104,19 +104,19 @@ export interface ComplianceCheck {
   strict_mode: boolean;
 }
 
-export interface OfferAlchemistCapability extends AgentCapability {
+export interface CampaignOptimizationEngineCapability extends AgentCapability {
   type: 'copy_generation' | 'ab_test_design' | 'personalization' | 'compliance_check';
 }
 
 // =============================================================================
-// Signal Wrangler Agent  
+// Performance Analytics Engine
 // =============================================================================
 
-export interface SignalWranglerConfig extends AgentConfiguration {
-  parameters: SignalWranglerParameters;
+export interface PerformanceAnalyticsEngineConfig extends AgentConfiguration {
+  parameters: PerformanceAnalyticsEngineParameters;
 }
 
-export interface SignalWranglerParameters extends AgentParameters {
+export interface PerformanceAnalyticsEngineParameters extends AgentParameters {
   anomaly_detection_sensitivity: number;
   statistical_significance_threshold: number;
   minimum_sample_size: number;
@@ -132,19 +132,19 @@ export interface AlertThreshold {
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
-export interface SignalWranglerCapability extends AgentCapability {
+export interface PerformanceAnalyticsEngineCapability extends AgentCapability {
   type: 'metric_calculation' | 'anomaly_detection' | 'forecasting' | 'alert_generation';
 }
 
 // =============================================================================
-// Budget Captain Agent
+// Budget Allocation Engine
 // =============================================================================
 
-export interface BudgetCaptainConfig extends AgentConfiguration {
-  parameters: BudgetCaptainParameters;
+export interface BudgetAllocationEngineConfig extends AgentConfiguration {
+  parameters: BudgetAllocationEngineParameters;
 }
 
-export interface BudgetCaptainParameters extends AgentParameters {
+export interface BudgetAllocationEngineParameters extends AgentParameters {
   allocation_strategy: AllocationStrategy;
   reallocation_threshold_percent: number;
   minimum_budget_percent: number;
@@ -156,7 +156,7 @@ export interface BudgetCaptainParameters extends AgentParameters {
 
 export type AllocationStrategy = 'thompson_sampling' | 'epsilon_greedy' | 'ucb' | 'manual';
 
-export interface BudgetCaptainCapability extends AgentCapability {
+export interface BudgetAllocationEngineCapability extends AgentCapability {
   type: 'budget_optimization' | 'allocation_strategy' | 'performance_modeling' | 'risk_assessment';
 }
 

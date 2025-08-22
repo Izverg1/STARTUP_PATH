@@ -11,9 +11,13 @@ class AuthService {
   private supabase: ReturnType<typeof createBrowserClient<Database>> | null = null
 
   constructor() {
+    console.log('🔧 AuthService: Initializing...')
     if (typeof window !== 'undefined') {
       this.initializeSupabase()
       this.loadStoredSession()
+      console.log('🔧 AuthService: Initialization complete')
+    } else {
+      console.log('🔧 AuthService: Server-side initialization (no localStorage)')
     }
   }
 
@@ -23,6 +27,8 @@ class AuthService {
 
     if (supabaseUrl && supabaseAnonKey) {
       this.supabase = createBrowserClient<Database>(supabaseUrl, supabaseAnonKey)
+    } else {
+      console.warn('⚠️ Supabase credentials not found, using fallback demo authentication')
     }
   }
 
@@ -32,6 +38,12 @@ class AuthService {
       // Check if this is demo user credentials
       const { DEMO_USER, DEV } = AUTH_CONFIG
       if (email === DEMO_USER.email && password === DEMO_USER.password) {
+        // If Supabase is not configured, use demo mode directly
+        if (!this.supabase) {
+          console.log('🔄 Using fallback demo authentication (Supabase not configured)')
+          return this.handleDemoLogin(email, password)
+        }
+        
         // Try Supabase first, fall back to demo mode if it fails
         try {
           return await this.handleDemoUserSupabaseLogin(email, password)
@@ -53,7 +65,16 @@ class AuthService {
       return this.handleSupabaseLogin(email, password)
     } catch (error) {
       if (error instanceof AuthError) throw error
-      throw new AuthError('Login failed', 'network_error')
+      
+      // Convert any other errors to user-friendly messages
+      let userMessage = 'Something went wrong during login. Please try again.';
+      if (error instanceof Error) {
+        if (error.message.includes('network') || error.message.includes('Network')) {
+          userMessage = 'Unable to connect. Please check your internet connection and try again.';
+        }
+      }
+      
+      throw new AuthError(userMessage, 'network_error')
     }
   }
 
@@ -129,14 +150,14 @@ class AuthService {
 
   // Demo authentication for professional platform
   private async handleDemoLogin(email: string, password: string): Promise<AuthUser> {
-    // Simulate API delay for realistic experience
-    await new Promise(resolve => setTimeout(resolve, 800))
+    // Simulate API delay for realistic experience (reduced from 800ms to 300ms for better UX)
+    await new Promise(resolve => setTimeout(resolve, 300))
 
     const { DEMO_USER } = AUTH_CONFIG
     
     if (email !== DEMO_USER.email || password !== DEMO_USER.password) {
       throw new AuthError(
-        `Invalid credentials. Use: ${DEMO_USER.email}`, 
+        'Incorrect email or password. Please check your credentials and try again.', 
         'invalid_credentials'
       )
     }
@@ -170,7 +191,7 @@ class AuthService {
   // Real Supabase authentication for professional platform
   private async handleSupabaseLogin(email: string, password: string): Promise<AuthUser> {
     if (!this.supabase) {
-      throw new AuthError('Supabase client not initialized', 'network_error')
+      throw new AuthError('Authentication service unavailable. Please contact support.', 'network_error')
     }
 
     const { data, error } = await this.supabase.auth.signInWithPassword({
@@ -179,10 +200,20 @@ class AuthService {
     })
 
     if (error) {
-      throw new AuthError(
-        error.message || 'Authentication failed',
-        'invalid_credentials'
-      )
+      // Provide user-friendly error messages
+      let userMessage = 'Authentication failed';
+      
+      if (error.message.includes('Invalid login credentials') || 
+          error.message.includes('invalid_credentials') ||
+          error.message.includes('Email not confirmed')) {
+        userMessage = 'Incorrect email or password. Please check your credentials and try again.';
+      } else if (error.message.includes('Too many requests')) {
+        userMessage = 'Too many login attempts. Please wait a moment and try again.';
+      } else if (error.message.includes('Network')) {
+        userMessage = 'Unable to connect. Please check your internet connection and try again.';
+      }
+      
+      throw new AuthError(userMessage, 'invalid_credentials')
     }
 
     if (!data.user) {
@@ -301,7 +332,11 @@ class AuthService {
 
   // Get current authenticated user
   getCurrentUser(): AuthUser | null {
-    if (!this.session || this.isSessionExpired()) {
+    const hasSession = !!this.session
+    const isExpired = this.isSessionExpired()
+    console.log('🔍 AuthService.getCurrentUser:', { hasSession, isExpired })
+    
+    if (!this.session || isExpired) {
       return null
     }
     return this.session.user
@@ -312,9 +347,10 @@ class AuthService {
     return this.getCurrentUser() !== null
   }
 
-  private isSessionExpired(): boolean {
-    if (!this.session) return true
-    return Date.now() > this.session.expiresAt
+  private isSessionExpired(session?: AuthSession): boolean {
+    const sessionToCheck = session || this.session
+    if (!sessionToCheck) return true
+    return Date.now() > sessionToCheck.expiresAt
   }
 
   // Professional token generation for demo
@@ -348,11 +384,16 @@ class AuthService {
       if (stored) {
         try {
           const session = JSON.parse(stored)
-          if (!this.isSessionExpired()) {
+          if (session && !this.isSessionExpired(session)) {
             this.session = session
+            console.log('📱 Restored session for:', session.user?.email)
+          } else {
+            console.log('🗑️ Expired session removed')
+            localStorage.removeItem(AUTH_CONFIG.SESSION.storageKey)
           }
         } catch (error) {
           // Invalid stored session, clear it
+          console.warn('🗑️ Invalid stored session removed')
           localStorage.removeItem(AUTH_CONFIG.SESSION.storageKey)
         }
       }
@@ -378,9 +419,25 @@ class AuthService {
 
   // Listener pattern for React integration
   onAuthChange(listener: (user: AuthUser | null) => void): () => void {
+    // Ensure client-side initialization if not already done
+    if (typeof window !== 'undefined') {
+      console.log('🔄 AuthService: Ensuring client-side initialization')
+      if (!this.supabase) {
+        console.log('🔧 AuthService: Performing late Supabase initialization')
+        this.initializeSupabase()
+      }
+      // Always try to load session on client side
+      this.loadStoredSession()
+    }
+
     this.listeners.push(listener)
-    // Call immediately with current state
-    listener(this.getCurrentUser())
+    
+    // Call immediately with current state (ensure this happens asynchronously to avoid issues)
+    setTimeout(() => {
+      const currentUser = this.getCurrentUser()
+      console.log('🔄 AuthService: Initial auth state for listener:', currentUser?.email || 'none')
+      listener(currentUser)
+    }, 0)
     
     // Return unsubscribe function
     return () => {

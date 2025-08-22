@@ -2,14 +2,14 @@ import { BaseAgent } from './base'
 import { 
   Artifact, 
   CopyArtifact, 
-  OfferAlchemistCapability,
+  CampaignOptimizationEngineCapability,
   TonePreference,
   CopyVariant 
 } from '@/types/agents'
 
-export class OfferAlchemistAgent extends BaseAgent {
+export class CampaignOptimizationEngineAgent extends BaseAgent {
   constructor() {
-    const capabilities: OfferAlchemistCapability[] = [
+    const capabilities: CampaignOptimizationEngineCapability[] = [
       {
         name: 'Copy Generation',
         description: 'Generate compelling copy variants for different channels',
@@ -66,7 +66,7 @@ export class OfferAlchemistAgent extends BaseAgent {
       }
     ]
 
-    super('offer_alchemist', capabilities)
+    super('campaign_optimization_engine', capabilities)
   }
 
   protected async performExecution(input?: {

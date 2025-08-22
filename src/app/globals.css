@@ -252,6 +252,14 @@
   }
   
   /* Cyberpunk effects */
+  /* Minimal grid pattern for dashboard */
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(rgba(255, 0, 64, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 0, 64, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
   .electric-grid {
     background-image: 
       linear-gradient(rgba(255, 0, 64, 0.05) 1px, transparent 1px),

@@ -2,16 +2,16 @@ import { BaseAgent } from './base'
 import { 
   Artifact, 
   AllocArtifact, 
-  BudgetCaptainCapability,
+  BudgetAllocationEngineCapability,
   AllocationStrategy,
   ChannelWeight,
   ExpectedImpact,
   RiskAssessment 
 } from '@/types/agents'
 
-export class BudgetCaptainAgent extends BaseAgent {
+export class BudgetAllocationEngineAgent extends BaseAgent {
   constructor() {
-    const capabilities: BudgetCaptainCapability[] = [
+    const capabilities: BudgetAllocationEngineCapability[] = [
       {
         name: 'Budget Optimization',
         description: 'Optimize budget allocation across channels using statistical methods',
@@ -68,7 +68,7 @@ export class BudgetCaptainAgent extends BaseAgent {
       }
     ]
 
-    super('budget_captain', capabilities)
+    super('budget_allocation_engine', capabilities)
   }
 
   protected async performExecution(input?: {

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tutorial } from '@/components/dashboard/Tutorial';
 import { 
   FlaskConical,
   Play,
@@ -216,7 +217,7 @@ function ExperimentCard({ experiment, type }: ExperimentCardProps) {
   };
 
   return (
-    <Card className="bg-gray-800 border-gray-600 hover:border-gray-500 transition-all h-fit">
+    <Card className="bg-black border-red-500/30 hover:border-red-500/50 transition-all h-fit">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
@@ -253,7 +254,7 @@ function ExperimentCard({ experiment, type }: ExperimentCardProps) {
       
       <CardContent className="space-y-4">
         {/* Primary Metric */}
-        <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+        <div className="bg-zinc-900 rounded-lg p-4 border border-red-500/30">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-200">Primary Metric: {experiment.primary_metric}</span>
             <Badge variant="outline" className="text-xs text-cyan-300 border-cyan-600">
@@ -310,7 +311,7 @@ function ExperimentCard({ experiment, type }: ExperimentCardProps) {
         
         {/* Budget Information */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="text-center p-3 bg-gray-700 rounded-lg border border-gray-600">
+          <div className="text-center p-3 bg-zinc-900 rounded-lg border border-red-500/30">
             <div className="text-xs text-gray-400 mb-1">Budget</div>
             <div className="font-semibold text-white">
               ${type === 'active' ? experiment.budget_allocated.toLocaleString() : experiment.budget_spent.toLocaleString()}
@@ -322,7 +323,7 @@ function ExperimentCard({ experiment, type }: ExperimentCardProps) {
             )}
           </div>
           
-          <div className="text-center p-3 bg-gray-700 rounded-lg border border-gray-600">
+          <div className="text-center p-3 bg-zinc-900 rounded-lg border border-red-500/30">
             <div className="text-xs text-gray-400 mb-1">
               {type === 'active' ? 'Statistical Sig.' : 'Duration'}
             </div>
@@ -336,27 +337,27 @@ function ExperimentCard({ experiment, type }: ExperimentCardProps) {
         </div>
         
         {/* Actions */}
-        <div className="flex items-center gap-2 pt-2 border-t border-gray-600">
+        <div className="flex items-center gap-2 pt-2 border-t border-red-500/30">
           {type === 'active' && (
             <>
               {experiment.status === 'running' ? (
-                <Button variant="outline" size="sm" className="bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600">
+                <Button variant="outline" size="sm" className="bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20">
                   <Pause className="h-3 w-3 mr-1" />
                   Pause
                 </Button>
               ) : (
-                <Button variant="outline" size="sm" className="bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600">
+                <Button variant="outline" size="sm" className="bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20">
                   <Play className="h-3 w-3 mr-1" />
                   Resume
                 </Button>
               )}
-              <Button variant="outline" size="sm" className="bg-gray-700 border-red-600 text-red-400 hover:bg-red-900">
+              <Button variant="outline" size="sm" className="bg-zinc-900 border-red-600 text-red-400 hover:bg-red-900">
                 <XCircle className="h-3 w-3 mr-1" />
                 Kill
               </Button>
             </>
           )}
-          <Button variant="outline" size="sm" className="ml-auto bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600">
+          <Button variant="outline" size="sm" className="ml-auto bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20">
             <BarChart3 className="h-3 w-3 mr-1" />
             View Details
           </Button>
@@ -367,8 +368,17 @@ function ExperimentCard({ experiment, type }: ExperimentCardProps) {
 }
 
 export default function ExperimentsPage() {
-  const [activeTab, setActiveTab] = useState('active');
+  const [activeTab, setActiveTab] = useState('overview');
   const [showTutorial, setShowTutorial] = useState(false);
+  
+  // Check if tutorial should be shown automatically for first-time users
+  React.useEffect(() => {
+    const tutorialCompleted = localStorage.getItem('tutorialCompleted');
+    if (!tutorialCompleted) {
+      // Show tutorial automatically for first-time users after a short delay
+      setTimeout(() => setShowTutorial(true), 1000);
+    }
+  }, []);
   
   // Calculate summary stats
   const activeExperiments = mockExperimentsData.active;
@@ -378,173 +388,140 @@ export default function ExperimentsPage() {
   const avgConfidence = activeExperiments.reduce((sum, e) => sum + e.confidence_level, 0) / activeExperiments.length;
 
   return (
-    <div className="h-full flex flex-col p-6 overflow-y-auto">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-              <span className="text-sm text-cyan-400 font-medium">Experiment Lab</span>
-            </div>
-            <p className="text-gray-400 text-sm">
-              Thompson Sampling allocation with deterministic seeding for optimal channel validation
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setShowTutorial(true)}
-              className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50"
+    <div className="h-full flex flex-col">
+      {/* Experiment Content with Horizontal Tabs */}
+      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+          <TabsList className="bg-zinc-800 border-2 border-zinc-500 p-1 m-6 mb-0 shrink-0 shadow-xl">
+            <TabsTrigger 
+              value="overview" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
             >
-              <Play className="h-4 w-4 mr-2" />
-              Tutorial
-            </Button>
-            <Button variant="outline" size="sm" className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50">
-              <Filter className="h-4 w-4 mr-2" />
-              Filter
-            </Button>
-            <Link href="/dashboard/experiments/designer">
-              <Button className="bg-red-600 hover:bg-red-700 text-white">
-                <Plus className="h-4 w-4 mr-2" />
-                Design Experiment
-              </Button>
-            </Link>
-          </div>
-        </div>
-        
-        {/* System Status */}
-        <div className="flex items-center gap-6 text-sm p-3 bg-black/40 border border-gray-500/20 rounded-lg">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-green-400">Thompson Sampling Active</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Target className="h-4 w-4 text-red-400" />
-            <span className="text-red-400">Deterministic Seeding</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-cyan-400" />
-            <span className="text-cyan-400">Real-time Optimization</span>
-          </div>
-        </div>
-      </div>
-
-      </div>
-
-      {/* Value Proposition */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-          Platform Benefits
-        </h2>
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-black/40 border border-green-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <DollarSign className="h-5 w-5 text-green-400" />
-              <h3 className="text-white font-medium">Reduce CAC by 35%</h3>
-            </div>
-            <p className="text-gray-300 text-sm">Intelligent budget allocation across channels with real-time optimization</p>
-          </div>
-          <div className="bg-black/40 border border-red-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <Target className="h-5 w-5 text-red-400" />
-              <h3 className="text-white font-medium">99.7% Statistical Accuracy</h3>
-            </div>
-            <p className="text-gray-300 text-sm">Thompson Sampling ensures optimal exploration vs exploitation balance</p>
-          </div>
-          <div className="bg-black/40 border border-cyan-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <Clock className="h-5 w-5 text-cyan-400" />
-              <h3 className="text-white font-medium">2x Faster Validation</h3>
-            </div>
-            <p className="text-gray-300 text-sm">Deterministic seeding eliminates variance and accelerates insights</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Performance Metrics */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-          Performance Overview
-        </h2>
-        <div className="grid grid-cols-4 gap-4">
-          <div className="bg-black/40 border border-green-500/20 rounded-lg p-4 hover:border-green-500/40 transition-colors">
-            <div className="flex items-center gap-2 mb-2">
-              <Play className="h-4 w-4 text-green-400" />
-              <div className="text-sm text-green-300">Active Experiments</div>
-            </div>
-            <div className="text-3xl font-bold text-white mb-1">{activeExperiments.length}</div>
-            <div className="text-xs text-gray-400">{runningCount} running live</div>
-          </div>
-          
-          <div className="bg-black/40 border border-yellow-500/20 rounded-lg p-4 hover:border-yellow-500/40 transition-colors">
-            <div className="flex items-center gap-2 mb-2">
-              <DollarSign className="h-4 w-4 text-yellow-400" />
-              <div className="text-sm text-yellow-300">Total Budget</div>
-            </div>
-            <div className="text-3xl font-bold text-white mb-1">${totalBudget.toLocaleString()}</div>
-            <div className="text-xs text-gray-400">${totalSpent.toLocaleString()} allocated</div>
-          </div>
-          
-          <div className="bg-black/40 border border-cyan-500/20 rounded-lg p-4 hover:border-cyan-500/40 transition-colors">
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="h-4 w-4 text-cyan-400" />
-              <div className="text-sm text-cyan-300">Avg Confidence</div>
-            </div>
-            <div className="text-3xl font-bold text-white mb-1">{(avgConfidence * 100).toFixed(0)}%</div>
-            <div className="text-xs text-gray-400">Statistical significance</div>
-          </div>
-          
-          <div className="bg-black/40 border border-blue-500/20 rounded-lg p-4 hover:border-blue-500/40 transition-colors">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="h-4 w-4 text-blue-400" />
-              <div className="text-sm text-blue-300">Success Rate</div>
-            </div>
-            <div className="text-3xl font-bold text-white mb-1">67.0%</div>
-            <div className="text-xs text-blue-400">↗ +8.3% (30d)</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Experiments */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-          Experiments Management
-        </h2>
-        
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-black/40 border border-gray-500/30">
+              📊 Overview
+            </TabsTrigger>
             <TabsTrigger 
               value="active" 
-              className="data-[state=active]:bg-red-600 data-[state=active]:text-white text-gray-300 flex items-center gap-2"
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
             >
-              <Play className="h-4 w-4" />
-              Active ({activeExperiments.length})
+              🧪 Active ({activeExperiments.length})
             </TabsTrigger>
             <TabsTrigger 
-              value="completed" 
-              className="data-[state=active]:bg-red-600 data-[state=active]:text-white text-gray-300 flex items-center gap-2"
+              value="results" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
             >
-              <CheckCircle className="h-4 w-4" />
-              Completed ({mockExperimentsData.completed.length})
+              📈 Results
             </TabsTrigger>
             <TabsTrigger 
-              value="failed" 
-              className="data-[state=active]:bg-red-600 data-[state=active]:text-white text-gray-300 flex items-center gap-2"
+              value="controls" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
             >
-              <XCircle className="h-4 w-4" />
-              Failed ({mockExperimentsData.failed.length})
+              ⚙️ Lab Controls
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="active" className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          {/* Overview Tab - Performance Metrics & Platform Benefits */}
+          <TabsContent value="overview" className="lab-workspace flex-1 overflow-y-auto p-6">
+            {/* Header Controls */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white">Experiment Lab</h2>
+                <p className="text-sm text-cyan-400 font-medium">Thompson Sampling Optimization Matrix</p>
+              </div>
+              <div className="experiment-controls flex items-center gap-3">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowTutorial(true)}
+                  className="bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20"
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  Tutorial
+                </Button>
+                <Button variant="outline" size="sm" className="bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filter
+                </Button>
+                <Link href="/dashboard/experiments/designer">
+                  <Button className="bg-red-600 hover:bg-red-700 text-white">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Design Experiment
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Platform Benefits */}
+            <div className="mb-8">
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="bg-black border border-green-500/30 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <DollarSign className="h-5 w-5 text-green-400" />
+                    <h3 className="text-white font-medium">Reduce CAC by 35%</h3>
+                  </div>
+                  <p className="text-gray-300 text-sm">Intelligent budget allocation across channels with real-time optimization</p>
+                </div>
+                <div className="bg-black border border-red-500/30 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Target className="h-5 w-5 text-red-400" />
+                    <h3 className="text-white font-medium">99.7% Statistical Accuracy</h3>
+                  </div>
+                  <p className="text-gray-300 text-sm">Thompson Sampling ensures optimal exploration vs exploitation balance</p>
+                </div>
+                <div className="bg-black border border-cyan-500/30 rounded-lg p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Clock className="h-5 w-5 text-cyan-400" />
+                    <h3 className="text-white font-medium">2x Faster Validation</h3>
+                  </div>
+                  <p className="text-gray-300 text-sm">Deterministic seeding eliminates variance and accelerates insights</p>
+                </div>
+              </div>
+
+              {/* Performance Overview */}
+              <div className="metrics-overview grid grid-cols-4 gap-4">
+                <div className="bg-black border border-green-500/30 rounded-lg p-4 hover:border-green-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Play className="h-4 w-4 text-green-400" />
+                    <div className="text-sm text-green-300">Active Experiments</div>
+                  </div>
+                  <div className="text-3xl font-bold text-white mb-1">{activeExperiments.length}</div>
+                  <div className="text-xs text-gray-400">{runningCount} running live</div>
+                </div>
+                
+                <div className="bg-black border border-yellow-500/30 rounded-lg p-4 hover:border-yellow-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <DollarSign className="h-4 w-4 text-yellow-400" />
+                    <div className="text-sm text-yellow-300">Total Budget</div>
+                  </div>
+                  <div className="text-3xl font-bold text-white mb-1">${totalBudget.toLocaleString()}</div>
+                  <div className="text-xs text-gray-400">${totalSpent.toLocaleString()} allocated</div>
+                </div>
+                
+                <div className="bg-black border border-cyan-500/30 rounded-lg p-4 hover:border-cyan-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Target className="h-4 w-4 text-cyan-400" />
+                    <div className="text-sm text-cyan-300">Avg Confidence</div>
+                  </div>
+                  <div className="text-3xl font-bold text-white mb-1">{(avgConfidence * 100).toFixed(0)}%</div>
+                  <div className="text-xs text-gray-400">Statistical significance</div>
+                </div>
+                
+                <div className="bg-black border border-blue-500/30 rounded-lg p-4 hover:border-blue-500/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <TrendingUp className="h-4 w-4 text-blue-400" />
+                    <div className="text-sm text-blue-300">Success Rate</div>
+                  </div>
+                  <div className="text-3xl font-bold text-white mb-1">67.0%</div>
+                  <div className="text-xs text-blue-400">↗ +8.3% (30d)</div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Active Experiments Tab */}
+          <TabsContent value="active" className="flex-1 overflow-y-auto p-6">
+            <div className="simulation-results grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {mockExperimentsData.active.map(experiment => (
-                <div key={experiment.id} className="bg-black/40 border border-gray-500/30 rounded-lg p-4 hover:border-gray-400/50 transition-colors">
+                <div key={experiment.id} className="bg-black border border-red-500/30 rounded-lg p-4 hover:border-red-500/50 transition-colors">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-white font-semibold text-lg">{experiment.name}</h3>
                     <Badge className={experiment.status === 'running' ? 'bg-green-600/80 text-green-100 border-green-500/30' : 'bg-yellow-600/80 text-yellow-100 border-yellow-500/30'}>
@@ -554,24 +531,24 @@ export default function ExperimentsPage() {
                   </div>
                   
                   <div className="grid grid-cols-2 gap-3 mb-4">
-                    <div className="bg-black/20 p-3 rounded-lg border border-gray-600/30">
+                    <div className="bg-zinc-900 p-3 rounded-lg border border-red-500/30">
                       <div className="text-gray-400 text-sm mb-1">Current {experiment.primary_metric}</div>
                       <div className="text-white font-bold text-lg">
                         {experiment.primary_metric.includes('Rate') ? `${(experiment.current_value * 100).toFixed(1)}%` : `$${experiment.current_value}`}
                       </div>
                     </div>
-                    <div className="bg-black/20 p-3 rounded-lg border border-gray-600/30">
+                    <div className="bg-zinc-900 p-3 rounded-lg border border-red-500/30">
                       <div className="text-gray-400 text-sm mb-1">Target</div>
                       <div className="text-green-400 font-bold text-lg">
                         {experiment.primary_metric.includes('Rate') ? `${(experiment.target_value * 100).toFixed(1)}%` : `$${experiment.target_value}`}
                       </div>
                     </div>
-                    <div className="bg-black/20 p-3 rounded-lg border border-gray-600/30">
+                    <div className="bg-zinc-900 p-3 rounded-lg border border-red-500/30">
                       <div className="text-gray-400 text-sm mb-1">Budget</div>
                       <div className="text-white font-bold text-sm">${experiment.budget_allocated.toLocaleString()}</div>
                       <div className="text-gray-500 text-xs">${experiment.budget_spent.toLocaleString()} spent</div>
                     </div>
-                    <div className="bg-black/20 p-3 rounded-lg border border-gray-600/30">
+                    <div className="bg-zinc-900 p-3 rounded-lg border border-red-500/30">
                       <div className="text-gray-400 text-sm mb-1">Confidence</div>
                       <div className="text-cyan-400 font-bold text-sm">{(experiment.confidence_level * 100).toFixed(0)}%</div>
                       <div className="text-gray-500 text-xs">Statistical sig.</div>
@@ -579,7 +556,7 @@ export default function ExperimentsPage() {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50 text-xs flex-1">
+                    <Button size="sm" variant="outline" className="bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20 text-xs flex-1">
                       {experiment.status === 'running' ? (
                         <>
                           <Pause className="h-3 w-3 mr-1" />
@@ -592,188 +569,175 @@ export default function ExperimentsPage() {
                         </>
                       )}
                     </Button>
-                    <Button size="sm" variant="outline" className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50 text-xs flex-1">
+                    <Button size="sm" variant="outline" className="bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20 text-xs flex-1">
                       <BarChart3 className="h-3 w-3 mr-1" />
                       Details
                     </Button>
                   </div>
                 </div>
               ))}
-              </div>
-            </TabsContent>
-
-          <TabsContent value="completed" className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {mockExperimentsData.completed.map(experiment => (
-                <div key={experiment.id} className="bg-black/40 border border-gray-500/30 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-white font-semibold text-base">{experiment.name}</h3>
-                    <Badge className="bg-blue-600 text-blue-100">
-                      <CheckCircle className="h-3 w-3 mr-1" />
-                      Completed
-                    </Badge>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-3 text-sm mb-4">
-                    <div className="bg-black/20 p-2 rounded border border-gray-600/30">
-                      <div className="text-gray-400 text-xs">Final {experiment.primary_metric}</div>
-                      <div className="text-white font-semibold">
-                        {experiment.primary_metric.includes('Rate') ? `${(experiment.final_value * 100).toFixed(1)}%` : `$${experiment.final_value}`}
-                      </div>
-                    </div>
-                    <div className="bg-black/20 p-2 rounded border border-gray-600/30">
-                      <div className="text-gray-400 text-xs">Result</div>
-                      <div className="text-green-400 font-semibold">Success</div>
-                    </div>
-                    <div className="bg-black/20 p-2 rounded border border-gray-600/30">
-                      <div className="text-gray-400 text-xs">Duration</div>
-                      <div className="text-white font-semibold">{experiment.duration_days} days</div>
-                    </div>
-                    <div className="bg-black/20 p-2 rounded border border-gray-600/30">
-                      <div className="text-gray-400 text-xs">Improvement</div>
-                      <div className="text-green-400 font-semibold">+{(experiment.improvement * 100).toFixed(1)}%</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50 text-xs flex-1">
-                      View Report
-                    </Button>
-                    <Button size="sm" variant="outline" className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50 text-xs flex-1">
-                      Clone
-                    </Button>
-                  </div>
-                </div>
-              ))}
             </div>
           </TabsContent>
 
-          <TabsContent value="failed" className="space-y-4">
-            <div className="space-y-4">
-              {mockExperimentsData.failed.map((experiment, index) => (
-                <div key={index} className="bg-black/40 border border-red-500/30 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-white font-medium">{experiment.name}</h4>
-                    <Badge className="bg-red-600 text-red-100">Failed</Badge>
+          {/* Results Tab - Completed & Failed */}
+          <TabsContent value="results" className="flex-1 overflow-y-auto p-6">
+            <div className="space-y-8">
+              {/* Completed Experiments */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  Completed Experiments ({mockExperimentsData.completed.length})
+                </h3>
+                <div className="simulation-results grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {mockExperimentsData.completed.map(experiment => (
+                    <div key={experiment.id} className="bg-black border border-red-500/30 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-white font-semibold text-base">{experiment.name}</h3>
+                        <Badge className="bg-blue-600 text-blue-100">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Completed
+                        </Badge>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-3 text-sm mb-4">
+                        <div className="bg-zinc-900 p-2 rounded border border-red-500/30">
+                          <div className="text-gray-400 text-xs">Final {experiment.primary_metric}</div>
+                          <div className="text-white font-semibold">
+                            {experiment.primary_metric.includes('Rate') ? `${(experiment.final_value * 100).toFixed(1)}%` : `$${experiment.final_value}`}
+                          </div>
+                        </div>
+                        <div className="bg-zinc-900 p-2 rounded border border-red-500/30">
+                          <div className="text-gray-400 text-xs">Result</div>
+                          <div className="text-green-400 font-semibold">Success</div>
+                        </div>
+                        <div className="bg-zinc-900 p-2 rounded border border-red-500/30">
+                          <div className="text-gray-400 text-xs">Duration</div>
+                          <div className="text-white font-semibold">{experiment.duration_days} days</div>
+                        </div>
+                        <div className="bg-zinc-900 p-2 rounded border border-red-500/30">
+                          <div className="text-gray-400 text-xs">Improvement</div>
+                          <div className="text-green-400 font-semibold">+{(experiment.improvement * 100).toFixed(1)}%</div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" className="bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20 text-xs flex-1">
+                          View Report
+                        </Button>
+                        <Button size="sm" variant="outline" className="bg-zinc-900 border-red-500/30 text-gray-300 hover:bg-red-900/20 text-xs flex-1">
+                          Clone
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Failed Experiments */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <XCircle className="h-5 w-5 text-red-400" />
+                  Failed Experiments ({mockExperimentsData.failed.length})
+                </h3>
+                <div className="space-y-4">
+                  {mockExperimentsData.failed.map((experiment, index) => (
+                    <div key={index} className="bg-black border border-red-500/30 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-white font-medium">{experiment.name}</h4>
+                        <Badge className="bg-red-600 text-red-100">Failed</Badge>
+                      </div>
+                      <div className="text-sm text-gray-400 mb-2">
+                        {experiment.start_date} → {experiment.end_date} • ${experiment.total_spend.toLocaleString()} spent
+                      </div>
+                      <div className="text-sm text-red-400">
+                        Target: {experiment.target_value} • Actual: {experiment.actual_value}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-2">
+                        Reason: {experiment.failure_reason.replace('_', ' ')}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Lab Controls Tab */}
+          <TabsContent value="controls" className="flex-1 overflow-y-auto p-6">
+            {/* System Status */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-white mb-4">Thompson Sampling Controls</h3>
+              <div className="flex items-center gap-6 text-sm p-4 bg-black border border-red-500/30 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span className="text-green-400">Thompson Sampling Active</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Target className="h-4 w-4 text-red-400" />
+                  <span className="text-red-400">Deterministic Seeding</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-cyan-400" />
+                  <span className="text-cyan-400">Real-time Optimization</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Control Settings */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-black border border-red-500/30 rounded-lg p-6">
+                <h4 className="text-white font-medium mb-4">Sampling Parameters</h4>
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-gray-300">Exploration Rate</span>
+                    <span className="text-cyan-400 font-mono">15.2%</span>
                   </div>
-                  <div className="text-sm text-gray-400 mb-2">
-                    {experiment.start_date} → {experiment.end_date} • ${experiment.total_spend.toLocaleString()} spent
+                  <div className="flex justify-between">
+                    <span className="text-gray-300">Confidence Threshold</span>
+                    <span className="text-cyan-400 font-mono">95%</span>
                   </div>
-                  <div className="text-sm text-red-400">
-                    Target: {experiment.target_value} • Actual: {experiment.actual_value}
-                  </div>
-                  <div className="text-xs text-gray-500 mt-2">
-                    Reason: {experiment.failure_reason.replace('_', ' ')}
+                  <div className="flex justify-between">
+                    <span className="text-gray-300">Min Sample Size</span>
+                    <span className="text-cyan-400 font-mono">1,000</span>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              <div className="bg-black border border-red-500/30 rounded-lg p-6">
+                <h4 className="text-white font-medium mb-4">System Health</h4>
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-gray-300">Uptime</span>
+                    <span className="text-green-400 font-mono">99.9%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-300">Response Time</span>
+                    <span className="text-green-400 font-mono">12ms</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-300">Data Points/Hour</span>
+                    <span className="text-green-400 font-mono">2,847</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </TabsContent>
         </Tabs>
       </div>
 
-      {/* Bottom Spacing */}
-      <div className="pb-8"></div>
-
-      {/* Tutorial Modal */}
+      {/* Advanced Tutorial with Fadeout Animations */}
       {showTutorial && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-black/90 border border-red-500/30 rounded-2xl p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-white flex items-center gap-3">
-                <div className="w-10 h-10 bg-red-600/20 border border-red-500/30 rounded-xl flex items-center justify-center">
-                  <FlaskConical className="h-5 w-5 text-red-400" />
-                </div>
-                GTM Experiment Lab Tutorial
-              </h2>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setShowTutorial(false)}
-                className="bg-black/40 border-red-500/30 text-red-200 hover:bg-red-900/20"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-white">Why Use Experiment Lab?</h3>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <DollarSign className="h-3 w-3 text-green-400" />
-                    </div>
-                    <div>
-                      <p className="text-white font-medium">Reduce CAC by 35%</p>
-                      <p className="text-gray-300 text-sm">Thompson Sampling ensures optimal budget allocation across channels</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-cyan-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Target className="h-3 w-3 text-cyan-400" />
-                    </div>
-                    <div>
-                      <p className="text-white font-medium">99.7% Statistical Accuracy</p>
-                      <p className="text-gray-300 text-sm">Deterministic seeding eliminates variance and accelerates insights</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Clock className="h-3 w-3 text-purple-400" />
-                    </div>
-                    <div>
-                      <p className="text-white font-medium">2x Faster Validation</p>
-                      <p className="text-gray-300 text-sm">Real-time optimization accelerates learning and decision making</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-white">How to Get Started</h3>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-red-500/20 rounded-full flex items-center justify-center flex-shrink-0 text-red-400 font-bold text-sm">1</div>
-                    <div>
-                      <p className="text-white font-medium">Design Your Experiment</p>
-                      <p className="text-gray-300 text-sm">Click "Design Experiment" to configure channels, budgets, and success metrics</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-red-500/20 rounded-full flex items-center justify-center flex-shrink-0 text-red-400 font-bold text-sm">2</div>
-                    <div>
-                      <p className="text-white font-medium">Set Success Gates</p>
-                      <p className="text-gray-300 text-sm">Define pass/fail thresholds to automatically optimize budget allocation</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-red-500/20 rounded-full flex items-center justify-center flex-shrink-0 text-red-400 font-bold text-sm">3</div>
-                    <div>
-                      <p className="text-white font-medium">Monitor & Optimize</p>
-                      <p className="text-gray-300 text-sm">Watch real-time performance and let Thompson Sampling optimize automatically</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t border-red-500/30 pt-6">
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-400">
-                  Pro Tip: Start with 2-3 channels and $5k budget for fastest validation
-                </div>
-                <Button 
-                  onClick={() => setShowTutorial(false)}
-                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
-                >
-                  Get Started
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Tutorial
+          onComplete={() => {
+            // Add CSS classes to optimize lab space
+            document.body.classList.add("lab-mode")
+            // Tutorial ready for lab space optimization
+            console.log("Lab space optimized for tutorial")
+            setShowTutorial(false)
+          }}
+        />
       )}
+
     </div>
   );
 }

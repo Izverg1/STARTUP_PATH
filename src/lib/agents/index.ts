@@ -1,15 +1,15 @@
 export { BaseAgent } from './base'
-export { ChannelScoutAgent } from './channel-scout'
-export { OfferAlchemistAgent } from './offer-alchemist'
-export { SignalWranglerAgent } from './signal-wrangler'
-export { BudgetCaptainAgent } from './budget-captain'
+export { ChannelDiscoveryEngineAgent } from './channel-scout'
+export { CampaignOptimizationEngineAgent } from './offer-alchemist'
+export { PerformanceAnalyticsEngineAgent } from './signal-wrangler'
+export { BudgetAllocationEngineAgent } from './budget-captain'
 
 // Agent registry for easy instantiation
 export const AgentRegistry = {
-  channel_scout: ChannelScoutAgent,
-  offer_alchemist: OfferAlchemistAgent,
-  signal_wrangler: SignalWranglerAgent,
-  budget_captain: BudgetCaptainAgent
+  channel_discovery_engine: ChannelDiscoveryEngineAgent,
+  campaign_optimization_engine: CampaignOptimizationEngineAgent,
+  performance_analytics_engine: PerformanceAnalyticsEngineAgent,
+  budget_allocation_engine: BudgetAllocationEngineAgent
 } as const
 
 // Factory function to create agents
@@ -21,9 +21,9 @@ export function createAgent(key: keyof typeof AgentRegistry) {
 // Create all agents
 export function createAllAgents() {
   return {
-    channel_scout: new ChannelScoutAgent(),
-    offer_alchemist: new OfferAlchemistAgent(),
-    signal_wrangler: new SignalWranglerAgent(),
-    budget_captain: new BudgetCaptainAgent()
+    channel_discovery_engine: new ChannelDiscoveryEngineAgent(),
+    campaign_optimization_engine: new CampaignOptimizationEngineAgent(),
+    performance_analytics_engine: new PerformanceAnalyticsEngineAgent(),
+    budget_allocation_engine: new BudgetAllocationEngineAgent()
   }
 }

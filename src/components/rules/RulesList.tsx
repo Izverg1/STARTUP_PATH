@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { 
@@ -201,7 +202,7 @@ export function RulesList({ rules, onRuleUpdate, onRuleDelete, onRuleEdit }: Rul
         </CardContent>
       </Card>
 
-      {/* Rules List */}
+      {/* Clean Rules Table */}
       <div className="space-y-4">
         {sortedRules.length === 0 ? (
           <Card>
@@ -216,157 +217,153 @@ export function RulesList({ rules, onRuleUpdate, onRuleDelete, onRuleEdit }: Rul
             </CardContent>
           </Card>
         ) : (
-          sortedRules.map((rule) => {
-            const metrics = getRuleMetrics(rule);
-            
-            return (
-              <Card key={rule.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="pt-6">
-                  <div className="space-y-4">
-                    {/* Header */}
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-3">
-                          <h3 className="font-semibold">{rule.name}</h3>
+          <Card>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[300px]">Rule Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Conditions</TableHead>
+                  <TableHead>Actions</TableHead>
+                  <TableHead>Performance</TableHead>
+                  <TableHead>Last Triggered</TableHead>
+                  <TableHead className="w-[50px]"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedRules.map((rule) => {
+                  const metrics = getRuleMetrics(rule);
+                  
+                  return (
+                    <TableRow key={rule.id} className="hover:bg-muted/50">
+                      <TableCell>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium">{rule.name}</p>
+                            <Badge variant="outline" className="text-xs">
+                              v{rule.version || 1}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {rule.description}
+                          </p>
+                          {rule.metadata?.tags && rule.metadata.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {rule.metadata.tags.slice(0, 2).map((tag, index) => (
+                                <Badge key={index} variant="secondary" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                              {rule.metadata.tags.length > 2 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  +{rule.metadata.tags.length - 2}
+                                </Badge>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
+                      
+                      <TableCell>
+                        <div className="space-y-1">
                           {rule.approval_status && getStatusBadge(rule.approval_status)}
-                          <Badge variant={rule.is_active ? 'default' : 'secondary'}>
+                          <Badge variant={rule.is_active ? 'default' : 'secondary'} className="block w-fit">
                             {rule.is_active ? 'Active' : 'Inactive'}
                           </Badge>
-                          <Badge variant="outline">
-                            v{rule.version || 1}
-                          </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          {rule.description}
-                        </p>
-                      </div>
+                      </TableCell>
                       
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem onClick={() => onRuleEdit?.(rule)}>
-                            <Edit className="h-4 w-4" />
-                            Edit Rule
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => rule.id && toggleRuleActive(rule.id, rule.is_active || false)}>
-                            {rule.is_active ? (
-                              <>
-                                <Pause className="h-4 w-4" />
-                                Pause Rule
-                              </>
-                            ) : (
-                              <>
-                                <Play className="h-4 w-4" />
-                                Activate Rule
-                              </>
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Copy className="h-4 w-4" />
-                            Duplicate
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <History className="h-4 w-4" />
-                            View History
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <BarChart3 className="h-4 w-4" />
-                            Analytics
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem 
-                            className="text-destructive"
-                            onClick={() => rule.id && handleDeleteRule(rule.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-
-                    {/* Rule Details */}
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <CheckCircle className="h-3 w-3" />
-                          Conditions
+                      <TableCell>
+                        <div className="text-sm">
+                          <span className="font-medium">{rule.conditions?.length || 0}</span>
+                          <span className="text-muted-foreground ml-1">condition{(rule.conditions?.length || 0) !== 1 ? 's' : ''}</span>
                         </div>
-                        <p className="text-sm font-medium">
-                          {rule.conditions?.length || 0} condition{(rule.conditions?.length || 0) !== 1 ? 's' : ''}
-                        </p>
-                      </div>
+                      </TableCell>
                       
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Play className="h-3 w-3" />
-                          Actions
+                      <TableCell>
+                        <div className="text-sm">
+                          <span className="font-medium">{rule.actions?.length || 0}</span>
+                          <span className="text-muted-foreground ml-1">action{(rule.actions?.length || 0) !== 1 ? 's' : ''}</span>
                         </div>
-                        <p className="text-sm font-medium">
-                          {rule.actions?.length || 0} action{(rule.actions?.length || 0) !== 1 ? 's' : ''}
-                        </p>
-                      </div>
+                      </TableCell>
                       
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <BarChart3 className="h-3 w-3" />
-                          Executions
+                      <TableCell>
+                        <div className="space-y-1">
+                          <div className="text-sm">
+                            <span className="font-medium">{metrics.executions}</span>
+                            <span className="text-muted-foreground ml-1">runs</span>
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {metrics.successRate}% success
+                          </div>
+                          <div className={`flex items-center gap-1 text-xs ${metrics.impact > 30 ? 'text-green-600' : metrics.impact > 15 ? 'text-yellow-600' : 'text-red-600'}`}>
+                            {metrics.impact > 30 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                            <span>{metrics.impact}% impact</span>
+                          </div>
                         </div>
-                        <p className="text-sm font-medium">
-                          {metrics.executions} ({metrics.successRate}% success)
-                        </p>
-                      </div>
+                      </TableCell>
                       
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          Last Triggered
-                        </div>
-                        <p className="text-sm font-medium">
+                      <TableCell>
+                        <div className="text-sm text-muted-foreground">
                           {formatDistance(metrics.lastTriggered, new Date(), { addSuffix: true })}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Tags */}
-                    {rule.metadata?.tags && rule.metadata.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {rule.metadata.tags.map((tag, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Footer */}
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <div className="flex items-center gap-4">
-                        <span>Priority: {rule.priority || 1}</span>
-                        {rule.updated_at && (
-                          <span>
-                            Updated {formatDistance(new Date(rule.updated_at), new Date(), { addSuffix: true })}
-                          </span>
-                        )}
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <div className={`flex items-center gap-1 ${metrics.impact > 30 ? 'text-green-600' : metrics.impact > 15 ? 'text-yellow-600' : 'text-red-600'}`}>
-                          {metrics.impact > 30 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                          <span>{metrics.impact}% impact</span>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })
+                      </TableCell>
+                      
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => onRuleEdit?.(rule)}>
+                              <Edit className="h-4 w-4" />
+                              Edit Rule
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => rule.id && toggleRuleActive(rule.id, rule.is_active || false)}>
+                              {rule.is_active ? (
+                                <>
+                                  <Pause className="h-4 w-4" />
+                                  Pause Rule
+                                </>
+                              ) : (
+                                <>
+                                  <Play className="h-4 w-4" />
+                                  Activate Rule
+                                </>
+                              )}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Copy className="h-4 w-4" />
+                              Duplicate
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <History className="h-4 w-4" />
+                              View History
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <BarChart3 className="h-4 w-4" />
+                              Analytics
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem 
+                              className="text-destructive"
+                              onClick={() => rule.id && handleDeleteRule(rule.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Card>
         )}
       </div>
 

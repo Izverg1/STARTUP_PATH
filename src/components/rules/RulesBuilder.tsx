@@ -258,15 +258,9 @@ export function RulesBuilder({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Business Rules Builder</h1>
-          <p className="text-muted-foreground">
-            Create and manage automated business rules for your SOL:GEN campaigns
-          </p>
-        </div>
+    <div className="space-y-6 p-6">
+      {/* Simplified Header */}
+      <div className="flex items-center justify-end">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
             <GitBranch className="h-4 w-4" />

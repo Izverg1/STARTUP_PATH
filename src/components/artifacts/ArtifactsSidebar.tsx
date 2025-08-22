@@ -18,10 +18,10 @@ interface ArtifactsSidebarProps {
 type FilterType = 'all' | AgentKey | ArtifactType
 
 const agentLabels: Record<AgentKey, string> = {
-  channel_scout: 'Scout',
-  offer_alchemist: 'Alchemist',
-  signal_wrangler: 'Wrangler',
-  budget_captain: 'Captain'
+  channel_discovery_engine: 'Channel Discovery',
+  campaign_optimization_engine: 'Campaign Optimization',
+  performance_analytics_engine: 'Performance Analytics',
+  budget_allocation_engine: 'Budget Allocation'
 }
 
 const artifactTypeLabels: Record<ArtifactType, string> = {
@@ -123,10 +123,10 @@ export function ArtifactsSidebar({
           onFilterChange={setFilter}
           artifactCounts={{
             all: artifacts.length,
-            channel_scout: artifacts.filter(a => a.agent_key === 'channel_scout').length,
-            offer_alchemist: artifacts.filter(a => a.agent_key === 'offer_alchemist').length,
-            signal_wrangler: artifacts.filter(a => a.agent_key === 'signal_wrangler').length,
-            budget_captain: artifacts.filter(a => a.agent_key === 'budget_captain').length,
+            channel_discovery_engine: artifacts.filter(a => a.agent_key === 'channel_discovery_engine').length,
+            campaign_optimization_engine: artifacts.filter(a => a.agent_key === 'campaign_optimization_engine').length,
+            performance_analytics_engine: artifacts.filter(a => a.agent_key === 'performance_analytics_engine').length,
+            budget_allocation_engine: artifacts.filter(a => a.agent_key === 'budget_allocation_engine').length,
             benchmark: artifacts.filter(a => a.type === 'benchmark').length,
             copy: artifacts.filter(a => a.type === 'copy').length,
             calc: artifacts.filter(a => a.type === 'calc').length,

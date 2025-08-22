@@ -15,6 +15,7 @@ import {
   Loader2,
   ChevronLeft,
   ChevronRight,
+  Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -25,48 +26,72 @@ const navigationItems = [
     label: "Command Center",
     href: "/dashboard",
     icon: Home,
+    description: "Central hub for monitoring all GTM activities, KPIs, and real-time performance metrics across channels",
+    value: "Save 10+ hours/week with unified dashboard view"
   },
   {
     id: "experiments",
     label: "Experiments",
     href: "/dashboard/experiments",
     icon: FlaskConical,
+    description: "Design and run A/B tests across channels with Thompson Sampling optimization for maximum ROI",
+    value: "Reduce failed experiments from 70% to 15%"
   },
   {
     id: "benchmarks",
     label: "Analytics",
     href: "/dashboard/benchmarks",
     icon: BarChart3,
+    description: "Deep-dive analytics with YC benchmarks, cohort analysis, and predictive insights for strategic decisions",
+    value: "Identify 3-5x ROI opportunities faster"
   },
   {
     id: "rules",
     label: "Rules",
     href: "/dashboard/rules",
     icon: Shield,
+    description: "Set automated business rules for budget allocation, bidding strategies, and performance thresholds",
+    value: "Prevent 80% of budget waste automatically"
   },
   {
     id: "collab",
     label: "Team",
     href: "/dashboard/collaboration",
     icon: Users,
+    description: "Collaborate with team members, share insights, and maintain decision logs for strategic alignment",
+    value: "Improve team efficiency by 40%"
   },
   {
     id: "effectiveness",
     label: "Performance",
     href: "/dashboard/effectiveness",
     icon: TrendingUp,
+    description: "Track CAC, LTV, payback periods, and channel effectiveness with real-time optimization suggestions",
+    value: "Improve CAC by 40% and reduce payback time"
+  },
+  {
+    id: "projects",
+    label: "Projects",
+    href: "/dashboard/projects",
+    icon: Building2,
+    description: "Manage your startup projects, simulations, and campaigns with organized workspace views",
+    value: "Organize GTM efforts into focused project streams"
   },
   {
     id: "assistant",
     label: "Assistant",
     href: "/dashboard/assistant",
     icon: Bot,
+    description: "AI-powered GTM advisor providing strategic recommendations and answering complex marketing questions",
+    value: "Get expert-level insights without hiring consultants"
   },
   {
     id: "admin",
     label: "Settings",
     href: "/dashboard/admin",
     icon: Settings,
+    description: "Configure platform settings, integrations, team permissions, and data sources for optimal performance",
+    value: "Streamline operations and data flow"
   },
 ];
 
@@ -135,7 +160,7 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || 
-              (item.href !== "/" && pathname.startsWith(item.href));
+              (item.href !== "/dashboard" && item.href !== "/" && pathname.startsWith(item.href));
             const isLoading = loadingRoute === item.href;
 
             return (
@@ -153,7 +178,7 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                       "group relative flex h-12 w-full items-center rounded-xl transition-all duration-300 hover:scale-105",
                       isExpanded ? "justify-start px-3 gap-3" : "justify-center",
                       isActive ? 
-                        "bg-gradient-to-r from-red-600/20 to-black/20 border border-red-500/30 shadow-lg shadow-red-500/10" : 
+                        "bg-gradient-to-r from-cyan-600/20 to-blue-600/20 border border-cyan-400/30 shadow-lg shadow-cyan-500/10" : 
                         "hover:bg-white/5 hover:border hover:border-white/10 hover:shadow-lg hover:shadow-white/5",
                       !isActive && "text-red-200/70 hover:text-white",
                       isLoading && "animate-pulse"
@@ -161,7 +186,7 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                     aria-label={item.label}
                   >
                     {isActive && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 to-black/10 rounded-xl animate-pulse" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-600/10 to-blue-600/10 rounded-xl animate-pulse" />
                     )}
                     
                     {/* Loading spinner overlay */}
@@ -174,7 +199,7 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                     <Icon 
                       className={cn(
                         "h-5 w-5 transition-all duration-300 relative z-10 flex-shrink-0",
-                        isActive && "text-red-400 scale-110",
+                        isActive && "text-cyan-400 scale-110",
                         !isActive && item.id === "assistant" && "text-red-400",
                         isLoading && "opacity-50"
                       )} 
@@ -184,7 +209,7 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                     {isExpanded && (
                       <span className={cn(
                         "text-sm font-medium transition-all duration-300 relative z-10",
-                        isActive && "text-red-200",
+                        isActive && "text-cyan-200",
                         !isActive && "text-red-200/70 group-hover:text-white",
                         isLoading && "opacity-50"
                       )}>
@@ -194,8 +219,14 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                   </Link>
                 </TooltipTrigger>
                 {!isExpanded && (
-                  <TooltipContent side="right" className="ml-2">
-                    <p>{item.label}</p>
+                  <TooltipContent side="right" className="ml-2 max-w-80 p-4 bg-slate-900/95 border-cyan-400/20 backdrop-blur-lg">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-cyan-300 text-sm">{item.label}</h4>
+                      <p className="text-xs text-gray-300 leading-relaxed">{item.description}</p>
+                      <div className="pt-1 border-t border-cyan-400/20">
+                        <span className="text-xs font-medium text-cyan-400">💡 {item.value}</span>
+                      </div>
+                    </div>
                   </TooltipContent>
                 )}
               </Tooltip>

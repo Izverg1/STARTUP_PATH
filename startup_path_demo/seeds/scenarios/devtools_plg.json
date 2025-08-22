@@ -1,0 +1,80 @@
+{
+  "id": "devtools_plg",
+  "title": "Developer Tools \u2014 PLG",
+  "seed": 44321,
+  "icp": {
+    "persona": "Senior Engineer",
+    "company_size": "50-500",
+    "geo": "Global"
+  },
+  "economics": {
+    "acv": 6000,
+    "gross_margin": 0.8,
+    "mrr_per_customer": 500
+  },
+  "window_days": 14,
+  "channels": [
+    {
+      "type": "search",
+      "label": "Google Search",
+      "budget_per_day": 250,
+      "base": {
+        "impressions": 18000,
+        "ctr": 0.028,
+        "cpc": 3.1,
+        "lp_cvr": 0.12,
+        "lead_to_meeting": 0.18,
+        "meeting_to_opp": 0.33,
+        "opp_to_win": 0.18
+      },
+      "variability": {
+        "impressions": 0.12,
+        "rates": 0.2,
+        "cpc": 0.12
+      },
+      "lags": {
+        "meeting_days": [
+          0,
+          0
+        ],
+        "opp_days": [
+          1,
+          4
+        ],
+        "win_days": [
+          5,
+          21
+        ]
+      }
+    },
+    {
+      "type": "cold_email",
+      "label": "Cold Email",
+      "sends_per_day": 1500,
+      "cost_per_send": 0.05,
+      "base": {
+        "reply_rate": 0.022,
+        "meet_given_reply": 0.28,
+        "opp_given_meeting": 0.28,
+        "win_given_opp": 0.18
+      },
+      "variability": {
+        "rates": 0.25
+      },
+      "lags": {
+        "meeting_days": [
+          0,
+          1
+        ],
+        "opp_days": [
+          2,
+          5
+        ],
+        "win_days": [
+          10,
+          28
+        ]
+      }
+    }
+  ]
+}

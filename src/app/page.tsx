@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { SpaceStationVisualization } from '@/components/SpaceStationVisualization'
 import { MetricPopup } from '@/components/MetricPopup'
+import { WaitlistForm } from '@/components/waitlist/WaitlistForm'
 import { 
   ArrowRight,
   ArrowLeft,
@@ -22,7 +23,8 @@ import {
   BarChart3,
   Target,
   Brain,
-  Info
+  Info,
+  Users
 } from 'lucide-react'
 
 const slides = [
@@ -31,6 +33,7 @@ const slides = [
   { id: 'solution', title: 'Solution', icon: Satellite },
   { id: 'features', title: 'Features', icon: Zap },
   { id: 'results', title: 'Results', icon: Star },
+  { id: 'waitlist', title: 'Join the Revolution', icon: Users },
   { id: 'cta', title: 'Get Started', icon: Rocket }
 ]
 
@@ -135,7 +138,7 @@ export default function SpaceLandingPage() {
         
         {/* Minimal atmosphere */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute bottom-1/3 right-1/3 w-[400px] h-[200px] bg-gradient-to-l from-cyan-500/15 to-transparent rounded-full filter blur-[100px]" />
+          <div className="absolute bottom-1/3 right-1/3 w-[400px] h-[200px] bg-cyan-500/10 rounded-full filter blur-[100px]" />
         </div>
 
         {/* Electric particles */}
@@ -164,13 +167,31 @@ export default function SpaceLandingPage() {
       <header className="absolute top-0 left-0 right-0 z-50 p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 neon-border bg-black/80 rounded flex items-center justify-center relative">
-              <Sparkles className="w-6 h-6 text-red-500 cyber-flicker" />
+            <div className="w-12 h-12 neon-border bg-black/80 rounded flex items-center justify-center relative overflow-hidden">
+              {/* Custom geometric logo with dynamic elements */}
+              <div className="relative w-8 h-8">
+                {/* Central diamond */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-red-500 rotate-45 animate-pulse"></div>
+                
+                {/* Orbiting particles */}
+                <div className="absolute inset-0 animate-spin-slow">
+                  <div className="absolute top-0 left-1/2 w-1 h-1 bg-cyan-400 rounded-full transform -translate-x-1/2"></div>
+                  <div className="absolute bottom-0 left-1/2 w-1 h-1 bg-cyan-400 rounded-full transform -translate-x-1/2"></div>
+                </div>
+                
+                {/* Energy rings */}
+                <div className="absolute inset-1 border border-red-500/40 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                <div className="absolute inset-0 border border-cyan-400/30 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                
+                {/* Data streams */}
+                <div className="absolute top-1/2 left-0 w-2 h-px bg-gradient-to-r from-transparent to-red-400 animate-pulse"></div>
+                <div className="absolute top-1/2 right-0 w-2 h-px bg-gradient-to-l from-transparent to-cyan-400 animate-pulse" style={{animationDelay: '0.3s'}}></div>
+              </div>
               <div className="absolute inset-0 hologram-effect rounded" />
             </div>
             <div className="flex flex-col">
               <span className="text-2xl font-bold text-white neon-glow font-mono tracking-wider">STARTUP_PATH</span>
-              <span className="text-xs text-cyan-400 font-mono tracking-widest opacity-80">GTM PLATFORM</span>
+              <span className="text-xs text-cyan-400 font-mono tracking-widest opacity-80">BY KARLSON LLC</span>
             </div>
           </div>
           
@@ -204,7 +225,7 @@ export default function SpaceLandingPage() {
                     AI-POWERED
                   </span>
                   <br />
-                  <span className="text-red-500 neon-glow">
+                  <span className="text-red-500">
                     GTM PLATFORM
                   </span>
                 </h1>
@@ -216,7 +237,7 @@ export default function SpaceLandingPage() {
                   <div className="text-sm text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 rounded-lg p-3 mt-4">
                     📊 MVP Platform - Simulation-based insights and projections
                   </div>
-                  <div className="bg-black/60 border border-cyan-500/30 rounded-lg p-6 mt-8">
+                  <div className="bg-black border border-cyan-500/30 rounded-lg p-6 mt-8">
                     <div className="text-xl text-cyan-400 leading-relaxed">
                       ✓ Connect all your marketing channels
                       <br />
@@ -230,7 +251,7 @@ export default function SpaceLandingPage() {
                   <div className="mt-8">
                     <Button 
                       onClick={nextSlide}
-                      className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-xl px-12 py-6 rounded-lg shadow-2xl hover:scale-105 transition-all duration-300 font-bold"
+                      className="bg-red-600 hover:bg-red-700 text-white text-xl px-12 py-6 rounded-lg shadow-2xl hover:scale-105 transition-all duration-300 font-bold"
                     >
                       SEE HOW IT WORKS
                       <ArrowRight className="w-6 h-6 ml-3" />
@@ -245,7 +266,7 @@ export default function SpaceLandingPage() {
             <div className="relative w-[500px] h-[500px] animate-fade-in-delayed">
               {/* Central AI Core */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full shadow-2xl cyber-flicker relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-red-700 rounded-full animate-pulse" />
+                <div className="absolute inset-0 bg-red-600 rounded-full animate-pulse" />
                 <div className="absolute inset-2 neon-border bg-black/80 rounded-full flex items-center justify-center">
                   <span className="text-white font-mono text-xs font-bold">AI</span>
                 </div>
@@ -258,7 +279,7 @@ export default function SpaceLandingPage() {
                   <span className="text-cyan-400 text-xs font-mono font-bold">ADS</span>
                 </div>
                 {/* Data stream line */}
-                <div className="absolute top-6 left-1/2 w-px h-[calc(50%-48px)] bg-gradient-to-b from-cyan-400 to-transparent animate-pulse" />
+                <div className="absolute top-6 left-1/2 w-px h-[calc(50%-48px)] bg-cyan-400/80 animate-pulse" />
                 {/* Data packets */}
                 <div className="absolute top-12 left-1/2 w-2 h-2 bg-cyan-400 rounded-full data-stream" style={{animationDelay: '0s'}} />
                 <div className="absolute top-20 left-1/2 w-2 h-2 bg-cyan-400 rounded-full data-stream" style={{animationDelay: '0.5s'}} />
@@ -268,7 +289,7 @@ export default function SpaceLandingPage() {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-10 neon-border bg-black/80 rounded flex items-center justify-center">
                   <span className="text-red-400 text-xs font-mono font-bold">SOC</span>
                 </div>
-                <div className="absolute top-5 left-1/2 w-px h-[calc(50%-40px)] bg-gradient-to-b from-red-400 to-transparent animate-pulse" />
+                <div className="absolute top-5 left-1/2 w-px h-[calc(50%-40px)] bg-red-400/80 animate-pulse" />
                 <div className="absolute top-10 left-1/2 w-2 h-2 bg-red-400 rounded-full data-stream" style={{animationDelay: '0.2s'}} />
                 <div className="absolute top-16 left-1/2 w-2 h-2 bg-red-400 rounded-full data-stream" style={{animationDelay: '0.7s'}} />
               </div>
@@ -277,7 +298,7 @@ export default function SpaceLandingPage() {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 neon-border bg-black/80 rounded flex items-center justify-center">
                   <span className="text-yellow-400 text-xs font-mono font-bold">ML</span>
                 </div>
-                <div className="absolute top-4 left-1/2 w-px h-[calc(50%-32px)] bg-gradient-to-b from-yellow-400 to-transparent animate-pulse" />
+                <div className="absolute top-4 left-1/2 w-px h-[calc(50%-32px)] bg-yellow-400/80 animate-pulse" />
                 <div className="absolute top-8 left-1/2 w-2 h-2 bg-yellow-400 rounded-full data-stream" style={{animationDelay: '0.4s'}} />
               </div>
               
@@ -306,8 +327,8 @@ export default function SpaceLandingPage() {
               
               {/* Electric surge effects */}
               <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent electric-surge" style={{animationDelay: '2s'}} />
-                <div className="absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-red-400 to-transparent electric-surge" style={{animationDelay: '3s'}} />
+                <div className="absolute top-1/2 left-0 w-full h-px bg-cyan-400/60 electric-surge" style={{animationDelay: '2s'}} />
+                <div className="absolute top-0 left-1/2 w-px h-full bg-red-400/60 electric-surge" style={{animationDelay: '3s'}} />
               </div>
             </div>
           </div>
@@ -326,7 +347,7 @@ export default function SpaceLandingPage() {
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold tracking-wider mb-6 max-w-4xl mx-auto">
                 <span className="text-white">THE</span> 
-                <span className="text-red-500 neon-glow">PROBLEM</span>
+                <span className="text-red-500">PROBLEM</span>
               </h2>
               <div className="text-2xl text-white leading-relaxed max-w-4xl mx-auto">
                 Most startups waste {" "}
@@ -344,7 +365,7 @@ export default function SpaceLandingPage() {
             </div>
             
             <div className="grid grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <Card className="bg-black/60 border border-red-500/30 p-6 hover:border-red-500/50 transition-all duration-300">
+              <Card className="bg-black border border-red-500/30 p-6 hover:border-red-500/50 transition-all duration-300">
                 <div className="text-center">
                   <div className="text-red-500 text-2xl mb-4">💸</div>
                   <h3 className="text-xl font-bold text-red-400 mb-3">Budget Waste</h3>
@@ -366,7 +387,7 @@ export default function SpaceLandingPage() {
                 </div>
               </Card>
               
-              <Card className="bg-black/60 border border-orange-500/30 p-6 hover:border-orange-500/50 transition-all duration-300">
+              <Card className="bg-black border border-orange-500/30 p-6 hover:border-orange-500/50 transition-all duration-300">
                 <div className="text-center">
                   <div className="text-orange-400 text-2xl mb-4">📊</div>
                   <h3 className="text-xl font-bold text-orange-400 mb-3">Data Blindness</h3>
@@ -389,7 +410,7 @@ export default function SpaceLandingPage() {
                 </div>
               </Card>
               
-              <Card className="bg-black/60 border border-yellow-500/30 p-6 hover:border-yellow-500/50 transition-all duration-300">
+              <Card className="bg-black border border-yellow-500/30 p-6 hover:border-yellow-500/50 transition-all duration-300">
                 <div className="text-center">
                   <div className="text-yellow-400 text-2xl mb-4">⏰</div>
                   <h3 className="text-xl font-bold text-yellow-400 mb-3">Time Pressure</h3>
@@ -430,7 +451,7 @@ export default function SpaceLandingPage() {
             <div className="mb-12 text-center">
               <h2 className="text-4xl font-bold tracking-wider mb-6">
                 <span className="text-white">WHY THIS</span> 
-                <span className="text-orange-500 neon-glow">HAPPENS</span>
+                <span className="text-orange-500">HAPPENS</span>
               </h2>
               <div className="text-2xl text-gray-300 max-w-4xl mx-auto">
                 Your marketing data is scattered across{" "}
@@ -458,7 +479,7 @@ export default function SpaceLandingPage() {
               {/* Scattered Data Tools Grid */}
               <div className="grid grid-cols-4 gap-6 max-w-6xl mx-auto">
                 {/* Google Ads - Disconnected */}
-                <Card className="bg-black/60 border border-red-500/20 p-4 hover:border-red-500/40 transition-all duration-300">
+                <Card className="bg-black border border-red-500/20 p-4 hover:border-red-500/40 transition-all duration-300">
                   <div className="text-center">
                     <div className="text-red-500 text-lg mb-2">📊</div>
                     <h3 className="text-sm font-bold text-red-400 mb-2">Google Ads</h3>
@@ -472,7 +493,7 @@ export default function SpaceLandingPage() {
                 </Card>
 
                 {/* Facebook - Disconnected */}
-                <Card className="bg-black/60 border border-blue-500/20 p-4 hover:border-blue-500/40 transition-all duration-300">
+                <Card className="bg-black border border-blue-500/20 p-4 hover:border-blue-500/40 transition-all duration-300">
                   <div className="text-center">
                     <div className="text-blue-500 text-lg mb-2">📱</div>
                     <h3 className="text-sm font-bold text-blue-400 mb-2">Facebook</h3>
@@ -486,7 +507,7 @@ export default function SpaceLandingPage() {
                 </Card>
 
                 {/* HubSpot - Disconnected */}
-                <Card className="bg-black/60 border border-orange-500/20 p-4 hover:border-orange-500/40 transition-all duration-300">
+                <Card className="bg-black border border-orange-500/20 p-4 hover:border-orange-500/40 transition-all duration-300">
                   <div className="text-center">
                     <div className="text-orange-500 text-lg mb-2">🎯</div>
                     <h3 className="text-sm font-bold text-orange-400 mb-2">HubSpot</h3>
@@ -500,7 +521,7 @@ export default function SpaceLandingPage() {
                 </Card>
 
                 {/* Analytics - Disconnected */}
-                <Card className="bg-black/60 border border-green-500/20 p-4 hover:border-green-500/40 transition-all duration-300">
+                <Card className="bg-black border border-green-500/20 p-4 hover:border-green-500/40 transition-all duration-300">
                   <div className="text-center">
                     <div className="text-green-500 text-lg mb-2">📈</div>
                     <h3 className="text-sm font-bold text-green-400 mb-2">Analytics</h3>
@@ -515,7 +536,7 @@ export default function SpaceLandingPage() {
               </div>
 
               {/* Problem Statement */}
-              <div className="mt-12 text-center bg-gray-900/30 rounded-lg p-8 border border-orange-500/20">
+              <div className="mt-12 text-center bg-zinc-900 rounded-lg p-8 border border-orange-500/20">
                 <h3 className="text-2xl font-bold text-orange-500 mb-4">The Result: Blind Decision Making</h3>
                 <div className="grid grid-cols-3 gap-6 text-center">
                   <div>
@@ -561,7 +582,7 @@ export default function SpaceLandingPage() {
             <div className="mb-6 text-center">
               <h2 className="text-3xl font-bold tracking-wider mb-4">
                 <span className="text-white">OUR</span> 
-                <span className="text-cyan-500 neon-glow">APPROACH</span>
+                <span className="text-cyan-500">APPROACH</span>
               </h2>
               <div className="text-lg text-gray-300 max-w-4xl mx-auto">
                 STARTUP_PATH unifies all your marketing data into{" "}
@@ -580,7 +601,7 @@ export default function SpaceLandingPage() {
             <div className="grid grid-cols-2 gap-3 max-w-4xl mx-auto mb-4">
               
               {/* Agent 1: Channel Discovery Engine */}
-              <Card className="bg-black/60 border border-cyan-500/30 p-3 hover:border-cyan-500/50 transition-all duration-300">
+              <Card className="bg-black border border-cyan-500/30 p-3 hover:border-cyan-500/50 transition-all duration-300">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
                     <Satellite className="w-4 h-4 text-cyan-400" />
@@ -609,7 +630,7 @@ export default function SpaceLandingPage() {
               </Card>
 
               {/* Agent 2: Campaign Optimization Engine */}
-              <Card className="bg-black/60 border border-red-500/30 p-3 hover:border-red-500/50 transition-all duration-300">
+              <Card className="bg-black border border-red-500/30 p-3 hover:border-red-500/50 transition-all duration-300">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
                     <Target className="w-4 h-4 text-red-400" />
@@ -639,7 +660,7 @@ export default function SpaceLandingPage() {
               </Card>
 
               {/* Agent 3: Performance Analytics Engine */}
-              <Card className="bg-black/60 border border-green-500/30 p-3 hover:border-green-500/50 transition-all duration-300">
+              <Card className="bg-black border border-green-500/30 p-3 hover:border-green-500/50 transition-all duration-300">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
                     <BarChart3 className="w-4 h-4 text-green-400" />
@@ -668,7 +689,7 @@ export default function SpaceLandingPage() {
               </Card>
 
               {/* Agent 4: Budget Allocation Engine */}
-              <Card className="bg-black/60 border border-purple-500/30 p-3 hover:border-purple-500/50 transition-all duration-300">
+              <Card className="bg-black border border-purple-500/30 p-3 hover:border-purple-500/50 transition-all duration-300">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
                     <TrendingUp className="w-4 h-4 text-purple-400" />
@@ -699,7 +720,7 @@ export default function SpaceLandingPage() {
             </div>
 
             {/* The Key Advantage */}
-            <div className="text-center bg-gray-900/30 rounded-lg p-4 border border-cyan-500/20">
+            <div className="text-center bg-zinc-900 rounded-lg p-4 border border-cyan-500/20">
               <h3 className="text-lg font-bold text-cyan-500 mb-2">The Key Advantage: They Work Together</h3>
               <div className="text-sm text-gray-300 max-w-3xl mx-auto">
                 Unlike disconnected tools, these 4 agents share data and coordinate decisions in real-time, creating{" "}
@@ -723,7 +744,7 @@ export default function SpaceLandingPage() {
             <div className="mb-12 text-center">
               <h2 className="text-4xl font-bold tracking-wider mb-6">
                 <span className="text-white">REAL</span> 
-                <span className="text-green-500 neon-glow">IMPACT</span>
+                <span className="text-green-500">IMPACT</span>
               </h2>
               <div className="text-2xl text-gray-300 max-w-4xl mx-auto">
                 STARTUP_PATH customers achieve{" "}
@@ -744,7 +765,7 @@ export default function SpaceLandingPage() {
                 
                 {/* Before State */}
                 <div className="flex-1 max-w-sm">
-                  <div className="bg-gray-900/50 border border-red-500/20 rounded-lg p-6">
+                  <div className="bg-zinc-900 border border-red-500/20 rounded-lg p-6">
                     <h3 className="text-sm font-mono text-red-400 mb-4 uppercase">Before Optimization</h3>
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm">
@@ -793,7 +814,7 @@ export default function SpaceLandingPage() {
 
                 {/* Transformation Arrow */}
                 <div className="flex flex-col items-center">
-                  <div className="p-3 bg-gradient-to-br from-cyan-500/20 to-green-500/20 rounded-full mb-2">
+                  <div className="p-3 bg-cyan-500/20 rounded-full mb-2">
                     <Zap className="w-8 h-8 text-cyan-400" />
                   </div>
                   <span className="text-sm text-cyan-400 uppercase">AI Optimization</span>
@@ -801,7 +822,7 @@ export default function SpaceLandingPage() {
 
                 {/* After State */}
                 <div className="flex-1 max-w-sm">
-                  <div className="bg-gray-900/50 border border-green-500/20 rounded-lg p-6">
+                  <div className="bg-zinc-900 border border-green-500/20 rounded-lg p-6">
                     <h3 className="text-sm font-mono text-green-400 mb-4 uppercase">After Optimization</h3>
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm">
@@ -848,7 +869,7 @@ export default function SpaceLandingPage() {
 
               {/* Key Results Bar */}
               <div className="mt-10 flex justify-center gap-8">
-                <div className="bg-gray-900/30 rounded-lg px-6 py-4 text-center">
+                <div className="bg-zinc-900 rounded-lg px-6 py-4 text-center">
                   <MetricPopup 
                     metric="CAC Reduction"
                     value="72%"
@@ -859,7 +880,7 @@ export default function SpaceLandingPage() {
                   />
                   <div className="text-sm text-gray-400">Lower CAC</div>
                 </div>
-                <div className="bg-gray-900/30 rounded-lg px-6 py-4 text-center">
+                <div className="bg-zinc-900 rounded-lg px-6 py-4 text-center">
                   <MetricPopup 
                     metric="Conversion Rate Improvement"
                     value="4x"
@@ -870,7 +891,7 @@ export default function SpaceLandingPage() {
                   />
                   <div className="text-sm text-gray-400">Higher Conversion</div>
                 </div>
-                <div className="bg-gray-900/30 rounded-lg px-6 py-4 text-center">
+                <div className="bg-zinc-900 rounded-lg px-6 py-4 text-center">
                   <MetricPopup 
                     metric="ROAS Improvement"
                     value="240%"
@@ -886,17 +907,95 @@ export default function SpaceLandingPage() {
           </div>
         </div>
 
-        {/* Slide 6: Stop The Waste - Compelling CTA */}
-        <div className="min-w-full h-full flex-shrink-0 flex items-center px-16 relative overflow-hidden" style={{ visibility: currentSlide === 5 ? 'visible' : 'hidden' }}>
+        {/* Slide 6: Waitlist - Join the Revolution */}
+        <div className="min-w-full h-full flex-shrink-0 flex items-center px-16 relative overflow-hidden">
           <div className="w-full max-w-7xl mx-auto">
             <div className="text-center">
               
               {/* Powerful Headline */}
               <div className="mb-12">
                 <h2 className="text-5xl font-bold tracking-wider mb-6">
-                  <span className="text-red-500 neon-glow">STOP</span> 
+                  <span className="text-cyan-500">JOIN</span> 
                   <span className="text-white"> THE </span>
-                  <span className="text-red-500 neon-glow">WASTE</span>
+                  <span className="text-cyan-500">REVOLUTION</span>
+                </h2>
+                <div className="text-2xl text-gray-300 max-w-4xl mx-auto">
+                  Be among the first to access STARTUP_PATH and transform your GTM strategy
+                </div>
+              </div>
+
+              {/* Two Waitlist Cards */}
+              <div className="grid grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
+                
+                {/* Customer Waitlist */}
+                <WaitlistForm
+                  type="customer"
+                  title="For Startups"
+                  description="Get early access to STARTUP_PATH and optimize your marketing budget with AI"
+                  benefits={[
+                    "65% average CAC reduction in 90 days",
+                    "4 AI agents optimizing 24/7",
+                    "Early access pricing",
+                    "Priority onboarding support"
+                  ]}
+                  icon="🚀"
+                  borderColor="border-cyan-500/30"
+                  buttonColor="bg-cyan-600 hover:bg-cyan-700"
+                  accentColor="text-cyan-400"
+                />
+
+                {/* Partner Waitlist */}
+                <div className="partner-form">
+                  <WaitlistForm
+                    type="partner"
+                    title="For Partners"
+                    description="Join our partner ecosystem and help shape the future of GTM optimization"
+                    benefits={[
+                      "Revenue sharing opportunities",
+                      "Co-marketing programs",
+                      "Integration opportunities",
+                      "Early access to APIs"
+                    ]}
+                    icon="🤝"
+                    borderColor="border-purple-500/30"
+                    buttonColor="bg-purple-600 hover:bg-purple-700"
+                    accentColor="text-purple-400"
+                  />
+                </div>
+              </div>
+
+              {/* Social Proof */}
+              <div className="text-center text-gray-400">
+                <div className="flex items-center justify-center gap-8 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                    <span>Early access limited</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+                    <span>KARLSON LLC backed</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+                    <span>Beta launching Q1 2025</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Slide 7: Stop The Waste - Compelling CTA */}
+        <div className="min-w-full h-full flex-shrink-0 flex items-center px-16 relative overflow-hidden" style={{ visibility: currentSlide === 6 ? 'visible' : 'hidden' }}>
+          <div className="w-full max-w-7xl mx-auto">
+            <div className="text-center">
+              
+              {/* Powerful Headline */}
+              <div className="mb-12">
+                <h2 className="text-5xl font-bold tracking-wider mb-6">
+                  <span className="text-red-500">STOP</span> 
+                  <span className="text-white"> THE </span>
+                  <span className="text-red-500">WASTE</span>
                 </h2>
                 <div className="text-2xl text-gray-300 max-w-4xl mx-auto">
                   Join{" "}
@@ -913,7 +1012,7 @@ export default function SpaceLandingPage() {
 
               {/* Urgency Factors */}
               <div className="grid grid-cols-3 gap-8 max-w-5xl mx-auto mb-12">
-                <Card className="bg-black/60 border border-red-500/30 p-6 hover:border-red-500/50 transition-all duration-300">
+                <Card className="bg-black border border-red-500/30 p-6 hover:border-red-500/50 transition-all duration-300">
                   <div className="text-center">
                     <div className="text-red-500 text-3xl mb-4">⏰</div>
                     <h3 className="text-xl font-bold text-red-400 mb-3">Runway Shrinking</h3>
@@ -933,7 +1032,7 @@ export default function SpaceLandingPage() {
                   </div>
                 </Card>
 
-                <Card className="bg-black/60 border border-orange-500/30 p-6 hover:border-orange-500/50 transition-all duration-300">
+                <Card className="bg-black border border-orange-500/30 p-6 hover:border-orange-500/50 transition-all duration-300">
                   <div className="text-center">
                     <div className="text-orange-500 text-3xl mb-4">📈</div>
                     <h3 className="text-xl font-bold text-orange-400 mb-3">Competition Growing</h3>
@@ -966,7 +1065,7 @@ export default function SpaceLandingPage() {
               </div>
 
               {/* Compelling CTA */}
-              <div className="bg-gradient-to-r from-red-900/20 via-red-800/10 to-red-900/20 rounded-xl p-8 border border-red-500/30 mb-8">
+              <div className="bg-red-900/20 rounded-xl p-8 border border-red-500/30 mb-8">
                 <h3 className="text-3xl font-bold text-white mb-4 text-center">
                   Experience STARTUP_PATH Today
                 </h3>
@@ -976,7 +1075,7 @@ export default function SpaceLandingPage() {
                 
                 <div className="flex items-center justify-center gap-6">
                   <a href="/login">
-                    <Button className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-bold text-lg px-8 py-4 neon-border shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/40 hover:scale-105 transition-all duration-300">
+                    <Button className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg px-8 py-4 neon-border shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/40 hover:scale-105 transition-all duration-300">
                       <Rocket className="w-6 h-6 mr-3" />
                       START DEMO NOW
                       <ArrowRight className="w-6 h-6 ml-3" />
@@ -1077,6 +1176,13 @@ export default function SpaceLandingPage() {
         {/* Keyboard hint - smaller and more subtle */}
         <div className="fixed bottom-8 left-8 text-white/20 text-xs">
           Press ← → to navigate
+        </div>
+
+        {/* Copyright Footer */}
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 text-center z-40">
+          <div className="text-xs text-gray-500">
+            © 2025 <a href="https://iamkarlson.com" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 transition-colors">KARLSON LLC</a>. All rights reserved.
+          </div>
         </div>
       </div>
 

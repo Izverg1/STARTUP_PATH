@@ -1,21 +1,33 @@
 export const theme = {
-  name: 'SOL:GEN for startups™',
-  company: 'Karlson LLC',
+  name: 'STARTUP_PATH for startups™',
+  company: 'KARLSON LLC',
+  website: 'https://iamkarlson.com',
   colors: {
-    // Clean Light Theme
+    // Dark Theme (Primary)
+    dark: {
+      background: '#0a0a0a',
+      surface: '#151515',
+      muted: '#27272a',
+      text: '#fafafa',
+      textDim: '#a1a1aa',
+      accent: '#ff00aa', // Magenta for agents
+      ring: '#ff00aa',
+      border: '#27272a',
+    },
+    // Clean Light Theme (Secondary)
     light: {
       background: '#ffffff',
       surface: '#f9fafb',
       muted: '#e5e7eb',
       text: '#111827',
       textDim: '#6b7280',
-      accent: '#0066FF', // Blue for agents
-      ring: '#7c7c7c',
+      accent: '#ff00aa', // Magenta for agents
+      ring: '#ff00aa',
       border: '#e5e7eb',
     },
   },
   layout: {
-    agentDock: 96, // px
+    agentDock: 140, // px - increased for better agent display
     mainContentMin: 720, // px
     mainContentMax: 1280, // px
     artifactsSidebar: 320, // px

@@ -2,12 +2,12 @@ import { BaseAgent } from './base'
 import { 
   Artifact, 
   BenchmarkArtifact, 
-  ChannelScoutCapability 
+  ChannelDiscoveryEngineCapability 
 } from '@/types/agents'
 
-export class ChannelScoutAgent extends BaseAgent {
+export class ChannelDiscoveryEngineAgent extends BaseAgent {
   constructor() {
-    const capabilities: ChannelScoutCapability[] = [
+    const capabilities: ChannelDiscoveryEngineCapability[] = [
       {
         name: 'Channel Discovery',
         description: 'Discover high-performing channels based on ICP and benchmarks',
@@ -58,7 +58,7 @@ export class ChannelScoutAgent extends BaseAgent {
       }
     ]
 
-    super('channel_scout', capabilities)
+    super('channel_discovery_engine', capabilities)
   }
 
   protected async performExecution(input?: {

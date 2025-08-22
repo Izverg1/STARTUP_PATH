@@ -339,7 +339,15 @@ export type FunnelStageName =
   | 'proposal'
   | 'closed_won';
 
-export type StageStatus = 'performing' | 'underperforming' | 'critical';
+export type StageStatus = 'performing' | 'underperforming' | 'critical' | 'acceptable';
+
+export interface PaybackAnalysis {
+  payback_months: number;
+  target_payback: number;
+  variance_from_target: number;
+  trend_direction: 'improving' | 'declining' | 'stable';
+  confidence_level: number;
+}
 
 export interface DropOffAnalysis {
   highest_drop_stage: FunnelStageName;

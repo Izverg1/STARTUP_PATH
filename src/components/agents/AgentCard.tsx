@@ -16,10 +16,10 @@ interface AgentCardProps {
 }
 
 const agentIcons: Record<AgentKey, string> = {
-  channel_scout: '🔍',
-  offer_alchemist: '⚗️',
-  signal_wrangler: '📊',
-  budget_captain: '💰'
+  channel_discovery_engine: '🔍',
+  campaign_optimization_engine: '⚗️',
+  performance_analytics_engine: '📊',
+  budget_allocation_engine: '💰'
 }
 
 const stateColors = {
@@ -60,13 +60,14 @@ export function AgentCard({
   return (
     <motion.div
       className={cn(
-        'relative w-24 h-24 rounded-lg border cursor-pointer',
-        'bg-white border-gray-200 hover:border-gray-300',
-        'transition-all duration-90',
-        isActive && 'ring-2 ring-pink-500 border-pink-500'
+        'relative w-28 h-28 rounded-xl border cursor-pointer overflow-hidden',
+        'bg-zinc-900/90 border-zinc-700/50 hover:border-zinc-600',
+        'backdrop-blur-sm transition-all duration-300',
+        'hover:shadow-lg hover:shadow-magenta-500/10',
+        isActive && 'ring-2 ring-magenta-500 border-magenta-500/70 shadow-lg shadow-magenta-500/25'
       )}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.02, y: -2 }}
+      whileTap={{ scale: 0.98 }}
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -78,50 +79,82 @@ export function AgentCard({
         }
       }}
     >
-      {/* Status indicator */}
-      <div className="absolute -top-1 -right-1 z-10">
+      {/* Status indicator - Modern pill design */}
+      <div className="absolute top-2 right-2 z-10">
         <motion.div
           className={cn(
-            'w-3 h-3 rounded-full',
+            'w-3 h-3 rounded-full border-2 border-zinc-800',
             stateColors[state]
           )}
           animate={stateAnimations[state]}
         />
       </div>
 
+      {/* Modern overlay */}
+      <div className="absolute inset-0 bg-zinc-800/20" />
+      
       {/* Main content */}
-      <div className="flex flex-col items-center justify-center h-full p-2 text-center">
-        {/* Icon with state-based animation */}
+      <div className="relative flex flex-col items-center justify-center h-full p-3 text-center">
+        {/* Icon with enhanced state-based animation */}
         <motion.div
-          className="text-2xl mb-1"
+          className="text-3xl mb-2 relative"
           animate={state === 'working' ? {
             rotate: [0, 10, -10, 0],
-            transition: { duration: 1, repeat: Infinity, ease: 'easeInOut' }
+            scale: [1, 1.1, 1],
+            transition: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' }
           } : {}}
         >
           {agentIcons[agentKey] || icon}
+          {/* Subtle glow effect for working state */}
+          {state === 'working' && (
+            <motion.div
+              className="absolute inset-0 text-3xl opacity-30"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.1, 0.3]
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              {agentIcons[agentKey] || icon}
+            </motion.div>
+          )}
         </motion.div>
 
-        {/* Title */}
-        <div className="text-xs font-medium text-white leading-tight">
+        {/* Title with improved typography */}
+        <div className="text-xs font-semibold text-white leading-tight mb-1">
           {title}
         </div>
 
-        {/* Status line */}
-        <div className="text-xs text-zinc-400 leading-tight mt-0.5 line-clamp-1">
+        {/* Status line with better contrast */}
+        <div className="text-xs text-zinc-300 leading-tight line-clamp-2 px-1">
           {statusLine}
         </div>
       </div>
 
-      {/* Active state accent */}
+      {/* Enhanced active state with magenta accent */}
       {isActive && (
-        <motion.div
-          className="absolute inset-0 rounded-lg bg-gradient-to-br from-pink-500/10 to-transparent"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.12 }}
-        />
+        <>
+          <motion.div
+            className="absolute inset-0 rounded-xl bg-gradient-to-br from-magenta-500/15 via-magenta-400/10 to-transparent"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          />
+          <motion.div
+            className="absolute inset-0 rounded-xl border border-magenta-500/30"
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+          />
+        </>
       )}
+
+      {/* Hover state enhancement */}
+      <motion.div
+        className="absolute inset-0 rounded-xl bg-gradient-to-t from-zinc-700/20 to-transparent opacity-0 pointer-events-none"
+        whileHover={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      />
     </motion.div>
   )
 }

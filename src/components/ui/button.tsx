@@ -10,18 +10,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-cyan-600 to-blue-600 text-white border border-cyan-500/50 shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-105 focus-visible:outline-cyan-400 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%]",
+          "bg-cyan-600 hover:bg-blue-600 text-white border border-cyan-500/50 shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/40 hover:scale-105 focus-visible:outline-cyan-400 transition-all duration-300",
         destructive:
-          "bg-gradient-to-r from-red-600 to-red-500 text-white border border-red-500/50 shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/40 hover:scale-105 focus-visible:outline-red-400 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%]",
+          "bg-red-600 hover:bg-red-500 text-white border border-red-500/50 shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/40 hover:scale-105 focus-visible:outline-red-400 transition-all duration-300",
         outline:
-          "border-2 border-cyan-500/40 bg-black/20 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/10 hover:border-cyan-400/60 hover:text-cyan-200 hover:shadow-lg hover:shadow-cyan-500/20 focus-visible:outline-cyan-400 after:absolute after:inset-0 after:bg-gradient-to-r after:from-transparent after:via-cyan-400/10 after:to-transparent after:translate-y-[100%] after:transition-transform after:duration-500 hover:after:translate-y-[-100%]",
+          "border-2 border-cyan-500/40 bg-black/20 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/10 hover:border-cyan-400/60 hover:text-cyan-200 hover:shadow-lg hover:shadow-cyan-500/20 focus-visible:outline-cyan-400 transition-all duration-300",
         secondary:
-          "bg-gradient-to-r from-gray-800 to-gray-700 text-cyan-200 border border-gray-600/50 shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-800/40 hover:scale-105 hover:from-gray-700 hover:to-gray-600 focus-visible:outline-cyan-400",
+          "bg-gray-800 hover:bg-gray-700 text-cyan-200 border border-gray-600/50 shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-800/40 hover:scale-105 focus-visible:outline-cyan-400 transition-all duration-300",
         ghost:
-          "text-cyan-300/80 hover:bg-cyan-500/10 hover:text-cyan-200 border border-transparent hover:border-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/10 focus-visible:outline-cyan-400 after:absolute after:inset-0 after:bg-gradient-to-r after:from-cyan-500/0 after:via-cyan-500/5 after:to-cyan-500/0 after:opacity-0 after:transition-opacity after:duration-300 hover:after:opacity-100",
-        link: "text-cyan-400 hover:text-cyan-300 underline-offset-4 hover:underline relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-cyan-400 after:to-blue-400 after:transition-all after:duration-300 hover:after:w-full",
+          "text-cyan-300/80 hover:bg-cyan-500/10 hover:text-cyan-200 border border-transparent hover:border-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/10 focus-visible:outline-cyan-400 transition-all duration-300",
+        link: "text-cyan-400 hover:text-cyan-300 underline-offset-4 hover:underline transition-all duration-300",
         agent:
-          "bg-gradient-to-r from-red-600 to-red-500 text-white border border-red-500/50 shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/40 hover:scale-105 focus-visible:outline-red-400 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%] neon-border"
+          "bg-red-600 hover:bg-red-500 text-white border border-red-500/50 shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/40 hover:scale-105 focus-visible:outline-red-400 neon-border transition-all duration-300"
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

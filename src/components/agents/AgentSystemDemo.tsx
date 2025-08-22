@@ -50,22 +50,22 @@ export function AgentSystemDemo() {
     // Auto-execute agent for demo purposes
     try {
       const demoInputs = {
-        channel_scout: {
+        channel_discovery_engine: {
           vertical: 'SaaS',
           target_audience: 'B2B Decision Makers',
           budget_range: [20000, 50000] as [number, number]
         },
-        offer_alchemist: {
+        campaign_optimization_engine: {
           channel_type: 'email',
           copy_type: 'subject_line' as const,
           target_audience: 'Enterprise CTOs',
           tone: 'professional' as const
         },
-        signal_wrangler: {
+        performance_analytics_engine: {
           metric_type: 'cpqm' as const,
           time_period: '30d'
         },
-        budget_captain: {
+        budget_allocation_engine: {
           total_budget: 50000,
           strategy: 'thompson_sampling' as const
         }
@@ -78,7 +78,7 @@ export function AgentSystemDemo() {
   }
 
   return (
-    <div className="relative h-screen bg-white overflow-hidden">
+    <div className="relative h-screen bg-zinc-950 overflow-hidden">
       {/* Agent Dock */}
       <AgentDock
         agents={agentStatusData}
@@ -87,72 +87,72 @@ export function AgentSystemDemo() {
 
       {/* Main Content Area */}
       <div 
-        className="flex-1 flex flex-col items-center justify-center text-gray-900 px-4"
+        className="flex-1 flex flex-col items-center justify-center text-white px-4"
         style={{ 
           marginLeft: theme.layout.agentDock,
           marginRight: theme.layout.artifactsSidebar 
         }}
       >
         <div className="text-center max-w-2xl">
-          <h1 className="text-4xl font-bold mb-6">
-            SOL:GEN Agent System
+          <h1 className="text-4xl font-bold mb-6 text-white">
+            STARTUP_PATH Agent System
           </h1>
           
           <p className="text-xl text-zinc-300 mb-8">
-            Autonomous agents working together to optimize your sales and marketing operations
+            4 AI engines working together to optimize your go-to-market operations
           </p>
 
           <div className="grid grid-cols-2 gap-6 mb-8">
-            <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold mb-4">System Status</h3>
+            <div className="bg-zinc-900/60 rounded-xl p-6 border border-zinc-800/60 backdrop-blur-sm">
+              <h3 className="text-lg font-semibold mb-4 text-white">System Status</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span>Idle:</span>
-                  <span className="text-gray-400">{systemStatus.idle}</span>
+                  <span className="text-zinc-300">Idle:</span>
+                  <span className="text-zinc-400 font-mono">{systemStatus.idle}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Working:</span>
-                  <span className="text-blue-400">{systemStatus.working}</span>
+                  <span className="text-zinc-300">Working:</span>
+                  <span className="text-cyan-400 font-mono">{systemStatus.working}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Blocked:</span>
-                  <span className="text-red-400">{systemStatus.blocked}</span>
+                  <span className="text-zinc-300">Blocked:</span>
+                  <span className="text-red-400 font-mono">{systemStatus.blocked}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Complete:</span>
-                  <span className="text-green-400">{systemStatus.done}</span>
+                  <span className="text-zinc-300">Complete:</span>
+                  <span className="text-green-400 font-mono">{systemStatus.done}</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold mb-4">Artifacts</h3>
+            <div className="bg-zinc-900/60 rounded-xl p-6 border border-zinc-800/60 backdrop-blur-sm">
+              <h3 className="text-lg font-semibold mb-4 text-white">Artifacts Generated</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span>Total:</span>
-                  <span className="text-zinc-300">{artifacts.length}</span>
+                  <span className="text-zinc-300">Total:</span>
+                  <span className="text-zinc-300 font-mono">{artifacts.length}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Benchmarks:</span>
-                  <span className="text-blue-400">
+                  <span className="text-zinc-300">Benchmarks:</span>
+                  <span className="text-cyan-400 font-mono">
                     {artifacts.filter(a => a.type === 'benchmark').length}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Copy:</span>
-                  <span className="text-green-400">
+                  <span className="text-zinc-300">Copy:</span>
+                  <span className="text-green-400 font-mono">
                     {artifacts.filter(a => a.type === 'copy').length}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Calculations:</span>
-                  <span className="text-purple-400">
+                  <span className="text-zinc-300">Calculations:</span>
+                  <span className="text-purple-400 font-mono">
                     {artifacts.filter(a => a.type === 'calc').length}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Allocations:</span>
-                  <span className="text-yellow-400">
+                  <span className="text-zinc-300">Allocations:</span>
+                  <span className="text-yellow-400 font-mono">
                     {artifacts.filter(a => a.type === 'alloc').length}
                   </span>
                 </div>
@@ -164,7 +164,7 @@ export function AgentSystemDemo() {
             <Button
               onClick={runDemo}
               size="lg"
-              className="bg-pink-600 hover:bg-pink-700"
+              className="bg-magenta-600 hover:bg-magenta-700 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-200 shadow-lg shadow-magenta-500/25"
             >
               Run Full Demo
             </Button>
@@ -173,14 +173,16 @@ export function AgentSystemDemo() {
               onClick={resetAllAgents}
               variant="outline"
               size="lg"
+              className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white px-8 py-3 rounded-lg transition-all duration-200"
             >
               Reset All Agents
             </Button>
           </div>
 
-          <div className="mt-8 text-sm text-gray-600">
+          <div className="mt-8 text-sm text-zinc-400 space-y-1">
             <p>Click on agent cards to execute individual agents</p>
             <p>View generated artifacts in the sidebar</p>
+            <p className="text-magenta-400 font-medium">AI Engines work together for optimal results</p>
           </div>
         </div>
       </div>

@@ -21,21 +21,25 @@ interface AgentDockProps {
 }
 
 const agentDefinitions = {
-  channel_scout: {
-    title: 'Channel Scout',
-    description: 'Discovers optimal channels'
+  channel_discovery_engine: {
+    title: 'Channel Discovery Engine',
+    subtitle: '',
+    description: 'Identifies & validates opportunities'
   },
-  offer_alchemist: {
-    title: 'Offer Alchemist', 
-    description: 'Creates compelling copy'
+  campaign_optimization_engine: {
+    title: 'Campaign Optimization Engine',
+    subtitle: '',
+    description: 'Optimizes messaging & creative'
   },
-  signal_wrangler: {
-    title: 'Signal Wrangler',
-    description: 'Analyzes performance data'
+  performance_analytics_engine: {
+    title: 'Performance Analytics Engine',
+    subtitle: '',
+    description: 'Real-time monitoring & analysis'
   },
-  budget_captain: {
-    title: 'Budget Captain',
-    description: 'Optimizes budget allocation'
+  budget_allocation_engine: {
+    title: 'Budget Allocation Engine',
+    subtitle: '',
+    description: 'Automated spend optimization'
   }
 } as const
 
@@ -71,8 +75,8 @@ export function AgentDock({
     <motion.div
       className={cn(
         'fixed left-0 top-0 h-full z-20',
-        'bg-zinc-950 border-r border-zinc-800',
-        'flex flex-col',
+        'bg-zinc-950/95 backdrop-blur-sm border-r border-zinc-800/60',
+        'flex flex-col shadow-2xl',
         className
       )}
       style={{ width: theme.layout.agentDock }}
@@ -80,35 +84,54 @@ export function AgentDock({
       initial="hidden"
       animate="visible"
     >
-      {/* Header */}
+      {/* Enhanced Header */}
       <motion.div
-        className="p-4 border-b border-zinc-800"
+        className="p-4 border-b border-zinc-800/60 bg-gradient-to-r from-zinc-900/50 to-zinc-800/30"
         variants={itemVariants}
       >
-        <div className="text-sm font-semibold text-gray-900">
-          Agents
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-2 h-2 bg-magenta-500 rounded-full animate-pulse" />
+          <div className="text-sm font-bold text-white">
+            AI Agents
+          </div>
         </div>
-        <div className="text-xs text-zinc-400 mt-1">
-          {agents.filter(a => a.state === 'working').length} active
+        <div className="text-xs text-zinc-400">
+          {agents.filter(a => a.state === 'working').length} active • {agents.filter(a => a.state === 'done').length} completed
         </div>
       </motion.div>
 
-      {/* Agent cards */}
-      <div className="flex-1 p-2 space-y-3 overflow-y-auto">
-        {agents.map((agent) => (
+      {/* Agent cards with improved spacing */}
+      <div className="flex-1 p-3 space-y-4 overflow-y-auto">
+        {agents.map((agent, index) => (
           <motion.div
             key={agent.key}
             variants={itemVariants}
+            className="relative"
           >
+            {/* Agent title above card */}
+            <div className="mb-2 px-1">
+              <div className="text-xs font-medium text-zinc-300">
+                {agentDefinitions[agent.key].title}
+              </div>
+              <div className="text-xs text-zinc-500">
+                {agentDefinitions[agent.key].subtitle}
+              </div>
+            </div>
+            
             <AgentCard
               agentKey={agent.key}
-              title={agentDefinitions[agent.key].title}
+              title={`${agentDefinitions[agent.key].title} ${agentDefinitions[agent.key].subtitle}`}
               icon="" // Using emoji from AgentCard component
               state={agent.state}
               statusLine={agent.statusLine}
               isActive={agent.isActive}
               onClick={() => onAgentClick?.(agent.key)}
             />
+            
+            {/* Connecting line to next agent (except last) */}
+            {index < agents.length - 1 && (
+              <div className="absolute left-1/2 -bottom-2 w-px h-4 bg-gradient-to-b from-zinc-600/50 to-transparent" />
+            )}
           </motion.div>
         ))}
       </div>

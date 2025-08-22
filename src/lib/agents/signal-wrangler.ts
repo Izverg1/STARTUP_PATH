@@ -2,12 +2,12 @@ import { BaseAgent } from './base'
 import { 
   Artifact, 
   CalcArtifact, 
-  SignalWranglerCapability 
+  PerformanceAnalyticsEngineCapability 
 } from '@/types/agents'
 
-export class SignalWranglerAgent extends BaseAgent {
+export class PerformanceAnalyticsEngineAgent extends BaseAgent {
   constructor() {
-    const capabilities: SignalWranglerCapability[] = [
+    const capabilities: PerformanceAnalyticsEngineCapability[] = [
       {
         name: 'Metric Calculation',
         description: 'Calculate key performance metrics (CPQM, CAC, LTV, etc.)',
@@ -85,7 +85,7 @@ export class SignalWranglerAgent extends BaseAgent {
       }
     ]
 
-    super('signal_wrangler', capabilities)
+    super('performance_analytics_engine', capabilities)
   }
 
   protected async performExecution(input?: {

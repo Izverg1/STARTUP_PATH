@@ -1,0 +1,77 @@
+{
+  "id": "services_midmarket",
+  "title": "B2B Services \u2014 Midmarket",
+  "seed": 92177,
+  "icp": {
+    "persona": "Ops/IT Director",
+    "company_size": "500-5000",
+    "geo": "NA"
+  },
+  "economics": {
+    "acv": 30000,
+    "gross_margin": 0.55,
+    "mrr_per_customer": 2500
+  },
+  "window_days": 14,
+  "channels": [
+    {
+      "type": "linkedin_inmail",
+      "label": "LinkedIn InMail",
+      "sends_per_day": 600,
+      "cost_per_send": 0.32,
+      "base": {
+        "reply_rate": 0.028,
+        "meet_given_reply": 0.32,
+        "opp_given_meeting": 0.4,
+        "win_given_opp": 0.22
+      },
+      "variability": {
+        "rates": 0.18
+      },
+      "lags": {
+        "meeting_days": [
+          0,
+          2
+        ],
+        "opp_days": [
+          2,
+          7
+        ],
+        "win_days": [
+          14,
+          35
+        ]
+      }
+    },
+    {
+      "type": "webinar",
+      "label": "Executive Webinar",
+      "regs_per_day": 80,
+      "cost_per_reg": 110,
+      "base": {
+        "reg_to_attend": 0.38,
+        "attend_to_meeting": 0.18,
+        "opp_given_meeting": 0.42,
+        "win_given_opp": 0.24
+      },
+      "variability": {
+        "rates": 0.15,
+        "regs": 0.1
+      },
+      "lags": {
+        "meeting_days": [
+          1,
+          3
+        ],
+        "opp_days": [
+          3,
+          10
+        ],
+        "win_days": [
+          21,
+          45
+        ]
+      }
+    }
+  ]
+}

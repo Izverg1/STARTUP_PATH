@@ -22,9 +22,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
 
+  // Safety timeout to prevent indefinite loading
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (loading) {
+        console.warn('⚠️ Auth loading timeout - forcing loading state to false')
+        setLoading(false)
+      }
+    }, 5000) // 5 second timeout
+
+    return () => clearTimeout(timeout)
+  }, [loading])
+
+  useEffect(() => {
+    console.log('🔄 AuthContext: Setting up auth listener')
+    
     // Subscribe to auth changes
     const unsubscribe = authService.onAuthChange((user) => {
+      console.log('🔄 AuthContext: Auth state changed', { user: user?.email || 'none', pathname })
       setUser(user)
       setLoading(false)
       
@@ -33,8 +48,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const isPublicPath = publicPaths.some(path => pathname.startsWith(path))
       
       if (!user && !isPublicPath) {
+        console.log('🔒 Redirecting to login (not authenticated)')
         router.push('/login')
       } else if (user && pathname === '/login') {
+        console.log('🏠 Redirecting to dashboard (already authenticated)')
         router.push('/dashboard')
       }
     })
@@ -45,9 +62,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     setLoading(true)
     try {
-      await authService.login(email, password)
+      const user = await authService.login(email, password)
       // User state will be updated via the auth change listener
+      console.log('✅ Login successful:', user.email)
     } catch (error) {
+      console.error('❌ Login failed:', error)
       setLoading(false)
       throw error
     }

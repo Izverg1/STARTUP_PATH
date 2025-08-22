@@ -38,10 +38,10 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 
     try {
       // Store in localStorage for demo
-      const existingEmails = JSON.parse(localStorage.getItem('solgen-waitlist') || '[]')
+      const existingEmails = JSON.parse(localStorage.getItem('startup-path-waitlist') || '[]')
       if (!existingEmails.includes(email)) {
         existingEmails.push(email)
-        localStorage.setItem('solgen-waitlist', JSON.stringify(existingEmails))
+        localStorage.setItem('startup-path-waitlist', JSON.stringify(existingEmails))
       }
 
       // Simulate API delay
@@ -65,9 +65,9 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">You're on the list!</h3>
+          <h3 className="text-xl font-semibold text-white">You're on the list!</h3>
           <p className="text-gray-400">
-            Welcome to the SOL:GEN founder cohort. We'll notify you when early access opens.
+            Welcome to the STARTUP_PATH founder cohort. We'll notify you when early access opens.
           </p>
           <Button 
             onClick={() => setIsSuccess(false)}
@@ -85,9 +85,9 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
     <Card className={`p-8 bg-gradient-to-br from-gray-900/90 to-black/90 border-red-500/20 backdrop-blur-sm ${className}`}>
       <div className="space-y-6">
         <div className="text-center space-y-2">
-          <h3 className="text-2xl font-bold text-gray-900">Join the Founder Cohort</h3>
+          <h3 className="text-2xl font-bold text-white">Join the Founder Cohort</h3>
           <p className="text-gray-400">
-            Secure early access to SOL:GEN and optimize your burn rate with scientific channel fit.
+            Secure early access to STARTUP_PATH and optimize your burn rate with scientific channel fit.
           </p>
         </div>
 
@@ -125,9 +125,9 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
         </form>
 
         <div className="text-center text-xs text-gray-500">
-          By joining, you agree to receive updates about SOL:GEN.
+          By joining, you agree to receive updates about STARTUP_PATH.
           <br />
-          Built by founders, for founders.
+          © 2025 <a href="https://iamkarlson.com" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300">KARLSON LLC</a>. Built by founders, for founders.
         </div>
       </div>
     </Card>

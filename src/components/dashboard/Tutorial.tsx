@@ -13,34 +13,28 @@ interface TutorialStep {
 
 const tutorialSteps: TutorialStep[] = [
   {
-    target: '.sidebar-toggle',
-    title: 'Collapsible Sidebar',
-    content: 'Click here to expand or collapse the navigation sidebar for more workspace.',
-    position: 'right'
-  },
-  {
-    target: '.metrics-cards',
-    title: 'Key Metrics',
-    content: 'Monitor your real-time GTM performance metrics. Green indicates growth, red shows areas needing attention.',
+    target: '.experiment-controls',
+    title: 'Experiment Controls',
+    content: 'Access tutorial, filters, and design new experiments from this control panel.',
     position: 'bottom'
   },
   {
-    target: '.cpqm-analysis',
-    title: 'CPQM Analysis',
-    content: 'Track your Cost Per Qualified Meeting and benchmark against industry standards.',
+    target: '.metrics-overview',
+    title: 'Performance Overview',
+    content: 'Monitor your experiment metrics: active experiments, budget allocation, confidence levels, and success rates.',
+    position: 'bottom'
+  },
+  {
+    target: '.simulation-results',
+    title: 'Active Experiments',
+    content: 'View your running experiments with real-time performance data, confidence levels, and budget tracking.',
     position: 'top'
   },
   {
-    target: '.cac-analysis',
-    title: 'CAC Tracking',
-    content: 'Monitor Customer Acquisition Cost trends and optimization opportunities.',
-    position: 'top'
-  },
-  {
-    target: '.live-analytics',
-    title: 'Live Channel Data',
-    content: 'Real-time optimization data streams show channel performance as it happens.',
-    position: 'left'
+    target: '.lab-workspace',
+    title: 'Thompson Sampling Lab',
+    content: 'This workspace uses Thompson Sampling for optimal experiment allocation and statistical accuracy.',
+    position: 'bottom'
   }
 ]
 
@@ -48,6 +42,8 @@ export function Tutorial({ onComplete }: { onComplete: () => void }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [position, setPosition] = useState({ top: 0, left: 0 })
   const [isVisible, setIsVisible] = useState(false)
+  const [fadeoutComplete, setFadeoutComplete] = useState(false)
+  const [tutorialActive, setTutorialActive] = useState(false)
   
   const step = tutorialSteps[currentStep]
   
@@ -79,8 +75,14 @@ export function Tutorial({ onComplete }: { onComplete: () => void }) {
         }
         
         setPosition({ top, left })
-        setIsVisible(true)
+      } else {
+        // Fallback position if element not found - center of screen
+        setPosition({ 
+          top: window.innerHeight / 2, 
+          left: window.innerWidth / 2 
+        })
       }
+      setIsVisible(true)
     }
     
     // Delay to ensure elements are rendered
@@ -124,6 +126,19 @@ export function Tutorial({ onComplete }: { onComplete: () => void }) {
       zIndex: 9999,
       transition: 'opacity 0.2s',
       opacity: isVisible ? 1 : 0
+    }
+    
+    // Check if element exists to determine if we should use fallback positioning
+    const element = document.querySelector(step.target)
+    
+    if (!element) {
+      // Fallback to center positioning if element not found
+      return {
+        ...baseStyles,
+        top: `${position.top}px`,
+        left: `${position.left}px`,
+        transform: 'translate(-50%, -50%)'
+      }
     }
     
     switch (step.position) {
@@ -219,44 +234,46 @@ export function Tutorial({ onComplete }: { onComplete: () => void }) {
           </div>
         </div>
         
-        {/* Arrow pointer */}
-        <div 
-          className="absolute w-0 h-0"
-          style={{
-            ...(step.position === 'bottom' && {
-              top: '-8px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              borderLeft: '8px solid transparent',
-              borderRight: '8px solid transparent',
-              borderBottom: '8px solid rgb(17 24 39)'
-            }),
-            ...(step.position === 'top' && {
-              bottom: '-8px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              borderLeft: '8px solid transparent',
-              borderRight: '8px solid transparent',
-              borderTop: '8px solid rgb(17 24 39)'
-            }),
-            ...(step.position === 'left' && {
-              right: '-8px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              borderTop: '8px solid transparent',
-              borderBottom: '8px solid transparent',
-              borderLeft: '8px solid rgb(17 24 39)'
-            }),
-            ...(step.position === 'right' && {
-              left: '-8px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              borderTop: '8px solid transparent',
-              borderBottom: '8px solid transparent',
-              borderRight: '8px solid rgb(17 24 39)'
-            })
-          }}
-        />
+        {/* Arrow pointer - only show if target element exists */}
+        {document.querySelector(step.target) && (
+          <div 
+            className="absolute w-0 h-0"
+            style={{
+              ...(step.position === 'bottom' && {
+                top: '-8px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                borderLeft: '8px solid transparent',
+                borderRight: '8px solid transparent',
+                borderBottom: '8px solid rgb(17 24 39)'
+              }),
+              ...(step.position === 'top' && {
+                bottom: '-8px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                borderLeft: '8px solid transparent',
+                borderRight: '8px solid transparent',
+                borderTop: '8px solid rgb(17 24 39)'
+              }),
+              ...(step.position === 'left' && {
+                right: '-8px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                borderTop: '8px solid transparent',
+                borderBottom: '8px solid transparent',
+                borderLeft: '8px solid rgb(17 24 39)'
+              }),
+              ...(step.position === 'right' && {
+                left: '-8px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                borderTop: '8px solid transparent',
+                borderBottom: '8px solid transparent',
+                borderRight: '8px solid rgb(17 24 39)'
+              })
+            }}
+          />
+        )}
       </div>
     </>
   )

@@ -1,0 +1,61 @@
+[
+  {
+    "id": "auto_pause_payback",
+    "label": "Auto-pause if Payback > 18mo for 7 days",
+    "if": {
+      "metric": "payback_months",
+      "op": ">",
+      "value": 18,
+      "window_days": 7
+    },
+    "then": [
+      {
+        "action": "pause_channel"
+      },
+      {
+        "action": "open_task",
+        "assignee_role": "owner"
+      }
+    ],
+    "status": "enabled"
+  },
+  {
+    "id": "webinar_quality_floor",
+    "label": "Flag webinar if Attend < 35%",
+    "if": {
+      "metric": "webinar_reg_to_attend",
+      "op": "<",
+      "value": 0.35,
+      "window_days": 3
+    },
+    "then": [
+      {
+        "action": "flag_channel",
+        "severity": "warn"
+      },
+      {
+        "action": "suggest_playbook",
+        "playbook": "Webinar Topic Refresh"
+      }
+    ],
+    "status": "enabled"
+  },
+  {
+    "id": "shift_spend_when_cpqm_high",
+    "label": "Shift 10% spend away if CPQM > $400",
+    "if": {
+      "metric": "cpqm",
+      "op": ">",
+      "value": 400,
+      "window_days": 3
+    },
+    "then": [
+      {
+        "action": "reweight_budget",
+        "delta": -0.1,
+        "to": "best_cpqm"
+      }
+    ],
+    "status": "enabled"
+  }
+]

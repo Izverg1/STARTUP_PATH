@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card'
 import { Rocket, Lock, Mail, TrendingUp, DollarSign, BarChart3, Zap, Target, Brain, AlertCircle } from 'lucide-react'
 import { LoadingTransition } from '@/components/LoadingTransition'
 import { useAuth } from '@/contexts/AuthContext'
+import { sanitizeAuthError } from '@/lib/utils/errorHandler'
 
 // Channel logo components
 const GoogleAdsLogo = () => (
@@ -70,31 +71,63 @@ export default function LoginPage() {
   const [password, setPassword] = useState('demo123')
   const [isClient, setIsClient] = useState(false)
   const [showTransition, setShowTransition] = useState(false)
+  const [localLoading, setLocalLoading] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
     
     // Redirect if already authenticated
     if (isAuthenticated) {
+      console.log('User already authenticated, redirecting to dashboard')
       setShowTransition(true)
     }
     
     // Clear any existing errors when component mounts
     setError(null)
-  }, [isAuthenticated])
+    
+    // Debug: Log auth loading state
+    console.log('Auth state:', { isAuthenticated, loading })
+  }, [isAuthenticated, loading])
+
+  // Force debug check - if loading persists for too long, something is wrong
+  useEffect(() => {
+    if (isClient) {
+      const debugTimeout = setTimeout(() => {
+        if (loading && !isAuthenticated) {
+          console.error('🚨 LOGIN DEBUG: Auth loading state stuck! This indicates an issue with the AuthContext initialization.')
+          console.error('Current state:', { loading, isAuthenticated, pathname: window.location.pathname })
+        }
+      }, 3000)
+      
+      return () => clearTimeout(debugTimeout)
+    }
+  }, [isClient, loading, isAuthenticated])
 
   // Professional authentication flow
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setLocalLoading(true)
+    
+    console.log('🔐 Starting login process...')
     
     try {
       await login(email, password)
       // Success - show professional transition
+      console.log('✅ Login completed, showing transition')
+      setLocalLoading(false)
       setShowTransition(true)
     } catch (err) {
-      setError((err as Error).message || 'Login failed')
-      console.error('Login failed:', err)
+      // Log technical details to console for debugging (dev only)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('❌ Login failed:', err)
+      }
+      
+      // Use utility function to get clean, user-friendly error message
+      const errorMessage = sanitizeAuthError(err);
+      
+      setError(errorMessage)
+      setLocalLoading(false)
     }
   }
 
@@ -123,6 +156,15 @@ export default function LoginPage() {
     { label: 'Perf', value: '4x', icon: Zap, color: 'text-orange-400' }
   ]
 
+  // Don't render anything until client-side hydration is complete
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    )
+  }
+
   if (showTransition) {
     return <LoadingTransition onComplete={handleTransitionComplete} />
   }
@@ -133,7 +175,7 @@ export default function LoginPage() {
       <div className="absolute inset-0">
         
         {/* Dark storm clouds background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-950 via-black to-gray-900" />
+        <div className="absolute inset-0 bg-black" />
         
         {/* Animated storm grid */}
         <div className="absolute inset-0"
@@ -310,7 +352,7 @@ export default function LoginPage() {
           <div className="p-6">
             {/* Logo */}
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-600 via-red-500 to-red-700 rounded-2xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-transform duration-300 border border-red-400/30 neon-border">
+              <div className="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-transform duration-300 border border-red-400/30 neon-border">
                 <Rocket className="w-8 h-8 text-white" />
               </div>
             </div>
@@ -354,18 +396,25 @@ export default function LoginPage() {
               </div>
 
               {error && (
-                <div className="text-red-300 text-sm text-center bg-red-900/20 p-3 rounded-lg border border-red-500/30 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                  <span>{error}</span>
+                <div className="text-red-300 text-sm bg-red-900/20 p-4 rounded-lg border border-red-500/30">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    <span className="font-medium">{error}</span>
+                  </div>
+                  <div className="text-xs text-red-200/80 pl-6">
+                    <div className="mb-1">Demo credentials:</div>
+                    <div>• Email: <span className="font-mono text-red-200">user@startuppath.ai</span></div>
+                    <div>• Password: <span className="font-mono text-red-200">demo123</span></div>
+                  </div>
                 </div>
               )}
 
               <Button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg border border-red-500/30 hover:border-red-400/50 transition-all duration-300 neon-border"
+                disabled={localLoading}
+                className="w-full bg-red-600 hover:bg-red-700 text-white shadow-lg border border-red-500/30 hover:border-red-400/50 transition-all duration-300 neon-border"
               >
-                {loading ? (
+                {localLoading ? (
                   <div className="flex items-center justify-center">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                     Authenticating...
@@ -384,6 +433,13 @@ export default function LoginPage() {
               <p className="text-gray-300 text-sm text-center">
                 Demo Credentials:<br />
                 <span className="text-white font-mono text-xs">user@startuppath.ai / demo123</span>
+              </p>
+            </div>
+
+            {/* Copyright footer */}
+            <div className="mt-6 text-center">
+              <p className="text-xs text-gray-500">
+                © 2025 <a href="https://iamkarlson.com" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 transition-colors">KARLSON LLC</a>. All rights reserved.
               </p>
             </div>
           </div>

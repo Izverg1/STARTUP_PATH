@@ -94,40 +94,54 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="h-full flex flex-col p-6 overflow-y-auto">
-      <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-            <span className="text-sm text-red-400 font-medium">System Administration</span>
+    <div className="h-full flex flex-col">
+      {/* Admin Content with Horizontal Tabs */}
+      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
+        <Tabs defaultValue="demo-mode" className="flex-1 flex flex-col">
+          <TabsList className="bg-zinc-800 border-2 border-zinc-500 p-1 m-6 mb-0 shrink-0 shadow-xl">
+            <TabsTrigger 
+              value="demo-mode" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
+            >
+              🎭 Demo Mode
+            </TabsTrigger>
+            <TabsTrigger 
+              value="data-overview" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
+            >
+              📊 Data Overview
+            </TabsTrigger>
+            <TabsTrigger 
+              value="validation" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
+            >
+              ✅ Validation
+            </TabsTrigger>
+            <TabsTrigger 
+              value="system-info" 
+              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
+            >
+              ⚙️ System Info
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Demo Mode Tab */}
+          <TabsContent value="demo-mode" className="flex-1 overflow-y-auto p-6">
+          {/* Header Controls */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-white">Admin Dashboard</h2>
+              <p className="text-sm text-red-400 font-medium">System Administration</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <DemoIndicator />
+              <Button variant="outline" size="sm" onClick={handleRefreshData} disabled={isLoading} className="bg-zinc-900 border-red-500/30 text-red-200 hover:bg-red-900/20">
+                <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+            </div>
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">Admin Dashboard</h1>
-          <p className="text-gray-400 text-sm">
-            System administration and demo mode controls
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <DemoIndicator />
-          <Button variant="outline" size="sm" onClick={handleRefreshData} disabled={isLoading} className="bg-black/40 border-gray-500/30 text-gray-300 hover:bg-gray-700/50">
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-        </div>
-      </div>
 
-      {/* Main Content */}
-      <Tabs defaultValue="demo-mode" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="demo-mode">Demo Mode</TabsTrigger>
-          <TabsTrigger value="data-overview">Data Overview</TabsTrigger>
-          <TabsTrigger value="validation">Data Validation</TabsTrigger>
-          <TabsTrigger value="system-info">System Info</TabsTrigger>
-        </TabsList>
-
-        {/* Demo Mode Tab */}
-        <TabsContent value="demo-mode" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Demo Toggle */}
             <DemoToggle showSettings={true} />
@@ -192,7 +206,7 @@ export default function AdminPage() {
 
           {/* Demo Status Alert */}
           {isDemoEnabled ? (
-            <Alert className="bg-black/40 border border-purple-500/20">
+            <Alert className="bg-black border border-purple-500/30">
               <CheckCircle2 className="h-4 w-4 text-purple-400" />
               <AlertDescription className="text-gray-300">
                 Demo mode is active. All data shown in the dashboard is synthetic and deterministic.
@@ -200,7 +214,7 @@ export default function AdminPage() {
               </AlertDescription>
             </Alert>
           ) : (
-            <Alert className="bg-black/40 border border-blue-500/20">
+            <Alert className="bg-black border border-blue-500/30">
               <Info className="h-4 w-4 text-blue-400" />
               <AlertDescription className="text-gray-300">
                 Live data mode is active. All metrics reflect real performance data from connected sources.
@@ -210,7 +224,7 @@ export default function AdminPage() {
         </TabsContent>
 
         {/* Data Overview Tab */}
-        <TabsContent value="data-overview" className="space-y-6">
+          <TabsContent value="data-overview" className="flex-1 overflow-y-auto p-6">
           {isDemoEnabled && demoData ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Experiment Overview */}
@@ -338,7 +352,7 @@ export default function AdminPage() {
         </TabsContent>
 
         {/* Data Validation Tab */}
-        <TabsContent value="validation" className="space-y-6">
+          <TabsContent value="validation" className="flex-1 overflow-y-auto p-6">
           {isDemoEnabled && dataValidation ? (
             <div className="space-y-6">
               {/* Validation Status */}
@@ -417,7 +431,7 @@ export default function AdminPage() {
 
               {/* All Good */}
               {dataValidation.errors.length === 0 && dataValidation.warnings.length === 0 && (
-                <Alert className="bg-black/40 border border-green-500/20">
+                <Alert className="bg-black border border-green-500/30">
                   <CheckCircle2 className="h-4 w-4 text-green-400" />
                   <AlertDescription className="text-gray-300">
                     All validation checks passed. Demo data is consistent and ready for use.
@@ -439,7 +453,7 @@ export default function AdminPage() {
         </TabsContent>
 
         {/* System Info Tab */}
-        <TabsContent value="system-info" className="space-y-6">
+          <TabsContent value="system-info" className="flex-1 overflow-y-auto p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Demo Configuration */}
             <Card>
@@ -473,7 +487,7 @@ export default function AdminPage() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-muted-foreground">Trends Enabled</span>
-                        <Badge variant="outline" size="sm">
+                        <Badge variant="outline">
                           {demoState.customizations.enableTrends ? "Yes" : "No"}
                         </Badge>
                       </div>
@@ -516,10 +530,7 @@ export default function AdminPage() {
             </Card>
           </div>
         </TabsContent>
-      </Tabs>
-      
-      {/* Bottom Spacing */}
-      <div className="pb-8"></div>
+        </Tabs>
       </div>
     </div>
   );
