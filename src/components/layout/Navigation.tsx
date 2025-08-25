@@ -19,15 +19,16 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useCurrentProject } from "@/contexts/ProjectContext";
 
 const navigationItems = [
   {
     id: "command-center",
-    label: "Command Center",
-    href: "/dashboard",
-    icon: Home,
-    description: "Central hub for monitoring all GTM activities, KPIs, and real-time performance metrics across channels",
-    value: "Save 10+ hours/week with unified dashboard view"
+    label: "Dashboard",
+    href: "/dashboard/projects",
+    icon: Building2,
+    description: "High-level overview of key metrics, quick actions, and organizational performance insights",
+    value: "Unified project oversight and insights"
   },
   {
     id: "experiments",
@@ -70,14 +71,6 @@ const navigationItems = [
     value: "Improve CAC by 40% and reduce payback time"
   },
   {
-    id: "projects",
-    label: "Projects",
-    href: "/dashboard/projects",
-    icon: Building2,
-    description: "Manage your startup projects, simulations, and campaigns with organized workspace views",
-    value: "Organize GTM efforts into focused project streams"
-  },
-  {
     id: "assistant",
     label: "Assistant",
     href: "/dashboard/assistant",
@@ -103,6 +96,7 @@ interface NavigationProps {
 export function Navigation({ isExpanded, onToggle }: NavigationProps) {
   const pathname = usePathname();
   const [loadingRoute, setLoadingRoute] = useState<string | null>(null);
+  const { currentProject, isLoading: projectLoading } = useCurrentProject();
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -118,12 +112,31 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                 <div className="flex items-center gap-2">
                   <span className="text-white font-bold text-lg neon-glow">STARTUP_PATH</span>
                 </div>
-                <span className="text-red-400 text-sm">Navigation</span>
+                <div className="flex flex-col gap-1">
+                  {currentProject && !projectLoading ? (
+                    <>
+                      <span className="text-blue-400 text-sm truncate">
+                        {currentProject.name}
+                      </span>
+                      <span className="text-white/40 text-xs">
+                        {currentProject.status === 'active' && '● Active Project'} 
+                        {currentProject.status === 'draft' && '○ Draft Project'} 
+                        {currentProject.status === 'paused' && '⏸ Paused Project'} 
+                        {currentProject.status === 'completed' && '✓ Completed Project'} 
+                        {currentProject.status === 'archived' && '📁 Archived Project'}
+                      </span>
+                    </>
+                  ) : projectLoading ? (
+                    <span className="text-white/40 text-xs">Loading project...</span>
+                  ) : (
+                    <span className="text-white/40 text-xs">No project selected</span>
+                  )}
+                </div>
               </div>
             )}
             {!isExpanded && (
-              <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-black rounded-xl flex items-center justify-center shadow-lg shadow-red-500/20 flex-shrink-0">
-                <span className="text-white font-bold text-lg">SP</span>
+              <div className="w-12 h-12 bg-slate-800/30 border border-blue-600/30 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/10 flex-shrink-0">
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
               </div>
             )}
           </div>
@@ -175,12 +188,12 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                       }
                     }}
                     className={cn(
-                      "group relative flex h-12 w-full items-center rounded-xl transition-all duration-300 hover:scale-105",
+                      "group relative flex h-12 w-full items-center rounded-xl transition-all duration-500 ease-in-out hover:scale-105",
                       isExpanded ? "justify-start px-3 gap-3" : "justify-center",
                       isActive ? 
                         "bg-gradient-to-r from-cyan-600/20 to-blue-600/20 border border-cyan-400/30 shadow-lg shadow-cyan-500/10" : 
-                        "hover:bg-white/5 hover:border hover:border-white/10 hover:shadow-lg hover:shadow-white/5",
-                      !isActive && "text-red-200/70 hover:text-white",
+                        "hover:bg-blue-900/20 hover:border hover:border-blue-500/20 hover:shadow-lg hover:shadow-blue-500/10",
+                      !isActive && "text-blue-200/70 hover:text-blue-100",
                       isLoading && "animate-pulse"
                     )}
                     aria-label={item.label}
@@ -198,9 +211,10 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                     
                     <Icon 
                       className={cn(
-                        "h-5 w-5 transition-all duration-300 relative z-10 flex-shrink-0",
+                        "h-5 w-5 transition-all duration-500 ease-in-out relative z-10 flex-shrink-0",
                         isActive && "text-cyan-400 scale-110",
                         !isActive && item.id === "assistant" && "text-red-400",
+                        !isActive && item.id !== "assistant" && "text-blue-300 group-hover:text-blue-200",
                         isLoading && "opacity-50"
                       )} 
                     />
@@ -208,9 +222,9 @@ export function Navigation({ isExpanded, onToggle }: NavigationProps) {
                     {/* Label for expanded state */}
                     {isExpanded && (
                       <span className={cn(
-                        "text-sm font-medium transition-all duration-300 relative z-10",
+                        "text-sm font-medium transition-all duration-500 ease-in-out relative z-10",
                         isActive && "text-cyan-200",
-                        !isActive && "text-red-200/70 group-hover:text-white",
+                        !isActive && "text-blue-200/70 group-hover:text-blue-100",
                         isLoading && "opacity-50"
                       )}>
                         {item.label}

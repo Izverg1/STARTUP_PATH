@@ -107,10 +107,17 @@ class AuthService {
 
   // Helper to create user session from Supabase data
   private async createUserSession(user: any, session: any): Promise<AuthUser> {
-    // Get user profile from users table (using actual table name)
+    // Get user profile from SPATH_users table (using actual table name)
     const { data: userProfile, error: profileError } = await this.supabase!
-      .from('users')
-      .select('*')
+      .from('SPATH_users')
+      .select(`
+        *,
+        SPATH_organizations (
+          id,
+          name,
+          slug
+        )
+      `)
       .eq('id', user.id)
       .single()
 
@@ -126,8 +133,8 @@ class AuthService {
       email: user.email || user.email,
       name: userProfile?.name || user.user_metadata?.name || 'Demo User',
       role: (userProfile?.role as UserRole) || 'owner',
-      orgId: userProfile?.org_id || 'demo-org',
-      orgName: 'STARTUP_PATH Demo', // Simplified - can fetch org separately if needed
+      orgId: userProfile?.SPATH_organizations?.id || '550e8400-e29b-41d4-a716-446655440000',
+      orgName: userProfile?.SPATH_organizations?.name || 'STARTUP_PATH Demo',
       avatarUrl: userProfile?.avatar_url || user.user_metadata?.avatar_url,
       lastLogin: new Date().toISOString(),
       onboardingCompleted: true // Default to true since field doesn't exist in schema
@@ -164,7 +171,7 @@ class AuthService {
 
     // Create professional user session
     const user: AuthUser = {
-      id: 'demo-user-001',
+      id: '550e8400-e29b-41d4-a716-446655440001',
       email: DEMO_USER.email,
       name: DEMO_USER.name,
       role: DEMO_USER.role,
@@ -220,15 +227,15 @@ class AuthService {
       throw new AuthError('No user data received', 'invalid_credentials')
     }
 
-    // Get user profile from users table  
+    // Get user profile from SPATH_users table  
     const { data: userProfile, error: profileError } = await this.supabase
-      .from('users')
+      .from('SPATH_users')
       .select(`
         *,
-        organizations (
+        SPATH_organizations (
           id,
           name,
-          domain
+          slug
         )
       `)
       .eq('id', data.user.id)
@@ -244,8 +251,8 @@ class AuthService {
       email: data.user.email || email,
       name: userProfile?.name || data.user.user_metadata?.name || 'User',
       role: (userProfile?.role as UserRole) || 'owner',
-      orgId: userProfile?.org_id || 'default-org',
-      orgName: userProfile?.organizations?.name || 'STARTUP_PATH',
+      orgId: userProfile?.SPATH_organizations?.id || '550e8400-e29b-41d4-a716-446655440000',
+      orgName: userProfile?.SPATH_organizations?.name || 'STARTUP_PATH',
       avatarUrl: userProfile?.avatar_url || data.user.user_metadata?.avatar_url,
       lastLogin: new Date().toISOString(),
       onboardingCompleted: userProfile?.onboarding_completed || false
@@ -306,7 +313,7 @@ class AuthService {
       email: data.user.email || email,
       name: name,
       role: 'owner',
-      orgId: 'default-org',
+      orgId: '550e8400-e29b-41d4-a716-446655440000',
       orgName: 'STARTUP_PATH',
       lastLogin: new Date().toISOString(),
       onboardingCompleted: false
@@ -357,9 +364,9 @@ class AuthService {
   private generateDemoToken(): string {
     const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
     const payload = btoa(JSON.stringify({
-      sub: 'demo-user-001',
+      sub: '550e8400-e29b-41d4-a716-446655440001',
       email: 'user@startuppath.ai',
-      org: 'spath-demo-org-001',
+      org: '550e8400-e29b-41d4-a716-446655440000',
       role: 'owner',
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor((Date.now() + AUTH_CONFIG.SESSION.duration) / 1000)

@@ -106,7 +106,7 @@ export function useAgents(): UseAgentsReturn {
     updateStatuses()
 
     // Set up polling interval
-    statusUpdateIntervalRef.current = setInterval(updateStatuses, 100) // 100ms polling
+    statusUpdateIntervalRef.current = setInterval(updateStatuses, 2000) // 2s polling (reduced from 100ms)
 
     return () => {
       if (statusUpdateIntervalRef.current) {
