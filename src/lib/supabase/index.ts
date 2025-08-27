@@ -7,18 +7,22 @@
 
 export {
   createClient,
-  createServerSupabaseClient,
-  createMiddlewareClient,
-  createAdminClient,
-  getUser,
-  getSession,
-  getUserProfile,
   type Database,
   type Tables,
   type TablesInsert,
   type TablesUpdate,
   type Enums
 } from './client'
+
+// Server-side exports (only for server components and API routes)
+export {
+  createServerSupabaseClient,
+  createMiddlewareClient,
+  createAdminClient,
+  getUser,
+  getSession,
+  getUserProfile
+} from './server'
 
 // =============================================================================
 // Query utilities exports
@@ -29,6 +33,7 @@ export {
   getOrganization,
   getOrganizationBySlug,
   createOrganization,
+  updateOrganization,
 
   // User queries
   getUserProfile as getUserProfileDetailed,
@@ -120,24 +125,24 @@ export type {
 } from './types'
 
 // Re-export specific table types for convenience
-export type Organization = Tables<'sg_orgs'>
-export type User = Tables<'sg_users'>
-export type Project = Tables<'sg_projects'>
-export type Experiment = Tables<'sg_experiments'>
-export type Channel = Tables<'sg_channels'>
-export type Gate = Tables<'sg_gates'>
-export type Result = Tables<'sg_results'>
-export type Decision = Tables<'sg_decisions'>
-export type Benchmark = Tables<'sg_benchmarks'>
-export type Agent = Tables<'sg_agents'>
-export type AgentState = Tables<'sg_agent_state'>
-export type Artifact = Tables<'sg_artifacts'>
-export type FactSheet = Tables<'sg_fact_sheets'>
-export type Ruleset = Tables<'sg_rulesets'>
-export type Rule = Tables<'sg_rules'>
-export type Space = Tables<'sg_spaces'>
-export type Thread = Tables<'sg_threads'>
-export type Comment = Tables<'sg_comments'>
+export type Organization = Tables<'SPATH_organizations'>
+export type User = Tables<'SPATH_users'>
+export type Project = Tables<'SPATH_projects'>
+export type Experiment = Tables<'SPATH_experiments'>
+export type Channel = Tables<'SPATH_channels'>
+export type Gate = Tables<'SPATH_gates'>
+export type Result = Tables<'SPATH_results'>
+export type Decision = Tables<'SPATH_decisions'>
+export type Benchmark = Tables<'SPATH_benchmarks'>
+export type Agent = Tables<'SPATH_agents'>
+export type AgentState = Tables<'SPATH_agent_state'>
+export type Artifact = Tables<'SPATH_artifacts'>
+export type FactSheet = Tables<'SPATH_fact_sheets'>
+export type Ruleset = Tables<'SPATH_rulesets'>
+export type Rule = Tables<'SPATH_rules'>
+export type Space = Tables<'SPATH_spaces'>
+export type Thread = Tables<'SPATH_threads'>
+export type Comment = Tables<'SPATH_comments'>
 
 // Re-export enum types for convenience
 export type UserRole = Enums<'user_role'>
@@ -160,15 +165,7 @@ export type NotificationTrigger = Enums<'notification_trigger'>
 // Helper functions for common operations
 // =============================================================================
 
-/**
- * Get the current user with full organization context
- */
-export async function getCurrentUserWithOrg() {
-  const user = await getUser()
-  if (!user) return null
-  
-  return await getUserProfile(user.id)
-}
+// Note: getCurrentUserWithOrg moved to server.ts to avoid client-side issues
 
 /**
  * Check if a user has permission to access a resource

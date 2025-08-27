@@ -8,7 +8,7 @@ const AUTH_CONFIG = {
     name: 'Demo User',
     role: 'owner',
     org: 'STARTUP_PATH Demo',
-    orgId: 'spath-demo-org-001'
+    orgId: '550e8400-e29b-41d4-a716-446655440000'
   },
   SESSION: {
     duration: 24 * 60 * 60 * 1000,
@@ -31,7 +31,7 @@ async function testDemoLogin(email, password) {
   await new Promise(resolve => setTimeout(resolve, 300))
   
   const user = {
-    id: 'demo-user-001',
+    id: '550e8400-e29b-41d4-a716-446655440001',
     email: AUTH_CONFIG.DEMO_USER.email,
     name: AUTH_CONFIG.DEMO_USER.name,
     role: AUTH_CONFIG.DEMO_USER.role,

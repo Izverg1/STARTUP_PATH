@@ -5,15 +5,19 @@ import { Navigation } from "./Navigation";
 import { Header } from "./Header";
 import { NavigationTransition } from "./NavigationTransition";
 import { Button } from "@/components/ui/button";
-import { PanelLeftOpen, PanelLeftClose, ChevronDown, ChevronUp, Satellite, Target, BarChart3, TrendingUp } from "lucide-react";
+import { PanelLeftOpen, PanelLeftClose, ChevronDown, ChevronUp, Satellite, Target, BarChart3, TrendingUp, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePerformanceMode } from "@/hooks/usePerformanceMode";
 import { AnimatedComponent } from "@/components/ui/AnimatedComponent";
 import { HeaderProvider } from "@/contexts/HeaderContext";
+import { ProjectProvider } from "@/contexts/ProjectContext";
+import { ProjectOnboardingGate } from "@/components/onboarding/ProjectOnboardingGate";
 import { useEngineStatus, getStatusIndicator } from "@/hooks/useEngineStatus";
 import { AgentCards } from "@/components/dashboard/AgentCards";
 import { InvestorChatbot } from "@/components/chat/InvestorChatbot";
 import { ChatbotToggle } from "@/components/chat/ChatbotToggle";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { AsyncWrapper } from "@/components/ui/async-wrapper";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -24,6 +28,8 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
   // Sidebar state management
   const [isLeftSidebarExpanded, setIsLeftSidebarExpanded] = useState(false);
   const [isRightSidebarExpanded, setIsRightSidebarExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [collapsedSections, setCollapsedSections] = useState<string[]>([]);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -32,35 +38,52 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const engines = useEngineStatus();
   
-  // Debounced hover state for right sidebar
-  const sidebarHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const sidebarLeaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Hover timeouts for both sidebars
+  const leftSidebarHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const leftSidebarLeaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const rightSidebarHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const rightSidebarLeaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Debounced sidebar hover handlers
-  const handleSidebarMouseEnter = () => {
-    // Clear any pending leave timeout
-    if (sidebarLeaveTimeoutRef.current) {
-      clearTimeout(sidebarLeaveTimeoutRef.current);
-      sidebarLeaveTimeoutRef.current = null;
+  // Left sidebar hover handlers - smoother, heavier feel
+  const handleLeftSidebarMouseEnter = () => {
+    if (leftSidebarLeaveTimeoutRef.current) {
+      clearTimeout(leftSidebarLeaveTimeoutRef.current);
+      leftSidebarLeaveTimeoutRef.current = null;
     }
-
-    // Set a small delay before expanding to reduce sensitivity
-    sidebarHoverTimeoutRef.current = setTimeout(() => {
-      setIsRightSidebarExpanded(true);
-    }, 150); // 150ms delay for expansion
+    leftSidebarHoverTimeoutRef.current = setTimeout(() => {
+      setIsLeftSidebarExpanded(true);
+    }, 120);
   };
 
-  const handleSidebarMouseLeave = () => {
-    // Clear any pending enter timeout
-    if (sidebarHoverTimeoutRef.current) {
-      clearTimeout(sidebarHoverTimeoutRef.current);
-      sidebarHoverTimeoutRef.current = null;
+  const handleLeftSidebarMouseLeave = () => {
+    if (leftSidebarHoverTimeoutRef.current) {
+      clearTimeout(leftSidebarHoverTimeoutRef.current);
+      leftSidebarHoverTimeoutRef.current = null;
     }
+    leftSidebarLeaveTimeoutRef.current = setTimeout(() => {
+      setIsLeftSidebarExpanded(false);
+    }, 600);
+  };
 
-    // Set a longer delay before retracting for smoother UX
-    sidebarLeaveTimeoutRef.current = setTimeout(() => {
+  // Right sidebar hover handlers - smoother, heavier feel
+  const handleRightSidebarMouseEnter = () => {
+    if (rightSidebarLeaveTimeoutRef.current) {
+      clearTimeout(rightSidebarLeaveTimeoutRef.current);
+      rightSidebarLeaveTimeoutRef.current = null;
+    }
+    rightSidebarHoverTimeoutRef.current = setTimeout(() => {
+      setIsRightSidebarExpanded(true);
+    }, 120);
+  };
+
+  const handleRightSidebarMouseLeave = () => {
+    if (rightSidebarHoverTimeoutRef.current) {
+      clearTimeout(rightSidebarHoverTimeoutRef.current);
+      rightSidebarHoverTimeoutRef.current = null;
+    }
+    rightSidebarLeaveTimeoutRef.current = setTimeout(() => {
       setIsRightSidebarExpanded(false);
-    }, 400); // 400ms delay for retraction
+    }, 600);
   };
 
   // Helper functions for engine footer
@@ -94,14 +117,28 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
     }
   };
 
-  // Cleanup timeouts on unmount
+  // Mobile detection and cleanup
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     return () => {
-      if (sidebarHoverTimeoutRef.current) {
-        clearTimeout(sidebarHoverTimeoutRef.current);
+      window.removeEventListener('resize', checkMobile);
+      if (leftSidebarHoverTimeoutRef.current) {
+        clearTimeout(leftSidebarHoverTimeoutRef.current);
       }
-      if (sidebarLeaveTimeoutRef.current) {
-        clearTimeout(sidebarLeaveTimeoutRef.current);
+      if (leftSidebarLeaveTimeoutRef.current) {
+        clearTimeout(leftSidebarLeaveTimeoutRef.current);
+      }
+      if (rightSidebarHoverTimeoutRef.current) {
+        clearTimeout(rightSidebarHoverTimeoutRef.current);
+      }
+      if (rightSidebarLeaveTimeoutRef.current) {
+        clearTimeout(rightSidebarLeaveTimeoutRef.current);
       }
     };
   }, []);
@@ -131,229 +168,268 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
 
   return (
     <HeaderProvider>
-      <div className={cn(
-        "flex h-screen bg-black relative overflow-hidden",
-        "bg-grid-pattern"
-      )}>
-        {/* Minimal grid background */}
-        <div className="absolute inset-0 bg-black" />
+      <ProjectProvider>
+        <ProjectOnboardingGate>
+          <div className={cn(
+            "h-screen bg-black relative overflow-hidden",
+            "bg-grid-pattern"
+          )}>
+          {/* Minimal grid background */}
+          <div className="absolute inset-0 bg-black" />
         
-        {/* Navigation - Left Sidebar (expandable) */}
-        <div className={cn(
-          "border-r border-slate-700/40 bg-slate-950/50 relative z-10 transition-all duration-300 backdrop-blur-sm",
-          isLeftSidebarExpanded ? "w-64" : "w-24"
-        )}>
-          <Navigation 
-            isExpanded={isLeftSidebarExpanded} 
-            onToggle={() => setIsLeftSidebarExpanded(!isLeftSidebarExpanded)} 
+        {/* Left Sidebar - Collapsed (always visible on desktop) */}
+        {!isMobile && (
+          <div 
+            className="fixed inset-y-0 left-0 w-16 bg-slate-950/60 border-r border-blue-700/40 backdrop-blur-md z-30 transition-all duration-200 ease-out"
+            onMouseEnter={handleLeftSidebarMouseEnter}
+            onMouseLeave={handleLeftSidebarMouseLeave}
+          >
+            <ErrorBoundary>
+              <Navigation 
+                isExpanded={false} 
+                onToggle={() => {}} // Disabled toggle for hover mode
+              />
+            </ErrorBoundary>
+          </div>
+        )}
+
+        {/* Left Sidebar - Expanded Overlay */}
+        {isLeftSidebarExpanded && (
+          <div 
+            className="fixed top-12 bottom-12 left-0 w-64 bg-slate-950/95 border-r border-blue-600/50 backdrop-blur-xl z-40 transition-all duration-500 ease-in-out shadow-2xl shadow-blue-900/20"
+            onMouseEnter={handleLeftSidebarMouseEnter}
+            onMouseLeave={handleLeftSidebarMouseLeave}
+          >
+            <ErrorBoundary>
+              <Navigation 
+                isExpanded={true} 
+                onToggle={() => {}} // Disabled toggle for hover mode
+              />
+            </ErrorBoundary>
+          </div>
+        )}
+
+        {/* Mobile overlay for left sidebar */}
+        {isMobile && isLeftSidebarExpanded && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-35"
+            onClick={() => setIsLeftSidebarExpanded(false)}
           />
+        )}
+
+        {/* Command Center Area - Fixed width with margins for sidebars */}
+        {/* Header - Flat Red Bar Across Full Width */}
+        <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between bg-red-600 border-b border-black/50 px-4 py-1">
+          {isMobile && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-white hover:bg-red-700/50 mr-4"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          )}
+          <ErrorBoundary>
+            <Header />
+          </ErrorBoundary>
         </div>
 
-        {/* Command Center Area */}
-        <div className="flex flex-1 flex-col min-w-0 relative z-10">
-          {/* Header - Clean */}
-          <div className="flex items-center justify-between border-b border-slate-700/40 bg-slate-950/30 px-4 py-3 backdrop-blur-sm">
-            <Header />
-          </div>
+        <div className={cn(
+          "flex flex-1 flex-col min-w-0 relative z-10 pt-12",
+          isMobile ? "ml-0" : "ml-16 mr-16"
+        )}>
 
           {/* Content Layout */}
           <div className="flex flex-1 min-h-0 flex-col">
             <div className="flex flex-1 min-h-0">
-              {/* Main Content (720-1280px fluid) */}
-              <main className="flex-1 min-w-0 max-w-none lg:max-w-5xl xl:max-w-none overflow-x-auto overflow-y-hidden relative">
-                <div className="mx-auto px-4 py-6 w-full min-w-[720px] max-w-[1280px] h-full">
-                  <NavigationTransition>
-                    {children}
-                  </NavigationTransition>
+              {/* Main Content (responsive) - now takes full width */}
+              <main className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden relative">
+                <div className="mx-auto px-4 py-6 w-full h-full max-w-[1280px] overflow-y-auto dashboard-scrollbar">
+                  <ErrorBoundary>
+                    <NavigationTransition>
+                      <AsyncWrapper loadingMessage="Loading page content...">
+                        {children}
+                      </AsyncWrapper>
+                    </NavigationTransition>
+                  </ErrorBoundary>
                 </div>
               </main>
-
-              {/* Redesigned Right Sidebar - Smooth Debounced Expansion */}
-              {showArtifacts && (
-                <aside 
-                  className={`transition-all duration-300 ease-out border-l border-gray-500/20 bg-gray-950/50 hidden xl:block relative flex flex-col backdrop-blur-sm ${
-                    isRightSidebarExpanded ? 'w-72' : 'w-16'
-                  }`}
-                  onMouseEnter={handleSidebarMouseEnter}
-                  onMouseLeave={handleSidebarMouseLeave}
-                >
-
-                  {/* Condensed View - Clean Mini Cards */}
-                  <div className={`flex-1 flex flex-col items-center p-2 pt-4 space-y-3 ${isRightSidebarExpanded ? 'hidden' : 'flex'}`}>
-                      {/* CAC Mini */}
-                      <div className="w-12 h-12 bg-slate-800/50 border border-slate-600/30 rounded-lg flex flex-col items-center justify-center">
-                        <div className="text-xs text-slate-300">CAC</div>
-                        <div className="text-xs text-white font-bold">$1.8K</div>
-                      </div>
-                      
-                      {/* CVR Mini */}
-                      <div className="w-12 h-12 bg-slate-800/50 border border-slate-600/30 rounded-lg flex flex-col items-center justify-center">
-                        <div className="text-xs text-slate-300">CVR</div>
-                        <div className="text-xs text-white font-bold">3.4%</div>
-                      </div>
-                      
-                      {/* Next Mini */}
-                      <div className="w-12 h-12 bg-slate-800/50 border border-slate-600/30 rounded-lg flex flex-col items-center justify-center">
-                        <div className="text-xs text-slate-300">Next</div>
-                        <div className="text-xs text-white font-bold">LI</div>
-                      </div>
-                      
-                      {/* Live Indicator */}
-                      <div className="flex flex-col items-center pt-2">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <div className="text-xs text-green-300 mt-1">LIVE</div>
-                      </div>
-                    </div>
-
-                  {/* Expanded View - Properly Contained Text */}
-                  <div ref={sidebarRef} className={`h-full p-4 pt-4 overflow-hidden flex-col ${isRightSidebarExpanded ? 'flex' : 'hidden'}`}>
-                      {/* Header - Cleaner */}
-                      <div className="mb-4 shrink-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h2 className="text-base font-semibold text-white">Live Analytics</h2>
-                          <div className="flex items-center gap-1">
-                            <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
-                            <span className="text-xs text-green-300">LIVE</span>
-                          </div>
-                        </div>
-                        <p className="text-xs text-gray-400">Real-time optimization data</p>
-                      </div>
-                    
-                      <div className="flex-1 overflow-y-auto space-y-4">
-                        {/* Performance Metrics - Compact Cards */}
-                        <div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleSection('performance')}
-                            className="w-full justify-between text-white hover:bg-slate-800/50 p-2 h-auto rounded-md"
-                          >
-                            <span className="text-sm font-medium">Performance</span>
-                            {collapsedSections.includes('performance') ? (
-                              <ChevronDown className="h-3 w-3" />
-                            ) : (
-                              <ChevronUp className="h-3 w-3" />
-                            )}
-                          </Button>
-                          {!collapsedSections.includes('performance') && (
-                            <div className="space-y-2 mt-2">
-                              {/* CAC Card */}
-                              <div className="p-3 bg-slate-900/30 border border-slate-700/40 rounded-md">
-                                <div className="flex items-center justify-between mb-1">
-                                  <span className="text-xs text-slate-300">Current CAC</span>
-                                  <span className="text-xs text-orange-400 bg-orange-900/20 px-1.5 py-0.5 rounded">↑ 5.2%</span>
-                                </div>
-                                <div className="text-lg text-white font-bold">$1,850</div>
-                                <div className="text-xs text-slate-400 break-words">
-                                  Target: $1,500<br />
-                                  Benchmark: $1,200
-                                </div>
-                              </div>
-                              
-                              {/* CVR Card */}
-                              <div className="p-3 bg-slate-900/30 border border-slate-700/40 rounded-md">
-                                <div className="flex items-center justify-between mb-1">
-                                  <span className="text-xs text-slate-300">Conversion Rate</span>
-                                  <span className="text-xs text-green-400 bg-green-900/20 px-1.5 py-0.5 rounded">↑ 8.1%</span>
-                                </div>
-                                <div className="text-lg text-white font-bold">3.4%</div>
-                                <div className="text-xs text-slate-400 break-words">
-                                  Industry: 3.0%<br />
-                                  YC Avg: 2.8%
-                                </div>
-                              </div>
-                              
-                              {/* Next Experiment */}
-                              <div className="p-3 bg-slate-900/30 border border-slate-700/40 rounded-md">
-                                <div className="flex items-center justify-between mb-1">
-                                  <span className="text-xs text-slate-300">Next Test</span>
-                                  <span className="text-xs text-blue-400 bg-blue-900/20 px-1.5 py-0.5 rounded">1.8x ROI</span>
-                                </div>
-                                <div className="text-sm text-white font-medium">LinkedIn A/B</div>
-                                <div className="text-xs text-slate-400 break-words">
-                                  Budget: $2,500<br />
-                                  Duration: 14 days
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        
-                        {/* Strategic Insights - Compact */}
-                        <div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleSection('insights')}
-                            className="w-full justify-between text-white hover:bg-slate-800/50 p-2 h-auto rounded-md"
-                          >
-                            <span className="text-sm font-medium">Insights</span>
-                            {collapsedSections.includes('insights') ? (
-                              <ChevronDown className="h-3 w-3" />
-                            ) : (
-                              <ChevronUp className="h-3 w-3" />
-                            )}
-                          </Button>
-                          {!collapsedSections.includes('insights') && (
-                            <div className="space-y-1.5 mt-2">
-                              <div className="p-2 bg-cyan-950/30 border border-cyan-500/20 rounded text-xs text-cyan-300 break-words">
-                                📊 Organic traffic converting 2.3x better
-                              </div>
-                              <div className="p-2 bg-purple-950/30 border border-purple-500/20 rounded text-xs text-purple-300 break-words">
-                                🎯 Product demos: 67% qualification rate
-                              </div>
-                              <div className="p-2 bg-orange-950/30 border border-orange-500/20 rounded text-xs text-orange-300 break-words">
-                                ⚡ Email A/B tests needed for subject lines
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        
-                        {/* Action Center - Subtle */}
-                        <div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleSection('actions')}
-                            className="w-full justify-between text-white hover:bg-slate-800/50 p-2 h-auto bg-slate-900/20 border border-slate-600/20 rounded-md"
-                          >
-                            <span className="text-sm font-medium flex items-center gap-2">
-                              <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
-                              Actions
-                            </span>
-                            {collapsedSections.includes('actions') ? (
-                              <ChevronDown className="h-3 w-3" />
-                            ) : (
-                              <ChevronUp className="h-3 w-3" />
-                            )}
-                          </Button>
-                          {!collapsedSections.includes('actions') && (
-                            <div className="space-y-1.5 mt-2">
-                              <Button size="sm" className="w-full bg-slate-700/60 hover:bg-slate-600/80 text-white text-xs border-none h-8">
-                                📈 Dashboard
-                              </Button>
-                              <Button size="sm" variant="outline" className="w-full border-slate-600/30 text-slate-300 hover:bg-slate-800/50 text-xs h-8">
-                                📊 Export
-                              </Button>
-                              <Button size="sm" variant="outline" className="w-full border-slate-600/30 text-slate-300 hover:bg-slate-800/50 text-xs h-8">
-                                🎯 Schedule
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                </aside>
-              )}
             </div>
 
-            {/* Collapsible Enhanced Footer */}
-            <div className="relative">
-              {/* Bottom Indicator - Always Visible */}
+            {/* Right Sidebar - Collapsed (always visible) */}
+            {showArtifacts && !isMobile && (
               <div 
-                className="shrink-0 bg-slate-950/50 border-t border-slate-700/40 px-6 py-2 cursor-pointer hover:bg-slate-800/30 transition-all duration-200 backdrop-blur-sm"
-                onMouseEnter={() => setIsFooterExpanded(true)}
+                className="fixed top-20 bottom-0 right-0 w-16 bg-slate-950/60 border-l border-red-700/40 backdrop-blur-md z-30 transition-all duration-200 ease-out"
+                onMouseEnter={handleRightSidebarMouseEnter}
+                onMouseLeave={handleRightSidebarMouseLeave}
               >
+                <div className="flex-1 flex flex-col items-center p-2 pt-8 space-y-4">
+                  {/* CAC Mini */}
+                  <div className="w-12 h-12 bg-red-900/30 border border-red-600/40 rounded-lg flex flex-col items-center justify-center hover:bg-red-800/40 transition-colors">
+                    <div className="text-xs text-red-300">CAC</div>
+                    <div className="text-xs text-red-100 font-bold">$1.8K</div>
+                  </div>
+                  
+                  {/* CVR Mini */}
+                  <div className="w-12 h-12 bg-red-900/30 border border-red-600/40 rounded-lg flex flex-col items-center justify-center hover:bg-red-800/40 transition-colors">
+                    <div className="text-xs text-red-300">CVR</div>
+                    <div className="text-xs text-red-100 font-bold">3.4%</div>
+                  </div>
+                  
+                  {/* Next Mini */}
+                  <div className="w-12 h-12 bg-red-900/30 border border-red-600/40 rounded-lg flex flex-col items-center justify-center hover:bg-red-800/40 transition-colors">
+                    <div className="text-xs text-red-300">Next</div>
+                    <div className="text-xs text-red-100 font-bold">LI</div>
+                  </div>
+                  
+                  {/* Live Indicator */}
+                  <div className="flex flex-col items-center pt-2">
+                    <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse shadow-red-400/50 shadow-sm"></div>
+                    <div className="text-xs text-red-300 mt-1">LIVE</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Right Sidebar - Expanded Overlay */}
+            {isRightSidebarExpanded && showArtifacts && !isMobile && (
+              <div 
+                className="fixed top-12 bottom-12 right-0 w-72 bg-slate-950/95 border-l border-red-600/50 backdrop-blur-xl z-40 transition-all duration-500 ease-in-out shadow-2xl shadow-red-900/20"
+                onMouseEnter={handleRightSidebarMouseEnter}
+                onMouseLeave={handleRightSidebarMouseLeave}
+              >
+                <div ref={sidebarRef} className="h-full p-4 pt-4 overflow-hidden flex flex-col">
+                  {/* Header */}
+                  <div className="mb-4 shrink-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h2 className="text-base font-semibold text-white">Live Analytics</h2>
+                      <div className="flex items-center gap-1">
+                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                        <span className="text-xs text-green-300">LIVE</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-400">Real-time optimization data</p>
+                  </div>
+                
+                  <div className="flex-1 overflow-y-auto space-y-4">
+                    {/* Performance Metrics */}
+                    <div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleSection('performance')}
+                        className="w-full justify-between text-white hover:bg-slate-800/50 p-2 h-auto rounded-md"
+                      >
+                        <span className="text-sm font-medium">Performance</span>
+                        {collapsedSections.includes('performance') ? (
+                          <ChevronDown className="h-3 w-3" />
+                        ) : (
+                          <ChevronUp className="h-3 w-3" />
+                        )}
+                      </Button>
+                      {!collapsedSections.includes('performance') && (
+                        <div className="space-y-2 mt-2">
+                          {/* CAC Card */}
+                          <div className="p-3 bg-slate-900/30 border border-slate-700/40 rounded-md">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-xs text-slate-300">Current CAC</span>
+                              <span className="text-xs text-orange-400 bg-orange-900/20 px-1.5 py-0.5 rounded">↑ 5.2%</span>
+                            </div>
+                            <div className="text-lg text-white font-bold">$1,850</div>
+                            <div className="text-xs text-slate-400 break-words">
+                              Target: $1,500<br />
+                              Benchmark: $1,200
+                            </div>
+                          </div>
+                          
+                          {/* CVR Card */}
+                          <div className="p-3 bg-slate-900/30 border border-slate-700/40 rounded-md">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-xs text-slate-300">Conversion Rate</span>
+                              <span className="text-xs text-green-400 bg-green-900/20 px-1.5 py-0.5 rounded">↑ 8.1%</span>
+                            </div>
+                            <div className="text-lg text-white font-bold">3.4%</div>
+                            <div className="text-xs text-slate-400 break-words">
+                              Industry: 3.0%<br />
+                              YC Avg: 2.8%
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Strategic Insights */}
+                    <div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleSection('insights')}
+                        className="w-full justify-between text-white hover:bg-slate-800/50 p-2 h-auto rounded-md"
+                      >
+                        <span className="text-sm font-medium">Insights</span>
+                        {collapsedSections.includes('insights') ? (
+                          <ChevronDown className="h-3 w-3" />
+                        ) : (
+                          <ChevronUp className="h-3 w-3" />
+                        )}
+                      </Button>
+                      {!collapsedSections.includes('insights') && (
+                        <div className="space-y-1.5 mt-2">
+                          <div className="p-2 bg-cyan-950/30 border border-cyan-500/20 rounded text-xs text-cyan-300 break-words">
+                            📊 Organic traffic converting 2.3x better
+                          </div>
+                          <div className="p-2 bg-purple-950/30 border border-purple-500/20 rounded text-xs text-purple-300 break-words">
+                            🎯 Product demos: 67% qualification rate
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Action Center */}
+                    <div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleSection('actions')}
+                        className="w-full justify-between text-white hover:bg-slate-800/50 p-2 h-auto bg-slate-900/20 border border-slate-600/20 rounded-md"
+                      >
+                        <span className="text-sm font-medium flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
+                          Actions
+                        </span>
+                        {collapsedSections.includes('actions') ? (
+                          <ChevronDown className="h-3 w-3" />
+                        ) : (
+                          <ChevronUp className="h-3 w-3" />
+                        )}
+                      </Button>
+                      {!collapsedSections.includes('actions') && (
+                        <div className="space-y-1.5 mt-2">
+                          <Button size="sm" className="w-full bg-slate-700/60 hover:bg-slate-600/80 text-white text-xs border-none h-8">
+                            📈 Dashboard
+                          </Button>
+                          <Button size="sm" variant="outline" className="w-full border-slate-600/30 text-slate-300 hover:bg-slate-800/50 text-xs h-8">
+                            📊 Export
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Collapsible Enhanced Footer - Fixed to bottom (hidden on mobile) */}
+        {!isMobile && (
+          <div className="fixed bottom-0 left-16 right-16 z-20">
+            {/* Bottom Indicator - Always Visible */}
+            <div 
+              className="shrink-0 bg-slate-950/80 border-t border-slate-700/40 px-6 py-2 cursor-pointer hover:bg-slate-800/30 transition-all duration-200 backdrop-blur-md"
+              onMouseEnter={() => setIsFooterExpanded(true)}
+            >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {/* Dynamic Engine Status Indicators */}
@@ -382,14 +458,14 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
 
               {/* Expanded Footer - Appears on Hover */}
               <div 
-                className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/98 via-slate-950/95 to-slate-950/90 border-t border-red-500/40 border-l border-r border-red-500/25 transition-all duration-300 ease-in-out z-50 backdrop-blur-lg shadow-2xl ${
+                className={`absolute bottom-full left-0 right-0 bg-slate-950/95 border-t border-red-500/40 border-l border-r border-red-500/25 transition-all duration-300 ease-in-out z-50 backdrop-blur-lg shadow-2xl ${
                   isFooterExpanded ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
                 }`}
                 style={{ height: '35vh' }}
                 onMouseLeave={() => setIsFooterExpanded(false)}
               >
                 {/* Elegant top accent line */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-400/60 to-transparent"></div>
+                <div className="absolute top-0 left-0 right-0 h-px bg-red-500/30"></div>
                 {/* Enhanced Engine Footer Content */}
                 <div className="h-full flex flex-col p-6">
                 {/* Header */}
@@ -433,7 +509,7 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
                     const bgColors = ['bg-blue-500/20', 'bg-indigo-500/20', 'bg-purple-500/20', 'bg-green-500/20'];
                     
                     return (
-                      <div key={engine.id} className={`bg-gradient-to-br ${gradients[index]} border border-slate-600/40 rounded-lg p-4 hover:border-slate-500/60 transition-all duration-200`}>
+                      <div key={engine.id} className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-4 hover:bg-slate-900/70 hover:border-slate-600/50 transition-colors duration-200">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-2">
                             <div className={`w-8 h-8 ${bgColors[index]} rounded-lg flex items-center justify-center`}>
@@ -495,22 +571,25 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
                     Next optimization cycle: 3m 42s
                   </div>
                 </div>
-                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
 
-      {/* Investor Chatbot */}
-      <ChatbotToggle 
-        onClick={() => setIsChatbotOpen(true)} 
-        isOpen={isChatbotOpen}
-      />
-      <InvestorChatbot 
-        isOpen={isChatbotOpen} 
-        onToggle={() => setIsChatbotOpen(!isChatbotOpen)}
-      />
+        {/* Investor Chatbot */}
+        <ErrorBoundary>
+          <ChatbotToggle 
+            onClick={() => setIsChatbotOpen(true)} 
+            isOpen={isChatbotOpen}
+          />
+          <InvestorChatbot 
+            isOpen={isChatbotOpen} 
+            onToggle={() => setIsChatbotOpen(!isChatbotOpen)}
+          />
+        </ErrorBoundary>
+        </div>
+        </ProjectOnboardingGate>
+      </ProjectProvider>
     </HeaderProvider>
   );
 }

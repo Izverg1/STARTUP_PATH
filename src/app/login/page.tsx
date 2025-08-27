@@ -132,7 +132,7 @@ export default function LoginPage() {
   }
 
   const handleTransitionComplete = () => {
-    router.push('/dashboard')
+    router.push('/dashboard/projects')
   }
 
   const channelLogos = [

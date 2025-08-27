@@ -1,33 +1,33 @@
-import { createServerSupabaseClient } from '@/lib/supabase/client'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
 import type { Database, Tables, TablesInsert, TablesUpdate } from '@/lib/supabase/client'
 
 // =============================================================================
 // Type Aliases for Convenience
 // =============================================================================
 
-type Organization = Tables<'sg_orgs'>
-type User = Tables<'sg_users'>
-type Project = Tables<'sg_projects'>
-type Experiment = Tables<'sg_experiments'>
-type Channel = Tables<'sg_channels'>
-type Gate = Tables<'sg_gates'>
-type Result = Tables<'sg_results'>
-type Decision = Tables<'sg_decisions'>
-type Benchmark = Tables<'sg_benchmarks'>
-type Agent = Tables<'sg_agents'>
-type AgentState = Tables<'sg_agent_state'>
-type Artifact = Tables<'sg_artifacts'>
-type FactSheet = Tables<'sg_fact_sheets'>
+type Organization = Tables<'SPATH_orgs'>
+type User = Tables<'SPATH_users'>
+type Project = Tables<'SPATH_projects'>
+type Experiment = Tables<'SPATH_experiments'>
+type Channel = Tables<'SPATH_channels'>
+type Gate = Tables<'SPATH_gates'>
+type Result = Tables<'SPATH_results'>
+type Decision = Tables<'SPATH_decisions'>
+type Benchmark = Tables<'SPATH_benchmarks'>
+type Agent = Tables<'SPATH_agents'>
+type AgentState = Tables<'SPATH_agent_state'>
+type Artifact = Tables<'SPATH_artifacts'>
+type FactSheet = Tables<'SPATH_fact_sheets'>
 
-type OrganizationInsert = TablesInsert<'sg_orgs'>
-type UserInsert = TablesInsert<'sg_users'>
-type ProjectInsert = TablesInsert<'sg_projects'>
-type ExperimentInsert = TablesInsert<'sg_experiments'>
-type ChannelInsert = TablesInsert<'sg_channels'>
-type GateInsert = TablesInsert<'sg_gates'>
-type ResultInsert = TablesInsert<'sg_results'>
-type DecisionInsert = TablesInsert<'sg_decisions'>
-type ArtifactInsert = TablesInsert<'sg_artifacts'>
+type OrganizationInsert = TablesInsert<'SPATH_orgs'>
+type UserInsert = TablesInsert<'SPATH_users'>
+type ProjectInsert = TablesInsert<'SPATH_projects'>
+type ExperimentInsert = TablesInsert<'SPATH_experiments'>
+type ChannelInsert = TablesInsert<'SPATH_channels'>
+type GateInsert = TablesInsert<'SPATH_gates'>
+type ResultInsert = TablesInsert<'SPATH_results'>
+type DecisionInsert = TablesInsert<'SPATH_decisions'>
+type ArtifactInsert = TablesInsert<'SPATH_artifacts'>
 
 // =============================================================================
 // Organization Queries
@@ -37,7 +37,7 @@ export async function getOrganization(orgId: string): Promise<Organization | nul
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_orgs')
+    .from('SPATH_orgs')
     .select('*')
     .eq('id', orgId)
     .single()
@@ -54,7 +54,7 @@ export async function getOrganizationBySlug(slug: string): Promise<Organization 
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_orgs')
+    .from('SPATH_orgs')
     .select('*')
     .eq('slug', slug)
     .single()
@@ -71,7 +71,7 @@ export async function createOrganization(org: OrganizationInsert): Promise<Organ
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_orgs')
+    .from('SPATH_orgs')
     .insert(org)
     .select()
     .single()
@@ -84,18 +84,36 @@ export async function createOrganization(org: OrganizationInsert): Promise<Organ
   return data
 }
 
+export async function updateOrganization(orgId: string, updates: Partial<OrganizationInsert>): Promise<Organization | null> {
+  const supabase = await createServerSupabaseClient()
+  
+  const { data, error } = await supabase
+    .from('SPATH_orgs')
+    .update(updates)
+    .eq('id', orgId)
+    .select()
+    .single()
+  
+  if (error) {
+    console.error('Error updating organization:', error.message)
+    return null
+  }
+  
+  return data
+}
+
 // =============================================================================
 // User Queries
 // =============================================================================
 
-export async function getUserProfile(userId: string): Promise<(User & { sg_orgs: Organization }) | null> {
+export async function getUserProfile(userId: string): Promise<(User & { SPATH_orgs: Organization }) | null> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_users')
+    .from('SPATH_users')
     .select(`
       *,
-      sg_orgs:org_id (
+      SPATH_orgs (
         id,
         name,
         slug,
@@ -111,14 +129,14 @@ export async function getUserProfile(userId: string): Promise<(User & { sg_orgs:
     return null
   }
   
-  return data as User & { sg_orgs: Organization }
+  return data as User & { SPATH_orgs: Organization }
 }
 
 export async function getOrganizationUsers(orgId: string): Promise<User[]> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_users')
+    .from('SPATH_users')
     .select('*')
     .eq('org_id', orgId)
     .eq('is_active', true)
@@ -136,7 +154,7 @@ export async function createUser(user: UserInsert): Promise<User | null> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_users')
+    .from('SPATH_users')
     .insert(user)
     .select()
     .single()
@@ -149,11 +167,11 @@ export async function createUser(user: UserInsert): Promise<User | null> {
   return data
 }
 
-export async function updateUserProfile(userId: string, updates: Partial<TablesUpdate<'sg_users'>>): Promise<User | null> {
+export async function updateUserProfile(userId: string, updates: Partial<TablesUpdate<'SPATH_users'>>): Promise<User | null> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_users')
+    .from('SPATH_users')
     .update(updates)
     .eq('id', userId)
     .select()
@@ -175,7 +193,7 @@ export async function getOrganizationProjects(orgId: string): Promise<Project[]>
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_projects')
+    .from('SPATH_projects')
     .select('*')
     .eq('org_id', orgId)
     .order('updated_at', { ascending: false })
@@ -192,7 +210,7 @@ export async function getProject(projectId: string): Promise<Project | null> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_projects')
+    .from('SPATH_projects')
     .select('*')
     .eq('id', projectId)
     .single()
@@ -209,7 +227,7 @@ export async function createProject(project: ProjectInsert): Promise<Project | n
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_projects')
+    .from('SPATH_projects')
     .insert(project)
     .select()
     .single()
@@ -222,11 +240,11 @@ export async function createProject(project: ProjectInsert): Promise<Project | n
   return data
 }
 
-export async function updateProject(projectId: string, updates: Partial<TablesUpdate<'sg_projects'>>): Promise<Project | null> {
+export async function updateProject(projectId: string, updates: Partial<TablesUpdate<'SPATH_projects'>>): Promise<Project | null> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_projects')
+    .from('SPATH_projects')
     .update(updates)
     .eq('id', projectId)
     .select()
@@ -248,7 +266,7 @@ export async function getProjectExperiments(projectId: string): Promise<Experime
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_experiments')
+    .from('SPATH_experiments')
     .select('*')
     .eq('project_id', projectId)
     .order('created_at', { ascending: false })
@@ -265,7 +283,7 @@ export async function getExperiment(experimentId: string): Promise<Experiment | 
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_experiments')
+    .from('SPATH_experiments')
     .select('*')
     .eq('id', experimentId)
     .single()
@@ -282,12 +300,12 @@ export async function getExperimentWithChannels(experimentId: string): Promise<(
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_experiments')
+    .from('SPATH_experiments')
     .select(`
       *,
-      channels:sg_channels (
+      channels:SPATH_channels (
         *,
-        gates:sg_gates (*)
+        gates:SPATH_gates (*)
       )
     `)
     .eq('id', experimentId)
@@ -305,7 +323,7 @@ export async function createExperiment(experiment: ExperimentInsert): Promise<Ex
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_experiments')
+    .from('SPATH_experiments')
     .insert(experiment)
     .select()
     .single()
@@ -318,11 +336,11 @@ export async function createExperiment(experiment: ExperimentInsert): Promise<Ex
   return data
 }
 
-export async function updateExperiment(experimentId: string, updates: Partial<TablesUpdate<'sg_experiments'>>): Promise<Experiment | null> {
+export async function updateExperiment(experimentId: string, updates: Partial<TablesUpdate<'SPATH_experiments'>>): Promise<Experiment | null> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_experiments')
+    .from('SPATH_experiments')
     .update(updates)
     .eq('id', experimentId)
     .select()
@@ -344,10 +362,10 @@ export async function getExperimentChannels(experimentId: string): Promise<(Chan
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_channels')
+    .from('SPATH_channels')
     .select(`
       *,
-      gates:sg_gates (*)
+      gates:SPATH_gates (*)
     `)
     .eq('experiment_id', experimentId)
     .order('created_at', { ascending: true })
@@ -364,7 +382,7 @@ export async function createChannel(channel: ChannelInsert): Promise<Channel | n
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_channels')
+    .from('SPATH_channels')
     .insert(channel)
     .select()
     .single()
@@ -381,7 +399,7 @@ export async function updateChannelWeight(channelId: string, weight: number): Pr
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_channels')
+    .from('SPATH_channels')
     .update({ current_weight: weight })
     .eq('id', channelId)
     .select()
@@ -403,7 +421,7 @@ export async function createGate(gate: GateInsert): Promise<Gate | null> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_gates')
+    .from('SPATH_gates')
     .insert(gate)
     .select()
     .single()
@@ -420,7 +438,7 @@ export async function getChannelGates(channelId: string): Promise<Gate[]> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_gates')
+    .from('SPATH_gates')
     .select('*')
     .eq('channel_id', channelId)
     .order('created_at', { ascending: true })
@@ -441,7 +459,7 @@ export async function getChannelResults(channelId: string, startDate?: string, e
   const supabase = await createServerSupabaseClient()
   
   let query = supabase
-    .from('sg_results')
+    .from('SPATH_results')
     .select('*')
     .eq('channel_id', channelId)
     .order('date', { ascending: true })
@@ -468,14 +486,14 @@ export async function getExperimentResults(experimentId: string, startDate?: str
   const supabase = await createServerSupabaseClient()
   
   let query = supabase
-    .from('sg_results')
+    .from('SPATH_results')
     .select(`
       *,
-      channel:sg_channels (*)
+      channel:SPATH_channels (*)
     `)
     .in('channel_id', 
       supabase
-        .from('sg_channels')
+        .from('SPATH_channels')
         .select('id')
         .eq('experiment_id', experimentId)
     )
@@ -503,7 +521,7 @@ export async function createResult(result: ResultInsert): Promise<Result | null>
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_results')
+    .from('SPATH_results')
     .insert(result)
     .select()
     .single()
@@ -520,7 +538,7 @@ export async function upsertResult(result: ResultInsert): Promise<Result | null>
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_results')
+    .from('SPATH_results')
     .upsert(result, { 
       onConflict: 'channel_id,date',
       ignoreDuplicates: false 
@@ -544,7 +562,7 @@ export async function getExperimentDecisions(experimentId: string): Promise<Deci
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_decisions')
+    .from('SPATH_decisions')
     .select('*')
     .eq('experiment_id', experimentId)
     .order('created_at', { ascending: false })
@@ -561,7 +579,7 @@ export async function createDecision(decision: DecisionInsert): Promise<Decision
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_decisions')
+    .from('SPATH_decisions')
     .insert(decision)
     .select()
     .single()
@@ -582,7 +600,7 @@ export async function getBenchmarks(channelType?: string, vertical?: string, com
   const supabase = await createServerSupabaseClient()
   
   let query = supabase
-    .from('sg_benchmarks')
+    .from('SPATH_benchmarks')
     .select('*')
     .order('updated_at', { ascending: false })
   
@@ -617,7 +635,7 @@ export async function getBenchmarkForMetric(
   const supabase = await createServerSupabaseClient()
   
   let query = supabase
-    .from('sg_benchmarks')
+    .from('SPATH_benchmarks')
     .select('*')
     .eq('metric', metric)
   
@@ -651,7 +669,7 @@ export async function getAgents(): Promise<Agent[]> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_agents')
+    .from('SPATH_agents')
     .select('*')
     .eq('is_active', true)
     .order('created_at', { ascending: true })
@@ -668,7 +686,7 @@ export async function getProjectAgentStates(projectId: string): Promise<AgentSta
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_agent_state')
+    .from('SPATH_agent_state')
     .select('*')
     .eq('project_id', projectId)
   
@@ -680,11 +698,11 @@ export async function getProjectAgentStates(projectId: string): Promise<AgentSta
   return data
 }
 
-export async function upsertAgentState(projectId: string, agentKey: string, state: Partial<TablesUpdate<'sg_agent_state'>>): Promise<AgentState | null> {
+export async function upsertAgentState(projectId: string, agentKey: string, state: Partial<TablesUpdate<'SPATH_agent_state'>>): Promise<AgentState | null> {
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_agent_state')
+    .from('SPATH_agent_state')
     .upsert({
       project_id: projectId,
       agent_key: agentKey,
@@ -712,7 +730,7 @@ export async function getProjectArtifacts(projectId: string, limit: number = 50)
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_artifacts')
+    .from('SPATH_artifacts')
     .select('*')
     .eq('project_id', projectId)
     .order('created_at', { ascending: false })
@@ -732,7 +750,7 @@ export async function createArtifact(artifact: ArtifactInsert): Promise<Artifact
   // Mark previous versions as not current
   if (artifact.is_current) {
     await supabase
-      .from('sg_artifacts')
+      .from('SPATH_artifacts')
       .update({ is_current: false })
       .eq('project_id', artifact.project_id)
       .eq('agent_key', artifact.agent_key)
@@ -740,7 +758,7 @@ export async function createArtifact(artifact: ArtifactInsert): Promise<Artifact
   }
   
   const { data, error } = await supabase
-    .from('sg_artifacts')
+    .from('SPATH_artifacts')
     .insert(artifact)
     .select()
     .single()
@@ -761,7 +779,7 @@ export async function getProjectFactSheets(projectId: string): Promise<FactSheet
   const supabase = await createServerSupabaseClient()
   
   const { data, error } = await supabase
-    .from('sg_fact_sheets')
+    .from('SPATH_fact_sheets')
     .select('*')
     .eq('project_id', projectId)
     .order('created_at', { ascending: false })
@@ -778,7 +796,7 @@ export async function getLatestFactSheet(projectId: string, experimentId?: strin
   const supabase = await createServerSupabaseClient()
   
   let query = supabase
-    .from('sg_fact_sheets')
+    .from('SPATH_fact_sheets')
     .select('*')
     .eq('project_id', projectId)
     .order('created_at', { ascending: false })

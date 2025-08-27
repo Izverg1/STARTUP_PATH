@@ -15,28 +15,28 @@ export interface EngineState {
 const INITIAL_ENGINES: EngineState[] = [
   {
     id: 'channel-discovery',
-    name: 'Channel Discovery Engine',
+    name: 'Channel Agent',
     status: 'processing',
     statusText: 'Scanning LinkedIn, Google Ads, cold email...',
     currentTask: 'Testing micro-budgets'
   },
   {
     id: 'campaign-optimization', 
-    name: 'Campaign Optimization Engine',
+    name: 'Campaign Agent',
     status: 'stopped',
     statusText: 'Idle - Ready to start A/B tests...',
     currentTask: 'Awaiting configuration'
   },
   {
     id: 'performance-analytics',
-    name: 'Performance Analytics Engine',
+    name: 'Analytics Agent',
     status: 'insights',
     statusText: 'Monitoring 500K+ data points...',
     currentTask: 'Trend detection'
   },
   {
     id: 'budget-allocation',
-    name: 'Budget Allocation Engine',
+    name: 'Finance Agent',
     status: 'reallocating',
     statusText: 'Thompson sampling optimization...',
     currentTask: 'Reallocating $15K budget'

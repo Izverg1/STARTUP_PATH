@@ -211,7 +211,8 @@ export default function SpaceLandingPage() {
           ref={containerRef}
           className="absolute inset-0 flex transition-all duration-1200 ease-out"
           style={{ 
-            transform: `translateX(-${currentSlide * 100}%)`
+            transform: `translateX(-${currentSlide * 100}%)`,
+            willChange: 'transform'
           }}
         >
         {/* Slide 1: Hero */}
@@ -600,14 +601,14 @@ export default function SpaceLandingPage() {
             {/* The 4-Agent Team */}
             <div className="grid grid-cols-2 gap-3 max-w-4xl mx-auto mb-4">
               
-              {/* Agent 1: Channel Discovery Engine */}
+              {/* Agent 1: Channel Agent */}
               <Card className="bg-black border border-cyan-500/30 p-3 hover:border-cyan-500/50 transition-all duration-300">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
                     <Satellite className="w-4 h-4 text-cyan-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-cyan-400">Channel Discovery Engine</h3>
+                    <h3 className="text-sm font-bold text-cyan-400">Channel Agent</h3>
                     <p className="text-xs text-gray-400">Identifies & validates opportunities</p>
                   </div>
                 </div>
@@ -620,7 +621,7 @@ export default function SpaceLandingPage() {
                     <MetricPopup 
                       metric="Channel Discovery Rate"
                       value="3-5 validated channels/month"
-                      rationale="Channel Discovery Engine identifies 3-5 new profitable marketing channels monthly through systematic testing, compared to manual discovery which averages 0.5 channels per quarter."
+                      rationale="Channel Agent identifies 3-5 new profitable marketing channels monthly through systematic testing, compared to manual discovery which averages 0.5 channels per quarter."
                       methodology="Analysis of channel discovery rates across 200+ B2B SaaS companies using automated vs manual channel testing approaches."
                       source="STARTUP_PATH Internal Analytics 2024"
                       className="text-cyan-400 font-bold"
@@ -629,14 +630,14 @@ export default function SpaceLandingPage() {
                 </div>
               </Card>
 
-              {/* Agent 2: Campaign Optimization Engine */}
+              {/* Agent 2: Campaign Agent */}
               <Card className="bg-black border border-red-500/30 p-3 hover:border-red-500/50 transition-all duration-300">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
                     <Target className="w-4 h-4 text-red-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-red-400">Campaign Optimization Engine</h3>
+                    <h3 className="text-sm font-bold text-red-400">Campaign Agent</h3>
                     <p className="text-xs text-gray-400">Optimizes messaging & creative</p>
                   </div>
                 </div>
@@ -649,7 +650,7 @@ export default function SpaceLandingPage() {
                     <MetricPopup 
                       metric="Conversion Rate Improvement"
                       value="40-85% CTR increase"
-                      rationale="Campaign Optimization Engine uses multivariate testing to optimize messaging, typically achieving 40-85% improvement in click-through rates compared to single-variant manual testing."
+                      rationale="Campaign Agent uses multivariate testing to optimize messaging, typically achieving 40-85% improvement in click-through rates compared to single-variant manual testing."
                       methodology="Meta-analysis of 500+ A/B test campaigns showing automated multivariate testing vs manual single-variant approaches across B2B SaaS companies."
                       source="Marketing Optimization Research 2024"
                       sourceUrl="https://optimization.com/b2b-testing-benchmarks"
@@ -659,14 +660,14 @@ export default function SpaceLandingPage() {
                 </div>
               </Card>
 
-              {/* Agent 3: Performance Analytics Engine */}
+              {/* Agent 3: Analytics Agent */}
               <Card className="bg-black border border-green-500/30 p-3 hover:border-green-500/50 transition-all duration-300">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
                     <BarChart3 className="w-4 h-4 text-green-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-green-400">Performance Analytics Engine</h3>
+                    <h3 className="text-sm font-bold text-green-400">Analytics Agent</h3>
                     <p className="text-xs text-gray-400">Real-time monitoring & analysis</p>
                   </div>
                 </div>
@@ -679,7 +680,7 @@ export default function SpaceLandingPage() {
                     <MetricPopup 
                       metric="Trend Detection Speed"
                       value="2-4 hours vs 6+ weeks"
-                      rationale="Performance Analytics Engine detects performance trends and anomalies within 2-4 hours through real-time monitoring, compared to 6-8 weeks for manual analysis across multiple platforms."
+                      rationale="Analytics Agent detects performance trends and anomalies within 2-4 hours through real-time monitoring, compared to 6-8 weeks for manual analysis across multiple platforms."
                       methodology="Time-to-detection analysis comparing automated monitoring vs manual dashboard reviews for identifying significant performance changes."
                       source="Marketing Analytics Efficiency Study 2024"
                       className="text-green-400 font-bold"
@@ -688,14 +689,14 @@ export default function SpaceLandingPage() {
                 </div>
               </Card>
 
-              {/* Agent 4: Budget Allocation Engine */}
+              {/* Agent 4: Finance Agent */}
               <Card className="bg-black border border-purple-500/30 p-3 hover:border-purple-500/50 transition-all duration-300">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
                     <TrendingUp className="w-4 h-4 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-purple-400">Budget Allocation Engine</h3>
+                    <h3 className="text-sm font-bold text-purple-400">Finance Agent</h3>
                     <p className="text-xs text-gray-400">Automated spend optimization</p>
                   </div>
                 </div>
@@ -708,7 +709,7 @@ export default function SpaceLandingPage() {
                     <MetricPopup 
                       metric="ROAS Improvement"
                       value="65-120% better ROAS"
-                      rationale="Budget Allocation Engine's Thompson Sampling algorithm achieves 65-120% better ROAS by automatically reallocating budget from underperforming to high-performing channels within 24 hours."
+                      rationale="Finance Agent's Thompson Sampling algorithm achieves 65-120% better ROAS by automatically reallocating budget from underperforming to high-performing channels within 24 hours."
                       methodology="Comparative analysis of automated vs manual budget allocation across 150+ B2B SaaS marketing portfolios over 12 months."
                       source="Thompson Sampling Marketing Study 2024"
                       sourceUrl="https://research.google.com/pubs/pub48424.html"
@@ -908,7 +909,7 @@ export default function SpaceLandingPage() {
         </div>
 
         {/* Slide 6: Waitlist - Join the Revolution */}
-        <div className="min-w-full h-full flex-shrink-0 flex items-center px-16 relative overflow-hidden">
+        <div className="min-w-full h-full flex-shrink-0 flex items-center px-16 relative overflow-hidden" style={{ isolation: 'isolate' }}>
           <div className="w-full max-w-7xl mx-auto">
             <div className="text-center">
               

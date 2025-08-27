@@ -49,6 +49,45 @@ export type Database = {
         }
         Relationships: []
       }
+      SPATH_waitlist: {
+        Row: {
+          id: string
+          email: string
+          name: string | null
+          company: string | null
+          role: string | null
+          use_case: string | null
+          status: 'pending' | 'approved' | 'rejected'
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          email: string
+          name?: string | null
+          company?: string | null
+          role?: string | null
+          use_case?: string | null
+          status?: 'pending' | 'approved' | 'rejected'
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          name?: string | null
+          company?: string | null
+          role?: string | null
+          use_case?: string | null
+          status?: 'pending' | 'approved' | 'rejected'
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       SPATH_users: {
         Row: {
           id: string
@@ -217,48 +256,60 @@ export type Database = {
       }
       SPATH_artifacts: {
         Row: {
-          agent_key: string
-          created_at: string
           id: string
-          is_current: boolean
-          json_meta: Json | null
-          md_body: string | null
+          agent_key: string
+          execution_id: string | null
           project_id: string
-          title: string
           type: Database["public"]["Enums"]["artifact_type"]
+          title: string
+          content: Json
+          metadata: Json
           version: number
+          is_active: boolean
+          parent_artifact_id: string | null
+          created_at: string
+          updated_at: string
+          expires_at: string | null
         }
         Insert: {
-          agent_key: string
-          created_at?: string
           id?: string
-          is_current?: boolean
-          json_meta?: Json | null
-          md_body?: string | null
+          agent_key: string
+          execution_id?: string | null
           project_id: string
-          title: string
           type: Database["public"]["Enums"]["artifact_type"]
+          title: string
+          content?: Json
+          metadata?: Json
           version?: number
+          is_active?: boolean
+          parent_artifact_id?: string | null
+          created_at?: string
+          updated_at?: string
+          expires_at?: string | null
         }
         Update: {
-          agent_key?: string
-          created_at?: string
           id?: string
-          is_current?: boolean
-          json_meta?: Json | null
-          md_body?: string | null
+          agent_key?: string
+          execution_id?: string | null
           project_id?: string
-          title?: string
           type?: Database["public"]["Enums"]["artifact_type"]
+          title?: string
+          content?: Json
+          metadata?: Json
           version?: number
+          is_active?: boolean
+          parent_artifact_id?: string | null
+          created_at?: string
+          updated_at?: string
+          expires_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "SPATH_artifacts_agent_key_fkey"
-            columns: ["agent_key"]
+            foreignKeyName: "SPATH_artifacts_execution_id_fkey"
+            columns: ["execution_id"]
             isOneToOne: false
-            referencedRelation: "SPATH_agents"
-            referencedColumns: ["key"]
+            referencedRelation: "SPATH_agent_executions"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "SPATH_artifacts_project_id_fkey"
@@ -987,51 +1038,190 @@ export type Database = {
           },
         ]
       }
-      SPATH_users: {
+      SPATH_agents: {
         Row: {
-          avatar_url: string | null
-          created_at: string
-          email: string
           id: string
+          project_id: string
+          agent_key: 'channel_discovery_engine' | 'campaign_optimization_engine' | 'performance_analytics_engine' | 'budget_allocation_engine'
+          status: Database["public"]["Enums"]["agent_status"]
+          status_line: string
+          last_activity: string | null
           is_active: boolean
-          last_login: string | null
-          name: string
-          org_id: string
-          role: Database["public"]["Enums"]["user_role"]
+          configuration: Json
+          capabilities: Json
+          created_at: string
           updated_at: string
         }
         Insert: {
-          avatar_url?: string | null
-          created_at?: string
-          email: string
-          id: string
+          id?: string
+          project_id: string
+          agent_key: 'channel_discovery_engine' | 'campaign_optimization_engine' | 'performance_analytics_engine' | 'budget_allocation_engine'
+          status?: Database["public"]["Enums"]["agent_status"]
+          status_line?: string
+          last_activity?: string | null
           is_active?: boolean
-          last_login?: string | null
-          name: string
-          org_id: string
-          role?: Database["public"]["Enums"]["user_role"]
+          configuration?: Json
+          capabilities?: Json
+          created_at?: string
           updated_at?: string
         }
         Update: {
-          avatar_url?: string | null
-          created_at?: string
-          email?: string
           id?: string
+          project_id?: string
+          agent_key?: 'channel_discovery_engine' | 'campaign_optimization_engine' | 'performance_analytics_engine' | 'budget_allocation_engine'
+          status?: Database["public"]["Enums"]["agent_status"]
+          status_line?: string
+          last_activity?: string | null
           is_active?: boolean
-          last_login?: string | null
-          name?: string
-          org_id?: string
-          role?: Database["public"]["Enums"]["user_role"]
+          configuration?: Json
+          capabilities?: Json
+          created_at?: string
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "SPATH_users_org_id_fkey"
-            columns: ["org_id"]
+            foreignKeyName: "SPATH_agents_project_id_fkey"
+            columns: ["project_id"]
             isOneToOne: false
-            referencedRelation: "SPATH_orgs"
+            referencedRelation: "SPATH_projects"
             referencedColumns: ["id"]
-          },
+          }
+        ]
+      }
+      SPATH_agent_executions: {
+        Row: {
+          id: string
+          agent_id: string
+          agent_key: string
+          trigger_type: 'manual' | 'scheduled' | 'rule_triggered' | 'webhook' | 'api_call'
+          trigger_data: Json
+          input_parameters: Json
+          start_time: string
+          end_time: string | null
+          duration_ms: number | null
+          timeout_ms: number
+          status: 'queued' | 'running' | 'completed' | 'failed' | 'timeout' | 'cancelled'
+          artifacts_created: string[]
+          output_data: Json
+          performance_metrics: Json
+          errors: Json
+          retry_count: number
+          max_retries: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          agent_id: string
+          agent_key: string
+          trigger_type?: 'manual' | 'scheduled' | 'rule_triggered' | 'webhook' | 'api_call'
+          trigger_data?: Json
+          input_parameters?: Json
+          start_time?: string
+          end_time?: string | null
+          duration_ms?: number | null
+          timeout_ms?: number
+          status?: 'queued' | 'running' | 'completed' | 'failed' | 'timeout' | 'cancelled'
+          artifacts_created?: string[]
+          output_data?: Json
+          performance_metrics?: Json
+          errors?: Json
+          retry_count?: number
+          max_retries?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          agent_id?: string
+          agent_key?: string
+          trigger_type?: 'manual' | 'scheduled' | 'rule_triggered' | 'webhook' | 'api_call'
+          trigger_data?: Json
+          input_parameters?: Json
+          start_time?: string
+          end_time?: string | null
+          duration_ms?: number | null
+          timeout_ms?: number
+          status?: 'queued' | 'running' | 'completed' | 'failed' | 'timeout' | 'cancelled'
+          artifacts_created?: string[]
+          output_data?: Json
+          performance_metrics?: Json
+          errors?: Json
+          retry_count?: number
+          max_retries?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SPATH_agent_executions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_agents"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      SPATH_agent_configurations: {
+        Row: {
+          id: string
+          project_id: string
+          agent_key: string
+          name: string
+          description: string | null
+          configuration: Json
+          schedule_enabled: boolean
+          schedule_cron: string | null
+          schedule_timezone: string
+          is_active: boolean
+          last_run: string | null
+          next_run: string | null
+          created_at: string
+          updated_at: string
+          created_by: string | null
+        }
+        Insert: {
+          id?: string
+          project_id: string
+          agent_key: string
+          name: string
+          description?: string | null
+          configuration?: Json
+          schedule_enabled?: boolean
+          schedule_cron?: string | null
+          schedule_timezone?: string
+          is_active?: boolean
+          last_run?: string | null
+          next_run?: string | null
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+        }
+        Update: {
+          id?: string
+          project_id?: string
+          agent_key?: string
+          name?: string
+          description?: string | null
+          configuration?: Json
+          schedule_enabled?: boolean
+          schedule_cron?: string | null
+          schedule_timezone?: string
+          is_active?: boolean
+          last_run?: string | null
+          next_run?: string | null
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SPATH_agent_configurations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_projects"
+            referencedColumns: ["id"]
+          }
         ]
       }
     }
@@ -1090,7 +1280,7 @@ export type Database = {
     }
     Enums: {
       agent_status: "idle" | "working" | "blocked" | "done"
-      artifact_type: "benchmark" | "copy" | "calc" | "alloc"
+      artifact_type: "benchmark" | "copy" | "calc" | "report" | "insight" | "recommendation" | "analysis" | "optimization"
       channel_type:
         | "google_search"
         | "linkedin_inmail"

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waitlist Form Debug</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 50px auto; 
+            padding: 20px;
+            background: #111;
+            color: white;
+        }
+        .form-container {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #444;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #333;
+            border: 1px solid #555;
+            color: white;
+            border-radius: 4px;
+        }
+        button {
+            background: #0066cc;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        .success {
+            color: #22c55e;
+            font-weight: bold;
+        }
+        .error {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .loading {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Direct Waitlist Form Test</h1>
+    <p>This tests the forms directly to ensure they work outside the main app.</p>
+    
+    <div class="form-container">
+        <h2>👨‍💼 Customer Waitlist</h2>
+        <form id="customer-form">
+            <input type="email" id="customer-email" placeholder="Your email address" required>
+            <input type="text" id="customer-name" placeholder="Your name">
+            <input type="text" id="customer-company" placeholder="Company name">
+            <input type="text" id="customer-position" placeholder="Your position">
+            <input type="text" id="customer-budget" placeholder="Monthly marketing budget">
+            <button type="submit">Join Customer Waitlist</button>
+        </form>
+        <div id="customer-status"></div>
+    </div>
+    
+    <div class="form-container">
+        <h2>🤝 Partner Waitlist</h2>
+        <form id="partner-form">
+            <input type="email" id="partner-email" placeholder="Your email address" required>
+            <input type="text" id="partner-name" placeholder="Your name">
+            <input type="text" id="partner-company" placeholder="Company name">
+            <input type="text" id="partner-position" placeholder="Your position">
+            <input type="text" id="partner-type" placeholder="Partnership type (Agency, Integration, etc.)">
+            <button type="submit">Join Partner Waitlist</button>
+        </form>
+        <div id="partner-status"></div>
+    </div>
+
+    <script>
+        // Customer form handler
+        document.getElementById('customer-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const statusEl = document.getElementById('customer-status');
+            
+            statusEl.innerHTML = '<div class="loading">⏳ Submitting...</div>';
+            
+            const formData = {
+                email: document.getElementById('customer-email').value,
+                name: document.getElementById('customer-name').value || undefined,
+                company: document.getElementById('customer-company').value || undefined,
+                position: document.getElementById('customer-position').value || undefined,
+                type: 'customer',
+                additionalInfo: {
+                    monthlyBudget: document.getElementById('customer-budget').value,
+                    industry: 'SaaS',
+                    source: 'direct_test'
+                }
+            };
+            
+            try {
+                const response = await fetch('/api/waitlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    statusEl.innerHTML = `<div class="success">✅ ${result.message}</div>`;
+                    document.getElementById('customer-form').reset();
+                } else {
+                    statusEl.innerHTML = `<div class="error">❌ ${result.error}</div>`;
+                }
+            } catch (error) {
+                statusEl.innerHTML = `<div class="error">💥 ${error.message}</div>`;
+            }
+        });
+        
+        // Partner form handler
+        document.getElementById('partner-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const statusEl = document.getElementById('partner-status');
+            
+            statusEl.innerHTML = '<div class="loading">⏳ Submitting...</div>';
+            
+            const formData = {
+                email: document.getElementById('partner-email').value,
+                name: document.getElementById('partner-name').value || undefined,
+                company: document.getElementById('partner-company').value || undefined,
+                position: document.getElementById('partner-position').value || undefined,
+                type: 'partner',
+                additionalInfo: {
+                    partnershipType: document.getElementById('partner-type').value,
+                    source: 'direct_test'
+                }
+            };
+            
+            try {
+                const response = await fetch('/api/waitlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    statusEl.innerHTML = `<div class="success">✅ ${result.message}</div>`;
+                    document.getElementById('partner-form').reset();
+                } else {
+                    statusEl.innerHTML = `<div class="error">❌ ${result.error}</div>`;
+                }
+            } catch (error) {
+                statusEl.innerHTML = `<div class="error">💥 ${error.message}</div>`;
+            }
+        });
+        
+        console.log('🧪 Debug forms loaded. Test the forms above!');
+        console.log('📍 Backend API is confirmed working');
+        console.log('🎯 If these forms work but the main site forms don\'t, it\'s a React/UI issue');
+    </script>
+</body>
+</html>

@@ -106,35 +106,35 @@ await databaseSeeder.seedCompleteDemo({
 
 ## Database Schema Overview
 
-### Core Tables (with sg_ prefix)
+### Core Tables (with SPATH_ prefix)
 
-- **`sg_orgs`** - Organizations
-- **`sg_users`** - Users with role-based access
-- **`sg_projects`** - Projects (simulation or connected mode)
-- **`sg_experiments`** - GTM experiments
-- **`sg_channels`** - Marketing channels (Google, LinkedIn, etc.)
-- **`sg_gates`** - Pass/fail criteria for channels
-- **`sg_results`** - Daily performance metrics
-- **`sg_decisions`** - Scale/iterate/kill decisions
+- **`SPATH_organizations`** - Organizations
+- **`SPATH_users`** - Users with role-based access
+- **`SPATH_projects`** - Projects (simulation or connected mode)
+- **`SPATH_experiments`** - GTM experiments
+- **`SPATH_channels`** - Marketing channels (Google, LinkedIn, etc.)
+- **`SPATH_gates`** - Pass/fail criteria for channels
+- **`SPATH_results`** - Daily performance metrics
+- **`SPATH_decisions`** - Scale/iterate/kill decisions
 
 ### Agent System Tables
 
-- **`sg_agents`** - Agent definitions (Scout, Alchemist, etc.)
-- **`sg_agent_state`** - Current state of agents per project
-- **`sg_artifacts`** - Agent outputs (benchmarks, copy, calculations)
+- **`SPATH_agents`** - Agent definitions (Scout, Alchemist, etc.)
+- **`SPATH_agent_state`** - Current state of agents per project
+- **`SPATH_artifacts`** - Agent outputs (benchmarks, copy, calculations)
 
 ### Collaboration Tables
 
-- **`sg_spaces`** - Collaboration spaces
-- **`sg_threads`** - Discussion threads
-- **`sg_comments`** - Thread comments
-- **`sg_rulesets`** - Business rule sets
-- **`sg_rules`** - Individual business rules
+- **`SPATH_spaces`** - Collaboration spaces
+- **`SPATH_threads`** - Discussion threads
+- **`SPATH_comments`** - Thread comments
+- **`SPATH_rulesets`** - Business rule sets
+- **`SPATH_rules`** - Individual business rules
 
 ### Reference Tables
 
-- **`sg_benchmarks`** - Industry benchmark data
-- **`sg_fact_sheets`** - Generated reports
+- **`SPATH_benchmarks`** - Industry benchmark data
+- **`SPATH_fact_sheets`** - Generated reports
 
 ## Security
 
@@ -201,7 +201,7 @@ All database operations are fully typed:
 ```typescript
 import type { Organization, Experiment, TablesInsert } from '@/lib/supabase'
 
-const orgData: TablesInsert<'sg_orgs'> = {
+const orgData: TablesInsert<'SPATH_organizations'> = {
   name: 'My Org',
   slug: 'my-org'
 }

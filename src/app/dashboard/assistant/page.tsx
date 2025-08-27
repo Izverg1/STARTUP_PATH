@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { MessageSquare, Sparkles, TrendingUp, Target, Zap, BarChart3, Clock } from 'lucide-react';
+import { useCurrentProject } from '@/contexts/ProjectContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -10,6 +11,7 @@ import { AssistantChat } from '@/components/assistant/AssistantChat';
 export default function AssistantPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [chatStarted, setChatStarted] = useState(false);
+  const { currentProject } = useCurrentProject();
 
   const quickActions = [
     {
@@ -43,7 +45,7 @@ export default function AssistantPage() {
       {/* Assistant Content with Horizontal Tabs */}
       <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-          <TabsList className="bg-zinc-800 border-2 border-zinc-500 p-1 m-6 mb-0 shrink-0 shadow-xl">
+          <TabsList className="bg-slate-900/50 border border-slate-700/50 p-1 m-6 mb-0 shrink-0">
             <TabsTrigger 
               value="overview" 
               className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"

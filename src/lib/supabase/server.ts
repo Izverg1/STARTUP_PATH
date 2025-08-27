@@ -171,3 +171,13 @@ export function createAdminClient() {
     }
   )
 }
+
+/**
+ * Get the current user with full organization context (server-side only)
+ */
+export async function getCurrentUserWithOrg() {
+  const user = await getUser()
+  if (!user) return null
+  
+  return await getUserProfile()
+}

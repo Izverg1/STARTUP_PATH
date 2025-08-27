@@ -9,7 +9,7 @@ export const AUTH_CONFIG = {
     name: 'Demo User',
     role: 'owner' as const,
     org: 'STARTUP_PATH Demo',
-    orgId: 'spath-demo-org-001'
+    orgId: '550e8400-e29b-41d4-a716-446655440000'
   },
 
   // Session configuration

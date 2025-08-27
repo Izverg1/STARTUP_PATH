@@ -3,15 +3,15 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 
 const updateSchema = z.object({
-  status: z.enum(['pending', 'contacted', 'converted', 'declined', 'spam']).optional(),
-  priority: z.number().min(1).max(5).optional(),
+  status: z.enum(['pending', 'approved', 'rejected']).optional(),
   notes: z.string().optional()
 })
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
     const body = await request.json()
     const validatedData = updateSchema.parse(body)
@@ -27,7 +27,7 @@ export async function PATCH(
         ...validatedData,
         updated_at: new Date().toISOString()
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single()
     
@@ -51,7 +51,7 @@ export async function PATCH(
       return NextResponse.json(
         { 
           error: 'Validation failed',
-          details: error.errors
+          details: error.issues
         },
         { status: 400 }
       )
@@ -66,8 +66,9 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
     const supabase = await createServerSupabaseClient()
     
@@ -77,7 +78,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('SPATH_waitlist')
       .delete()
-      .eq('id', params.id)
+      .eq('id', id)
     
     if (error) {
       console.error('Error deleting waitlist entry:', error)

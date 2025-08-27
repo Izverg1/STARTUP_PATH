@@ -22,21 +22,21 @@ export function UserProfileDropdown() {
   // Mock agent notifications - in real implementation, this would come from useAgents hook
   const agentNotifications = [
     {
-      agent: 'Channel Discovery Engine',
+      agent: 'Channel Agent',
       icon: '🔍',
       message: 'Found 3 new high-performing channels',
       priority: 'high',
       timestamp: '5 min ago'
     },
     {
-      agent: 'Budget Allocation Engine',
+      agent: 'Finance Agent',
       icon: '💰',
       message: 'Budget reallocation recommended',
       priority: 'medium',
       timestamp: '15 min ago'
     },
     {
-      agent: 'Performance Analytics Engine',
+      agent: 'Analytics Agent',
       icon: '📊',
       message: 'CPQM threshold exceeded on LinkedIn',
       priority: 'critical',
@@ -117,7 +117,7 @@ export function UserProfileDropdown() {
                 <div 
                   key={index}
                   className="px-3 py-2 rounded-lg bg-slate-800/30 hover:bg-slate-800/50 cursor-pointer transition-colors"
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push('/dashboard/projects')}
                 >
                   <div className="flex items-start gap-2">
                     <span className="text-sm mt-0.5">{notification.icon}</span>
@@ -148,7 +148,7 @@ export function UserProfileDropdown() {
                 variant="outline"
                 size="sm"
                 className="w-full text-xs bg-slate-800/50 border-slate-600 hover:bg-slate-800/70 text-gray-300"
-                onClick={() => router.push('/dashboard')}
+                onClick={() => router.push('/dashboard/projects')}
               >
                 View All Insights
               </Button>
@@ -162,17 +162,10 @@ export function UserProfileDropdown() {
         <div className="p-1">
           <DropdownMenuItem 
             className="cursor-pointer p-3 rounded-lg hover:bg-slate-800/50 focus:bg-slate-800/50 transition-colors"
-            onClick={() => router.push('/dashboard/profile')}
+            onClick={() => router.push('/dashboard/account')}
           >
             <User className="mr-3 h-4 w-4 text-gray-400" />
-            <span className="text-white">Profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem 
-            className="cursor-pointer p-3 rounded-lg hover:bg-slate-800/50 focus:bg-slate-800/50 transition-colors"
-            onClick={() => router.push('/dashboard/settings')}
-          >
-            <Settings className="mr-3 h-4 w-4 text-gray-400" />
-            <span className="text-white">Settings</span>
+            <span className="text-white">Account</span>
           </DropdownMenuItem>
           <DropdownMenuItem 
             className="cursor-pointer p-3 rounded-lg hover:bg-slate-800/50 focus:bg-slate-800/50 transition-colors"

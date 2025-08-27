@@ -1496,3 +1496,69 @@
 .settings-scrollbar::-webkit-scrollbar-corner {
   background: rgba(15, 23, 42, 0.5);
 }
+
+/* Red scrollbar for effectiveness page */
+.effectiveness-scrollbar::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.effectiveness-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.effectiveness-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.effectiveness-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+}
+
+.effectiveness-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+}
+
+.effectiveness-scrollbar::-webkit-scrollbar-corner {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+/* Red scrollbar for all dashboard pages */
+.dashboard-scrollbar::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.dashboard-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.dashboard-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+}
+
+.dashboard-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+}
+
+.dashboard-scrollbar::-webkit-scrollbar-corner {
+  background: rgba(15, 23, 42, 0.5);
+}

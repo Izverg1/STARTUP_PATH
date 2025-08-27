@@ -22,22 +22,22 @@ interface AgentDockProps {
 
 const agentDefinitions = {
   channel_discovery_engine: {
-    title: 'Channel Discovery Engine',
+    title: 'Channel Agent',
     subtitle: '',
     description: 'Identifies & validates opportunities'
   },
   campaign_optimization_engine: {
-    title: 'Campaign Optimization Engine',
+    title: 'Campaign Agent',
     subtitle: '',
     description: 'Optimizes messaging & creative'
   },
   performance_analytics_engine: {
-    title: 'Performance Analytics Engine',
+    title: 'Analytics Agent',
     subtitle: '',
     description: 'Real-time monitoring & analysis'
   },
   budget_allocation_engine: {
-    title: 'Budget Allocation Engine',
+    title: 'Finance Agent',
     subtitle: '',
     description: 'Automated spend optimization'
   }

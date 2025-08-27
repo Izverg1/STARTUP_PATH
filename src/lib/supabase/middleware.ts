@@ -59,7 +59,7 @@ export async function updateSession(request: NextRequest) {
     if (pathname === '/' && session) {
       // Check if user has completed onboarding
       const { data: userProfile } = await supabase
-        .from('sg_users')
+        .from('SPATH_users')
         .select('*')
         .eq('id', session.user.id)
         .single()
@@ -67,7 +67,7 @@ export async function updateSession(request: NextRequest) {
       if (userProfile) {
         // Check if user has any projects
         const { data: projects } = await supabase
-          .from('sg_projects')
+          .from('SPATH_projects')
           .select('id')
           .eq('org_id', userProfile.org_id)
           .limit(1)

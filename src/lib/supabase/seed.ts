@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 import type { Database } from './types'
 
 type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
@@ -6,7 +6,7 @@ type TablesInsert<T extends keyof Database['public']['Tables']> = Database['publ
 
 // Demo data generation utilities
 export class DatabaseSeeder {
-  private supabase = createAdminClient()
+  private supabase = createClient()
 
   // =============================================================================
   // Organization and User Seeding
@@ -23,7 +23,7 @@ export class DatabaseSeeder {
 
     // Create organization
     const { data: org, error: orgError } = await this.supabase
-      .from('sg_orgs')
+      .from('SPATH_organizations')
       .insert({
         name,
         slug,
@@ -54,7 +54,7 @@ export class DatabaseSeeder {
 
     // Create owner user
     const { data: user, error: userError } = await this.supabase
-      .from('sg_users')
+      .from('SPATH_users')
       .insert({
         id: ownerId,
         email: ownerEmail,
@@ -80,7 +80,7 @@ export class DatabaseSeeder {
   async seedDemoProject(orgId: string, ownerId: string) {
     // Create demo project
     const { data: project, error: projectError } = await this.supabase
-      .from('sg_projects')
+      .from('SPATH_projects')
       .insert({
         name: 'FinOps SaaS GTM Test',
         description: 'B2B FinOps SaaS targeting $20-200M ARR companies with 14-day decision window',
@@ -106,7 +106,7 @@ export class DatabaseSeeder {
 
     // Create demo experiment
     const { data: experiment, error: experimentError } = await this.supabase
-      .from('sg_experiments')
+      .from('SPATH_experiments')
       .insert({
         name: 'Multi-Channel GTM Test',
         description: 'Testing Google Search, LinkedIn InMail, and Webinar channels',
@@ -208,7 +208,7 @@ export class DatabaseSeeder {
     
     for (const channelData of channels) {
       const { data: channel, error: channelError } = await this.supabase
-        .from('sg_channels')
+        .from('SPATH_channels')
         .insert({
           experiment_id: experimentId,
           ...channelData
@@ -303,7 +303,7 @@ export class DatabaseSeeder {
 
     for (const gateData of gates) {
       const { error: gateError } = await this.supabase
-        .from('sg_gates')
+        .from('SPATH_gates')
         .insert({
           channel_id: channelId,
           ...gateData
@@ -319,7 +319,7 @@ export class DatabaseSeeder {
   // Results Seeding (14 days of demo data)
   // =============================================================================
 
-  async seedDemoResults(channels: Tables<'sg_channels'>[]) {
+  async seedDemoResults(channels: Tables<'SPATH_channels'>[]) {
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - 13) // Start 13 days ago for 14 days total
 
@@ -332,7 +332,7 @@ export class DatabaseSeeder {
         const resultData = this.generateResultsForChannel(channel, day)
         
         const { error: resultError } = await this.supabase
-          .from('sg_results')
+          .from('SPATH_results')
           .insert({
             channel_id: channel.id,
             date: dateStr,
@@ -349,7 +349,7 @@ export class DatabaseSeeder {
     }
   }
 
-  private generateResultsForChannel(channel: Tables<'sg_channels'>, dayIndex: number) {
+  private generateResultsForChannel(channel: Tables<'SPATH_channels'>, dayIndex: number) {
     const baseMultiplier = 1 + (dayIndex * 0.05) // Gradual improvement over time
     const randomVariance = 0.8 + (Math.random() * 0.4) // ±20% random variance
 
@@ -470,7 +470,7 @@ export class DatabaseSeeder {
 
     for (const agentData of agents) {
       const { error } = await this.supabase
-        .from('sg_agent_state')
+        .from('SPATH_agent_state')
         .upsert({
           project_id: projectId,
           ...agentData,
@@ -602,12 +602,12 @@ Webinar channel showing 28% better CPQM than target. InMail underperforming due 
 
     for (const artifactData of artifacts) {
       const { error } = await this.supabase
-        .from('sg_artifacts')
+        .from('SPATH_artifacts')
         .insert({
           project_id: projectId,
           ...artifactData,
           version: 1,
-          is_current: true
+          is_active: true
         })
 
       if (error) {
@@ -671,6 +671,19 @@ Webinar channel showing 28% better CPQM than target. InMail underperforming due 
       console.error('Error seeding demo data:', error)
       throw error
     }
+  }
+
+  // =============================================================================
+  // Backward Compatibility Aliases
+  // =============================================================================
+
+  // Alias for setupDemoDatabase to maintain compatibility with setup scripts
+  async setupDemoDatabase(userData: {
+    email: string
+    name: string
+    userId: string
+  }) {
+    return this.seedCompleteDemo(userData)
   }
 }
 

@@ -140,16 +140,22 @@ export default function CommandCenterPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Building2 className="w-8 h-8 text-blue-400" />
-              {currentProject ? `${currentProject.name} Dashboard` : 'Dashboard Overview'}
-            </h1>
-            <p className="text-gray-400 mt-1">
-              {currentProject 
-                ? `Get a high-level view of ${currentProject.name} performance and key insights`
-                : 'Get a high-level view of performance and key insights across your organization'
-              }
-            </p>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-blue-400 text-sm font-medium uppercase tracking-wide">Project Case:</span>
+                <span className="text-white/70 text-sm">{currentProject?.name || 'All Projects'}</span>
+              </div>
+              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                <Building2 className="w-8 h-8 text-blue-400" />
+                {currentProject ? `${currentProject.name} Dashboard` : 'Project Overview'}
+              </h1>
+              <p className="text-gray-400">
+                {currentProject 
+                  ? `Track market traction and GTM performance for ${currentProject.name}. All experiments, agents, and insights roll up to this project.`
+                  : 'Project-based case management system for tracking startup market traction and GTM performance.'
+                }
+              </p>
+            </div>
           </div>
           
           <Link href="/dashboard/experiments">
@@ -224,32 +230,7 @@ export default function CommandCenterPage() {
               Quick Actions
             </h2>
             
-            {experiments.length === 0 ? (
-              <div className="text-center py-8">
-                <FlaskConical className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-white text-lg font-medium mb-2">Ready to Get Started?</h3>
-                <p className="text-gray-400 text-sm mb-6 max-w-md mx-auto">
-                  Create your first GTM experiment to start validating distribution channels and optimizing your customer acquisition cost.
-                </p>
-                <div className="flex gap-3 justify-center">
-                  <Link href="/dashboard/experiments">
-                    <Button className="bg-orange-600/20 border-orange-500/30 hover:bg-orange-600/30 text-orange-400">
-                      <FlaskConical className="w-4 h-4 mr-2" />
-                      Create Your First Experiment
-                    </Button>
-                  </Link>
-                  <Button 
-                    onClick={() => setShowWelcomeGuide(true)}
-                    variant="outline"
-                    className="bg-blue-600/10 border-blue-500/20 hover:bg-blue-600/20 text-blue-400"
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Getting Started Guide
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Link href="/dashboard/experiments">
                   <Card className="bg-slate-800/50 border-slate-700/50 p-4 hover:bg-slate-800/70 transition-colors cursor-pointer group">
                     <div className="flex items-center gap-3">
@@ -334,6 +315,23 @@ export default function CommandCenterPage() {
                   </Card>
                 </Link>
               </div>
+            
+            {experiments.length === 0 && currentProject && (
+              <div className="col-span-full mt-6 p-6 bg-slate-800/30 border border-slate-700/30 rounded-lg text-center">
+                <FlaskConical className="h-8 w-8 text-gray-400 mx-auto mb-3" />
+                <h3 className="text-white font-medium mb-2">Ready to Start Tracking Traction?</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  Your project "{currentProject.name}" is set up. Create your first experiment to start validating GTM channels and tracking market traction.
+                </p>
+                <Button 
+                  onClick={() => setShowWelcomeGuide(true)}
+                  variant="outline"
+                  className="bg-blue-600/10 border-blue-500/20 hover:bg-blue-600/20 text-blue-400"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Getting Started Guide
+                </Button>
+              </div>
             )}
           </div>
         </Card>
@@ -343,6 +341,16 @@ export default function CommandCenterPage() {
           isOpen={showWelcomeGuide} 
           onClose={handleCloseWelcomeGuide} 
         />
+        
+        {/* Force scrollable content to test red scrollbar */}
+        <div className="mt-8 space-y-4">
+          {Array.from({length: 50}, (_, i) => (
+            <div key={i} className="p-4 bg-slate-900/30 border border-slate-700/40 rounded-lg">
+              <h3 className="text-white font-medium mb-2">Test Content Block {i + 1}</h3>
+              <p className="text-gray-400 text-sm">This is test content to force scrolling and verify the red scrollbar appears correctly on the dashboard page.</p>
+            </div>
+          ))}
+        </div>
       </div>
     </ErrorBoundary>
   )

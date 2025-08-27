@@ -37,13 +37,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     console.log('🔄 AuthContext: Setting up auth listener')
     
+    // Initialize auth state immediately
+    const initializeAuth = async () => {
+      try {
+        const currentUser = await authService.getCurrentUser()
+        console.log('🔄 AuthContext: Initial auth check', { user: currentUser?.email || 'none' })
+        setUser(currentUser)
+        setLoading(false)
+        
+        // Handle redirects based on initial state
+        const publicPaths = ['/', '/login', '/auth/register', '/auth/reset-password']
+        const isPublicPath = publicPaths.some(path => pathname.startsWith(path))
+        
+        if (!currentUser && !isPublicPath) {
+          console.log('🔒 Redirecting to login (not authenticated)')
+          router.push('/login')
+        } else if (currentUser && pathname === '/login') {
+          console.log('🏠 Redirecting to dashboard (already authenticated)')
+          router.push('/dashboard/projects')
+        }
+      } catch (error) {
+        console.error('❌ Auth initialization error:', error)
+        setLoading(false)
+        setUser(null)
+        
+        const publicPaths = ['/', '/login', '/auth/register', '/auth/reset-password']
+        const isPublicPath = publicPaths.some(path => pathname.startsWith(path))
+        if (!isPublicPath) {
+          router.push('/login')
+        }
+      }
+    }
+    
     // Subscribe to auth changes
     const unsubscribe = authService.onAuthChange((user) => {
       console.log('🔄 AuthContext: Auth state changed', { user: user?.email || 'none', pathname })
       setUser(user)
       setLoading(false)
       
-      // Redirect logic
+      // Handle redirects based on auth changes
       const publicPaths = ['/', '/login', '/auth/register', '/auth/reset-password']
       const isPublicPath = publicPaths.some(path => pathname.startsWith(path))
       
@@ -52,9 +84,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         router.push('/login')
       } else if (user && pathname === '/login') {
         console.log('🏠 Redirecting to dashboard (already authenticated)')
-        router.push('/dashboard')
+        router.push('/dashboard/projects')
       }
     })
+
+    // Initialize auth state
+    initializeAuth()
 
     return unsubscribe
   }, [pathname, router])
@@ -117,3 +152,6 @@ export const useAuth = () => {
   }
   return context
 }
+
+// Alias for backward compatibility
+export const useUser = useAuth

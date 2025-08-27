@@ -14,9 +14,19 @@ import {
   DollarSign,
   BarChart3,
   Minimize2,
-  Maximize2
+  Maximize2,
+  Mic,
+  MicOff
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+// Speech Recognition types
+declare global {
+  interface Window {
+    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
+}
 
 interface Message {
   id: string;
@@ -77,6 +87,8 @@ export function InvestorChatbot({ isOpen, onToggle }: InvestorChatbotProps) {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [speechRecognition, setSpeechRecognition] = useState<SpeechRecognition | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -86,6 +98,42 @@ export function InvestorChatbot({ isOpen, onToggle }: InvestorChatbotProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Initialize speech recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+      
+      recognition.onstart = () => {
+        console.log('🎤 Voice recognition started');
+        setIsListening(true);
+      };
+      
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('🎤 Voice input:', transcript);
+        setInputMessage(transcript);
+        setIsListening(false);
+      };
+      
+      recognition.onerror = (event) => {
+        console.error('🎤 Voice recognition error:', event.error);
+        setIsListening(false);
+      };
+      
+      recognition.onend = () => {
+        console.log('🎤 Voice recognition ended');
+        setIsListening(false);
+      };
+      
+      setSpeechRecognition(recognition);
+    }
+  }, []);
 
   const findBestResponse = (userInput: string): string => {
     const input = userInput.toLowerCase();
@@ -132,13 +180,33 @@ export function InvestorChatbot({ isOpen, onToggle }: InvestorChatbotProps) {
     }
   };
 
+  const startVoiceInput = () => {
+    if (speechRecognition && !isListening) {
+      try {
+        speechRecognition.start();
+      } catch (error) {
+        console.error('🎤 Error starting voice recognition:', error);
+      }
+    }
+  };
+
+  const stopVoiceInput = () => {
+    if (speechRecognition && isListening) {
+      speechRecognition.stop();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
     <Card className={cn(
-      "fixed bottom-4 right-4 w-96 bg-slate-950/95 border-red-500/30 shadow-2xl backdrop-blur-lg z-50 transition-all duration-300 pointer-events-auto",
+      "fixed bottom-4 right-4 w-96 bg-slate-950/95 border-red-500/30 shadow-2xl backdrop-blur-lg z-[60] transition-all duration-300 pointer-events-auto",
       isMinimized ? "h-14" : "h-[500px]"
-    )}>
+    )}
+    style={{
+      transform: 'translateZ(0)',
+      isolation: 'isolate'
+    }}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-red-500/20">
         <div className="flex items-center gap-3">
@@ -213,16 +281,45 @@ export function InvestorChatbot({ isOpen, onToggle }: InvestorChatbotProps) {
                 }}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask about ROI, market size, technology..."
-                className="bg-slate-800/60 border-red-500/30 text-white placeholder:text-gray-400 focus:border-red-400"
+                className="bg-slate-800/60 border-red-500/30 text-white placeholder:text-gray-400 focus:border-red-400 focus:ring-2 focus:ring-red-400/50 focus:outline-none"
+                style={{
+                  transform: 'translateZ(0)',
+                  position: 'relative',
+                  zIndex: 10
+                }}
               />
+              <Button
+                onClick={isListening ? stopVoiceInput : startVoiceInput}
+                className={cn(
+                  "shrink-0 transition-colors",
+                  isListening 
+                    ? "bg-red-600 hover:bg-red-700 animate-pulse" 
+                    : "bg-slate-700 hover:bg-slate-600"
+                )}
+                size="sm"
+                title={isListening ? "Stop voice input" : "Start voice input"}
+              >
+                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </Button>
               <Button
                 onClick={handleSendMessage}
                 className="bg-red-600 hover:bg-red-700 shrink-0"
                 size="sm"
+                style={{
+                  transform: 'translateZ(0)',
+                  position: 'relative',
+                  zIndex: 10
+                }}
               >
                 <Send className="w-4 h-4" />
               </Button>
             </div>
+            {isListening && (
+              <div className="mt-2 flex items-center gap-2 text-xs text-red-400">
+                <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+                Listening... speak now
+              </div>
+            )}
           </div>
         </>
       )}

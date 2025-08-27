@@ -187,59 +187,24 @@ export async function getProjectExperimentsWithChannels(projectId: string): Prom
   const supabase = createClient()
   
   try {
-    const { data, error } = await supabase
-      .from('SPATH_experiments')
-      .select(`
-        *,
-        channels:SPATH_channels (*),
-        gates:SPATH_gates (*),
-        results:SPATH_results (*)
-      `)
-      .eq('project_id', projectId)
-      .order('updated_at', { ascending: false })
+    // For now, return empty array since experiment tables don't exist yet
+    // This prevents the relationship error until the full schema is implemented
+    console.warn('Experiment tables not yet implemented - returning empty array')
+    return []
     
-    if (error) {
-      console.error('Error fetching project experiments with channels:', error.message)
-      // If it's a missing table error, return empty array gracefully
-      if (error.message.includes('does not exist') || error.message.includes('relation') || error.message.includes('table')) {
-        console.warn('Database tables may not be set up yet. Returning empty experiments array.')
-        return []
-      }
-      return []
-    }
+    // TODO: Uncomment when experiment tables are created
+    // const { data, error } = await supabase
+    //   .from('SPATH_experiments')
+    //   .select('*')
+    //   .eq('project_id', projectId)
+    //   .order('updated_at', { ascending: false })
+    // 
+    // if (error) {
+    //   console.error('Error fetching project experiments:', error.message)
+    //   return []
+    // }
     
-    // Transform the data to match the UI expectations (same as getOrganizationExperiments)
-    return (data || []).map(experiment => {
-      const experimentData = experiment as any
-      const channels = experimentData.channels || []
-      const gates = experimentData.gates || []
-      const results = experimentData.results || []
-    
-    // Calculate derived metrics
-    const totalBudgetSpent = results.reduce((sum: number, r: any) => sum + (r.cost || 0), 0)
-    const totalMeetings = results.reduce((sum: number, r: any) => sum + (r.meetings || 0), 0)
-    const totalLeads = results.reduce((sum: number, r: any) => sum + (r.leads || 0), 0)
-    const currentCPQM = totalMeetings > 0 ? totalBudgetSpent / totalMeetings : 0
-    
-    const daysRunning = experiment.start_date 
-      ? Math.ceil((new Date().getTime() - new Date(experiment.start_date).getTime()) / (1000 * 60 * 60 * 24))
-      : 0
-    
-    return {
-      ...experiment,
-      channels,
-      gates,
-      days_running: daysRunning,
-      budget_spent: totalBudgetSpent,
-      current_value: experiment.primary_metric === 'CPQM' ? currentCPQM : 
-        experiment.primary_metric === 'Conversion Rate' ? (totalLeads > 0 ? totalMeetings / totalLeads : 0) :
-        experiment.primary_metric === 'Total Cost' ? totalBudgetSpent :
-        experiment.primary_metric === 'Meeting Count' ? totalMeetings :
-        0,
-      conversion_rate: totalLeads > 0 ? totalMeetings / totalLeads : 0,
-      spend: totalBudgetSpent
-    }
-  })
+    // TODO: When tables are implemented, return transformed data here
   } catch (err) {
     console.error('Database connection error:', err)
     return []

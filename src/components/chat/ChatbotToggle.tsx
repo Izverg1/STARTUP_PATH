@@ -12,7 +12,7 @@ interface ChatbotToggleProps {
 
 export function ChatbotToggle({ onClick, isOpen }: ChatbotToggleProps) {
   return (
-    <div className="fixed bottom-4 right-4 z-40">
+    <div className="fixed bottom-4 right-4 z-[50]" style={{ transform: 'translateZ(0)' }}>
       <div className="relative">
         {/* Animated attention ring */}
         <div className="absolute -inset-2 bg-gradient-to-r from-red-500/40 via-red-400/40 to-red-500/40 rounded-full opacity-75 blur-sm animate-pulse"></div>
@@ -22,9 +22,14 @@ export function ChatbotToggle({ onClick, isOpen }: ChatbotToggleProps) {
           onClick={onClick}
           className={cn(
             "relative w-14 h-14 rounded-full bg-red-600 hover:bg-red-700 shadow-2xl transition-all duration-300",
-            "flex items-center justify-center",
+            "flex items-center justify-center pointer-events-auto cursor-pointer",
             isOpen && "scale-0 opacity-0 pointer-events-none"
           )}
+          style={{
+            transform: 'translateZ(0)',
+            position: 'relative',
+            zIndex: 10
+          }}
         >
           <div className="flex items-center justify-center">
             <Bot className="w-6 h-6 text-white" />

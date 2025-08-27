@@ -3,30 +3,40 @@
 import { useState } from 'react'
 import { AgentDock } from './AgentDock'
 import { ArtifactsSidebar } from '../artifacts/ArtifactsSidebar'
-import { useAgents, useAgentsDemo } from '@/hooks/useAgents'
+import { useAgentService, useCurrentProject } from '@/hooks/useAgentService'
 import { AgentKey } from '@/types/agents'
 import { Button } from '@/components/ui/button'
 import { theme } from '@/config/theme'
 
 export function AgentSystemDemo() {
+  const { projectId, loading: projectLoading } = useCurrentProject()
   const { 
     statuses, 
     artifacts, 
     executeAgent, 
     resetAllAgents, 
     isInitialized,
-    getSystemStatus 
-  } = useAgents()
+    getSystemStatus,
+    error,
+    loading
+  } = useAgentService({ 
+    projectId: projectId || '',
+    pollInterval: 2000 
+  })
   
-  const { runDemo } = useAgentsDemo()
   const [selectedAgent, setSelectedAgent] = useState<AgentKey | null>(null)
 
-  if (!isInitialized) {
+  if (projectLoading || !isInitialized) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white text-gray-900">
+      <div className="flex items-center justify-center h-screen bg-zinc-950 text-white">
         <div className="text-center">
           <div className="animate-pulse text-lg mb-2">Initializing Agent System...</div>
-          <div className="text-sm text-gray-600">Setting up agents and configurations</div>
+          <div className="text-sm text-zinc-400">Setting up agents and configurations</div>
+          {error && (
+            <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+              Error: {error}
+            </div>
+          )}
         </div>
       </div>
     )
@@ -74,6 +84,41 @@ export function AgentSystemDemo() {
       await executeAgent(agentKey, demoInputs[agentKey])
     } catch (error) {
       console.error(`Failed to execute ${agentKey}:`, error)
+    }
+  }
+
+  const runDemo = async () => {
+    // Run all agents in sequence
+    const agents: AgentKey[] = [
+      'channel_discovery_engine',
+      'campaign_optimization_engine', 
+      'performance_analytics_engine',
+      'budget_allocation_engine'
+    ]
+
+    for (const agentKey of agents) {
+      await handleAgentClick(agentKey)
+      // Add small delay between agents
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+  }
+
+  const handleArtifactDelete = async (artifactId: string) => {
+    try {
+      const response = await fetch(`/api/artifacts/${artifactId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to delete artifact')
+      }
+
+      // The useAgentService hook should handle the refresh automatically through real-time updates
+      console.log('Artifact deleted successfully')
+    } catch (error) {
+      console.error('Error deleting artifact:', error)
+      // You might want to show a toast notification here
     }
   }
 
@@ -194,6 +239,7 @@ export function AgentSystemDemo() {
           console.log('Artifact clicked:', artifact)
           // Could open a modal or navigate to detail view
         }}
+        onArtifactDelete={handleArtifactDelete}
       />
     </div>
   )

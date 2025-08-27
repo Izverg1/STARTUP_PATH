@@ -10,7 +10,7 @@ import { useEngineStatus, getStatusIndicator } from '@/hooks/useEngineStatus';
 const AGENTS = [
   {
     id: 'channel-discovery',
-    name: 'Channel Discovery Engine',
+    name: 'Channel Agent',
     subtitle: '',
     icon: Satellite,
     status: 'processing',
@@ -21,7 +21,7 @@ const AGENTS = [
   },
   {
     id: 'campaign-optimization', 
-    name: 'Campaign Optimization Engine',
+    name: 'Campaign Agent',
     subtitle: '',
     icon: Target,
     status: 'stopped',
@@ -32,7 +32,7 @@ const AGENTS = [
   },
   {
     id: 'performance-analytics',
-    name: 'Performance Analytics Engine',
+    name: 'Analytics Agent',
     subtitle: '',
     icon: BarChart3,
     status: 'processing',
@@ -43,7 +43,7 @@ const AGENTS = [
   },
   {
     id: 'budget-allocation',
-    name: 'Budget Allocation Engine',
+    name: 'Finance Agent',
     subtitle: '',
     icon: TrendingUp,
     status: 'processing',

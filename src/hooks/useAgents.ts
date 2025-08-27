@@ -354,16 +354,16 @@ export function useAgentsDemo() {
       // Wait a bit for reset
       await new Promise(resolve => setTimeout(resolve, 500))
       
-      // Execute Channel Discovery Engine
-      console.log('Executing Channel Discovery Engine...')
+      // Execute Channel Agent
+      console.log('Executing Channel Agent...')
       await executeAgent('channel_discovery_engine', {
         vertical: 'SaaS',
         target_audience: 'B2B Decision Makers',
         budget_range: [20000, 50000]
       })
       
-      // Execute Campaign Optimization Engine
-      console.log('Executing Campaign Optimization Engine...')
+      // Execute Campaign Agent
+      console.log('Executing Campaign Agent...')
       await executeAgent('campaign_optimization_engine', {
         channel_type: 'email',
         copy_type: 'subject_line',
@@ -371,15 +371,15 @@ export function useAgentsDemo() {
         tone: 'professional'
       })
       
-      // Execute Performance Analytics Engine
-      console.log('Executing Performance Analytics Engine...')
+      // Execute Analytics Agent
+      console.log('Executing Analytics Agent...')
       await executeAgent('performance_analytics_engine', {
         metric_type: 'cpqm',
         time_period: '30d'
       })
       
-      // Execute Budget Allocation Engine
-      console.log('Executing Budget Allocation Engine...')
+      // Execute Finance Agent
+      console.log('Executing Finance Agent...')
       await executeAgent('budget_allocation_engine', {
         total_budget: 50000,
         strategy: 'thompson_sampling'

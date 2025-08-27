@@ -96,7 +96,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "SPATH_organizations"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       SPATH_projects: {
@@ -105,7 +105,7 @@ export type Database = {
           name: string
           description: string | null
           org_id: string
-          owner_id: string
+          created_by: string
           status: 'draft' | 'active' | 'paused' | 'completed' | 'archived'
           mode: 'simulation' | 'connected'
           settings: Json
@@ -117,7 +117,7 @@ export type Database = {
           name: string
           description?: string | null
           org_id: string
-          owner_id: string
+          created_by: string
           status?: 'draft' | 'active' | 'paused' | 'completed' | 'archived'
           mode?: 'simulation' | 'connected'
           settings?: Json
@@ -129,7 +129,7 @@ export type Database = {
           name?: string
           description?: string | null
           org_id?: string
-          owner_id?: string
+          created_by?: string
           status?: 'draft' | 'active' | 'paused' | 'completed' | 'archived'
           mode?: 'simulation' | 'connected'
           settings?: Json
@@ -145,12 +145,12 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "SPATH_projects_owner_id_fkey"
-            columns: ["owner_id"]
+            foreignKeyName: "SPATH_projects_created_by_fkey"
+            columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "SPATH_users"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       SPATH_experiments: {
@@ -158,16 +158,19 @@ export type Database = {
           id: string
           name: string
           description: string | null
-          hypothesis: string | null
           project_id: string
-          status: 'draft' | 'running' | 'paused' | 'completed' | 'killed'
-          budget_allocated: number
-          target_cpqm: number | null
-          max_cac_payback_months: number | null
-          icp: Json
-          success_criteria: Json | null
+          status: 'draft' | 'running' | 'paused' | 'completed' | 'failed'
           start_date: string | null
           end_date: string | null
+          budget_total: number | null
+          budget_daily: number | null
+          budget_allocated: number | null
+          budget_spent: number | null
+          target_cpqm: number | null
+          max_cac_payback_months: number | null
+          primary_metric: string | null
+          icp: Json
+          settings: Json
           created_at: string
           updated_at: string
         }
@@ -175,16 +178,19 @@ export type Database = {
           id?: string
           name: string
           description?: string | null
-          hypothesis?: string | null
           project_id: string
-          status?: 'draft' | 'running' | 'paused' | 'completed' | 'killed'
-          budget_allocated?: number
-          target_cpqm?: number | null
-          max_cac_payback_months?: number | null
-          icp?: Json
-          success_criteria?: Json | null
+          status?: 'draft' | 'running' | 'paused' | 'completed' | 'failed'
           start_date?: string | null
           end_date?: string | null
+          budget_total?: number | null
+          budget_daily?: number | null
+          budget_allocated?: number | null
+          budget_spent?: number | null
+          target_cpqm?: number | null
+          max_cac_payback_months?: number | null
+          primary_metric?: string | null
+          icp?: Json
+          settings?: Json
           created_at?: string
           updated_at?: string
         }
@@ -192,16 +198,19 @@ export type Database = {
           id?: string
           name?: string
           description?: string | null
-          hypothesis?: string | null
           project_id?: string
-          status?: 'draft' | 'running' | 'paused' | 'completed' | 'killed'
-          budget_allocated?: number
-          target_cpqm?: number | null
-          max_cac_payback_months?: number | null
-          icp?: Json
-          success_criteria?: Json | null
+          status?: 'draft' | 'running' | 'paused' | 'completed' | 'failed'
           start_date?: string | null
           end_date?: string | null
+          budget_total?: number | null
+          budget_daily?: number | null
+          budget_allocated?: number | null
+          budget_spent?: number | null
+          target_cpqm?: number | null
+          max_cac_payback_months?: number | null
+          primary_metric?: string | null
+          icp?: Json
+          settings?: Json
           created_at?: string
           updated_at?: string
         }
@@ -212,152 +221,44 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "SPATH_projects"
             referencedColumns: ["id"]
-          }
-        ]
-      }
-      SPATH_artifacts: {
-        Row: {
-          agent_key: string
-          created_at: string
-          id: string
-          is_current: boolean
-          json_meta: Json | null
-          md_body: string | null
-          project_id: string
-          title: string
-          type: Database["public"]["Enums"]["artifact_type"]
-          version: number
-        }
-        Insert: {
-          agent_key: string
-          created_at?: string
-          id?: string
-          is_current?: boolean
-          json_meta?: Json | null
-          md_body?: string | null
-          project_id: string
-          title: string
-          type: Database["public"]["Enums"]["artifact_type"]
-          version?: number
-        }
-        Update: {
-          agent_key?: string
-          created_at?: string
-          id?: string
-          is_current?: boolean
-          json_meta?: Json | null
-          md_body?: string | null
-          project_id?: string
-          title?: string
-          type?: Database["public"]["Enums"]["artifact_type"]
-          version?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_artifacts_agent_key_fkey"
-            columns: ["agent_key"]
-            isOneToOne: false
-            referencedRelation: "SPATH_agents"
-            referencedColumns: ["key"]
-          },
-          {
-            foreignKeyName: "SPATH_artifacts_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_projects"
-            referencedColumns: ["id"]
           },
         ]
-      }
-      SPATH_benchmarks: {
-        Row: {
-          channel_type: Database["public"]["Enums"]["channel_type"] | null
-          company_size: Database["public"]["Enums"]["company_size"] | null
-          created_at: string
-          id: string
-          metric: string
-          percentile_25: number | null
-          percentile_75: number | null
-          source_name: string | null
-          source_url: string | null
-          updated_at: string
-          value_max: number | null
-          value_median: number | null
-          value_min: number | null
-          vertical: string | null
-        }
-        Insert: {
-          channel_type?: Database["public"]["Enums"]["channel_type"] | null
-          company_size?: Database["public"]["Enums"]["company_size"] | null
-          created_at?: string
-          id?: string
-          metric: string
-          percentile_25?: number | null
-          percentile_75?: number | null
-          source_name?: string | null
-          source_url?: string | null
-          updated_at?: string
-          value_max?: number | null
-          value_median?: number | null
-          value_min?: number | null
-          vertical?: string | null
-        }
-        Update: {
-          channel_type?: Database["public"]["Enums"]["channel_type"] | null
-          company_size?: Database["public"]["Enums"]["company_size"] | null
-          created_at?: string
-          id?: string
-          metric?: string
-          percentile_25?: number | null
-          percentile_75?: number | null
-          source_name?: string | null
-          source_url?: string | null
-          updated_at?: string
-          value_max?: number | null
-          value_median?: number | null
-          value_min?: number | null
-          vertical?: string | null
-        }
-        Relationships: []
       }
       SPATH_channels: {
         Row: {
-          allocated_budget: number
-          created_at: string
-          current_weight: number
-          description: string | null
-          experiment_id: string
           id: string
-          is_active: boolean
+          experiment_id: string
           name: string
-          parameters: Json
-          type: Database["public"]["Enums"]["channel_type"]
+          type: string
+          budget_allocated: number | null
+          budget_spent: number | null
+          status: 'active' | 'paused' | 'stopped'
+          settings: Json
+          created_at: string
           updated_at: string
         }
         Insert: {
-          allocated_budget?: number
-          created_at?: string
-          current_weight?: number
-          description?: string | null
-          experiment_id: string
           id?: string
-          is_active?: boolean
+          experiment_id: string
           name: string
-          parameters?: Json
-          type: Database["public"]["Enums"]["channel_type"]
+          type: string
+          budget_allocated?: number | null
+          budget_spent?: number | null
+          status?: 'active' | 'paused' | 'stopped'
+          settings?: Json
+          created_at?: string
           updated_at?: string
         }
         Update: {
-          allocated_budget?: number
-          created_at?: string
-          current_weight?: number
-          description?: string | null
-          experiment_id?: string
           id?: string
-          is_active?: boolean
+          experiment_id?: string
           name?: string
-          parameters?: Json
-          type?: Database["public"]["Enums"]["channel_type"]
+          type?: string
+          budget_allocated?: number | null
+          budget_spent?: number | null
+          status?: 'active' | 'paused' | 'stopped'
+          settings?: Json
+          created_at?: string
           updated_at?: string
         }
         Relationships: [
@@ -370,292 +271,57 @@ export type Database = {
           },
         ]
       }
-      SPATH_comments: {
-        Row: {
-          attachments: Json | null
-          author_id: string
-          content: string
-          created_at: string
-          id: string
-          parent_id: string | null
-          thread_id: string
-          updated_at: string
-        }
-        Insert: {
-          attachments?: Json | null
-          author_id: string
-          content: string
-          created_at?: string
-          id?: string
-          parent_id?: string | null
-          thread_id: string
-          updated_at?: string
-        }
-        Update: {
-          attachments?: Json | null
-          author_id?: string
-          content?: string
-          created_at?: string
-          id?: string
-          parent_id?: string | null
-          thread_id?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_comments_author_id_fkey"
-            columns: ["author_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_comments_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_comments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_comments_thread_id_fkey"
-            columns: ["thread_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_threads"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      SPATH_decisions: {
-        Row: {
-          approver_id: string
-          channel_id: string | null
-          created_at: string
-          experiment_id: string
-          id: string
-          impact_metrics: Json | null
-          implemented_at: string | null
-          reason: string
-          supporting_data: Json
-          type: Database["public"]["Enums"]["decision_type"]
-          updated_at: string
-        }
-        Insert: {
-          approver_id: string
-          channel_id?: string | null
-          created_at?: string
-          experiment_id: string
-          id?: string
-          impact_metrics?: Json | null
-          implemented_at?: string | null
-          reason: string
-          supporting_data?: Json
-          type: Database["public"]["Enums"]["decision_type"]
-          updated_at?: string
-        }
-        Update: {
-          approver_id?: string
-          channel_id?: string | null
-          created_at?: string
-          experiment_id?: string
-          id?: string
-          impact_metrics?: Json | null
-          implemented_at?: string | null
-          reason?: string
-          supporting_data?: Json
-          type?: Database["public"]["Enums"]["decision_type"]
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_decisions_approver_id_fkey"
-            columns: ["approver_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_decisions_channel_id_fkey"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_channels"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_decisions_experiment_id_fkey"
-            columns: ["experiment_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_experiments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      SPATH_experiments: {
-        Row: {
-          budget_allocated: number
-          created_at: string
-          description: string | null
-          end_date: string | null
-          hypothesis: string | null
-          icp: Json
-          id: string
-          max_cac_payback_months: number | null
-          name: string
-          project_id: string
-          start_date: string | null
-          status: Database["public"]["Enums"]["experiment_status"]
-          success_criteria: Json | null
-          target_cpqm: number | null
-          updated_at: string
-        }
-        Insert: {
-          budget_allocated?: number
-          created_at?: string
-          description?: string | null
-          end_date?: string | null
-          hypothesis?: string | null
-          icp: Json
-          id?: string
-          max_cac_payback_months?: number | null
-          name: string
-          project_id: string
-          start_date?: string | null
-          status?: Database["public"]["Enums"]["experiment_status"]
-          success_criteria?: Json | null
-          target_cpqm?: number | null
-          updated_at?: string
-        }
-        Update: {
-          budget_allocated?: number
-          created_at?: string
-          description?: string | null
-          end_date?: string | null
-          hypothesis?: string | null
-          icp?: Json
-          id?: string
-          max_cac_payback_months?: number | null
-          name?: string
-          project_id?: string
-          start_date?: string | null
-          status?: Database["public"]["Enums"]["experiment_status"]
-          success_criteria?: Json | null
-          target_cpqm?: number | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_experiments_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      SPATH_fact_sheets: {
-        Row: {
-          citations_json: Json | null
-          created_at: string
-          experiment_id: string | null
-          generated_by: string | null
-          id: string
-          md_body: string
-          pdf_url: string | null
-          project_id: string
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          citations_json?: Json | null
-          created_at?: string
-          experiment_id?: string | null
-          generated_by?: string | null
-          id?: string
-          md_body: string
-          pdf_url?: string | null
-          project_id: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          citations_json?: Json | null
-          created_at?: string
-          experiment_id?: string | null
-          generated_by?: string | null
-          id?: string
-          md_body?: string
-          pdf_url?: string | null
-          project_id?: string
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_fact_sheets_experiment_id_fkey"
-            columns: ["experiment_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_experiments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_fact_sheets_generated_by_fkey"
-            columns: ["generated_by"]
-            isOneToOne: false
-            referencedRelation: "SPATH_users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_fact_sheets_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       SPATH_gates: {
         Row: {
-          benchmark_range: Json | null
-          benchmark_source: string | null
-          channel_id: string
-          created_at: string
           id: string
-          is_critical: boolean
-          metric: Database["public"]["Enums"]["gate_metric"]
+          experiment_id: string
+          channel_id: string | null
           name: string
-          operator: Database["public"]["Enums"]["gate_operator"]
+          metric: string
+          operator: string
           threshold_value: number
+          current_value: number | null
+          status: 'monitoring' | 'passed' | 'failed' | 'warning'
+          priority: 'low' | 'medium' | 'high' | 'critical'
+          created_at: string
           updated_at: string
-          window_days: number
         }
         Insert: {
-          benchmark_range?: Json | null
-          benchmark_source?: string | null
-          channel_id: string
-          created_at?: string
           id?: string
-          is_critical?: boolean
-          metric: Database["public"]["Enums"]["gate_metric"]
+          experiment_id: string
+          channel_id?: string | null
           name: string
-          operator: Database["public"]["Enums"]["gate_operator"]
+          metric: string
+          operator: string
           threshold_value: number
+          current_value?: number | null
+          status?: 'monitoring' | 'passed' | 'failed' | 'warning'
+          priority?: 'low' | 'medium' | 'high' | 'critical'
+          created_at?: string
           updated_at?: string
-          window_days?: number
         }
         Update: {
-          benchmark_range?: Json | null
-          benchmark_source?: string | null
-          channel_id?: string
-          created_at?: string
           id?: string
-          is_critical?: boolean
-          metric?: Database["public"]["Enums"]["gate_metric"]
+          experiment_id?: string
+          channel_id?: string | null
           name?: string
-          operator?: Database["public"]["Enums"]["gate_operator"]
+          metric?: string
+          operator?: string
           threshold_value?: number
+          current_value?: number | null
+          status?: 'monitoring' | 'passed' | 'failed' | 'warning'
+          priority?: 'low' | 'medium' | 'high' | 'critical'
+          created_at?: string
           updated_at?: string
-          window_days?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "SPATH_gates_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_experiments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "SPATH_gates_channel_id_fkey"
             columns: ["channel_id"]
@@ -665,131 +331,90 @@ export type Database = {
           },
         ]
       }
-      SPATH_orgs: {
-        Row: {
-          created_at: string
-          domain: string | null
-          id: string
-          name: string
-          owner_id: string | null
-          settings: Json
-          slug: string
-          subscription_tier: Database["public"]["Enums"]["subscription_tier"]
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          domain?: string | null
-          id?: string
-          name: string
-          owner_id?: string | null
-          settings?: Json
-          slug: string
-          subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          domain?: string | null
-          id?: string
-          name?: string
-          owner_id?: string | null
-          settings?: Json
-          slug?: string
-          subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      SPATH_projects: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          mode: Database["public"]["Enums"]["project_mode"]
-          name: string
-          org_id: string
-          owner_id: string
-          settings: Json
-          status: Database["public"]["Enums"]["project_status"]
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          mode?: Database["public"]["Enums"]["project_mode"]
-          name: string
-          org_id: string
-          owner_id: string
-          settings?: Json
-          status?: Database["public"]["Enums"]["project_status"]
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          mode?: Database["public"]["Enums"]["project_mode"]
-          name?: string
-          org_id?: string
-          owner_id?: string
-          settings?: Json
-          status?: Database["public"]["Enums"]["project_status"]
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_projects_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_projects_owner_id_fkey"
-            columns: ["owner_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       SPATH_results: {
         Row: {
-          channel_id: string
-          costs: Json
-          created_at: string
-          date: string
           id: string
-          is_simulated: boolean
-          metrics: Json
-          updated_at: string
-          variance_applied: number | null
+          experiment_id: string
+          channel_id: string
+          date: string
+          impressions: number | null
+          clicks: number | null
+          cost: number | null
+          leads: number | null
+          meetings: number | null
+          opportunities: number | null
+          wins: number | null
+          revenue: number | null
+          click_through_rate: number | null
+          cost_per_click: number | null
+          cost_per_lead: number | null
+          cost_per_qualified_meeting: number | null
+          customer_acquisition_cost: number | null
+          lead_to_meeting_rate: number | null
+          meeting_to_opp_rate: number | null
+          opp_to_win_rate: number | null
+          avg_deal_size: number | null
+          metadata: Json
+          created_at: string
         }
         Insert: {
-          channel_id: string
-          costs?: Json
-          created_at?: string
-          date: string
           id?: string
-          is_simulated?: boolean
-          metrics?: Json
-          updated_at?: string
-          variance_applied?: number | null
+          experiment_id: string
+          channel_id: string
+          date: string
+          impressions?: number | null
+          clicks?: number | null
+          cost?: number | null
+          leads?: number | null
+          meetings?: number | null
+          opportunities?: number | null
+          wins?: number | null
+          revenue?: number | null
+          click_through_rate?: number | null
+          cost_per_click?: number | null
+          cost_per_lead?: number | null
+          cost_per_qualified_meeting?: number | null
+          customer_acquisition_cost?: number | null
+          lead_to_meeting_rate?: number | null
+          meeting_to_opp_rate?: number | null
+          opp_to_win_rate?: number | null
+          avg_deal_size?: number | null
+          metadata?: Json
+          created_at?: string
         }
         Update: {
-          channel_id?: string
-          costs?: Json
-          created_at?: string
-          date?: string
           id?: string
-          is_simulated?: boolean
-          metrics?: Json
-          updated_at?: string
-          variance_applied?: number | null
+          experiment_id?: string
+          channel_id?: string
+          date?: string
+          impressions?: number | null
+          clicks?: number | null
+          cost?: number | null
+          leads?: number | null
+          meetings?: number | null
+          opportunities?: number | null
+          wins?: number | null
+          revenue?: number | null
+          click_through_rate?: number | null
+          cost_per_click?: number | null
+          cost_per_lead?: number | null
+          cost_per_qualified_meeting?: number | null
+          customer_acquisition_cost?: number | null
+          lead_to_meeting_rate?: number | null
+          meeting_to_opp_rate?: number | null
+          opp_to_win_rate?: number | null
+          avg_deal_size?: number | null
+          metadata?: Json
+          created_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "SPATH_results_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_experiments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "SPATH_results_channel_id_fkey"
             columns: ["channel_id"]
@@ -799,97 +424,58 @@ export type Database = {
           },
         ]
       }
-      SPATH_rules: {
+      SPATH_agents: {
         Row: {
-          action_logic: Json
-          condition_logic: Json
-          created_at: string
-          description: string | null
           id: string
-          is_enabled: boolean
+          project_id: string
+          agent_key: 'channel_scout' | 'offer_alchemist' | 'signal_wrangler' | 'budget_captain'
           name: string
-          priority: number
-          ruleset_id: string
-          updated_at: string
-        }
-        Insert: {
-          action_logic: Json
-          condition_logic: Json
-          created_at?: string
-          description?: string | null
-          id?: string
-          is_enabled?: boolean
-          name: string
-          priority?: number
-          ruleset_id: string
-          updated_at?: string
-        }
-        Update: {
-          action_logic?: Json
-          condition_logic?: Json
-          created_at?: string
-          description?: string | null
-          id?: string
-          is_enabled?: boolean
-          name?: string
-          priority?: number
-          ruleset_id?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_rules_ruleset_id_fkey"
-            columns: ["ruleset_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_rulesets"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      SPATH_rulesets: {
-        Row: {
-          created_at: string
-          created_by: string
           description: string | null
-          id: string
+          status: 'idle' | 'working' | 'blocked' | 'done'
+          status_line: string | null
+          current_task: string | null
+          progress: number | null
           is_active: boolean
-          name: string
-          project_id: string
+          settings: Json
+          last_activity: string | null
+          created_at: string
           updated_at: string
-          version: number
         }
         Insert: {
-          created_at?: string
-          created_by: string
-          description?: string | null
           id?: string
-          is_active?: boolean
-          name: string
           project_id: string
+          agent_key: 'channel_scout' | 'offer_alchemist' | 'signal_wrangler' | 'budget_captain'
+          name: string
+          description?: string | null
+          status?: 'idle' | 'working' | 'blocked' | 'done'
+          status_line?: string | null
+          current_task?: string | null
+          progress?: number | null
+          is_active?: boolean
+          settings?: Json
+          last_activity?: string | null
+          created_at?: string
           updated_at?: string
-          version?: number
         }
         Update: {
-          created_at?: string
-          created_by?: string
-          description?: string | null
           id?: string
-          is_active?: boolean
-          name?: string
           project_id?: string
+          agent_key?: 'channel_scout' | 'offer_alchemist' | 'signal_wrangler' | 'budget_captain'
+          name?: string
+          description?: string | null
+          status?: 'idle' | 'working' | 'blocked' | 'done'
+          status_line?: string | null
+          current_task?: string | null
+          progress?: number | null
+          is_active?: boolean
+          settings?: Json
+          last_activity?: string | null
+          created_at?: string
           updated_at?: string
-          version?: number
         }
         Relationships: [
           {
-            foreignKeyName: "SPATH_rulesets_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "SPATH_users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_rulesets_project_id_fkey"
+            foreignKeyName: "SPATH_agents_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "SPATH_projects"
@@ -897,243 +483,180 @@ export type Database = {
           },
         ]
       }
-      SPATH_spaces: {
+      SPATH_benchmarks: {
         Row: {
-          created_at: string
-          created_by: string
-          description: string | null
           id: string
-          name: string
+          metric: string
+          category: string
+          industry: string | null
+          company_size: string | null
+          geographic_region: string | null
+          value_p25: number
+          value_p50: number
+          value_p75: number
+          value_avg: number
+          sample_size: number
+          last_updated: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          metric: string
+          category: string
+          industry?: string | null
+          company_size?: string | null
+          geographic_region?: string | null
+          value_p25: number
+          value_p50: number
+          value_p75: number
+          value_avg: number
+          sample_size: number
+          last_updated: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          metric?: string
+          category?: string
+          industry?: string | null
+          company_size?: string | null
+          geographic_region?: string | null
+          value_p25?: number
+          value_p50?: number
+          value_p75?: number
+          value_avg?: number
+          sample_size?: number
+          last_updated?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      SPATH_agent_executions: {
+        Row: {
+          id: string
+          agent_id: string
+          status: 'running' | 'completed' | 'failed'
+          start_time: string
+          end_time: string | null
+          duration_ms: number | null
+          input_data: Json | null
+          output_data: Json | null
+          error_message: string | null
+          artifacts_created: string[] | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          agent_id: string
+          status?: 'running' | 'completed' | 'failed'
+          start_time?: string
+          end_time?: string | null
+          duration_ms?: number | null
+          input_data?: Json | null
+          output_data?: Json | null
+          error_message?: string | null
+          artifacts_created?: string[] | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          agent_id?: string
+          status?: 'running' | 'completed' | 'failed'
+          start_time?: string
+          end_time?: string | null
+          duration_ms?: number | null
+          input_data?: Json | null
+          output_data?: Json | null
+          error_message?: string | null
+          artifacts_created?: string[] | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "SPATH_agent_executions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "SPATH_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      SPATH_artifacts: {
+        Row: {
+          id: string
           project_id: string
+          agent_key: string
+          execution_id: string | null
+          name: string
+          description: string | null
+          artifact_type: string
+          content: Json
+          metadata: Json | null
+          is_active: boolean
+          created_at: string
           updated_at: string
         }
         Insert: {
-          created_at?: string
-          created_by: string
-          description?: string | null
           id?: string
-          name: string
           project_id: string
+          agent_key: string
+          execution_id?: string | null
+          name: string
+          description?: string | null
+          artifact_type: string
+          content: Json
+          metadata?: Json | null
+          is_active?: boolean
+          created_at?: string
           updated_at?: string
         }
         Update: {
-          created_at?: string
-          created_by?: string
-          description?: string | null
           id?: string
-          name?: string
           project_id?: string
+          agent_key?: string
+          execution_id?: string | null
+          name?: string
+          description?: string | null
+          artifact_type?: string
+          content?: Json
+          metadata?: Json | null
+          is_active?: boolean
+          created_at?: string
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "SPATH_spaces_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "SPATH_users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_spaces_project_id_fkey"
+            foreignKeyName: "SPATH_artifacts_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "SPATH_projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      SPATH_threads: {
-        Row: {
-          created_at: string
-          created_by: string
-          id: string
-          is_locked: boolean
-          space_id: string
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          created_by: string
-          id?: string
-          is_locked?: boolean
-          space_id: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          created_by?: string
-          id?: string
-          is_locked?: boolean
-          space_id?: string
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_threads_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "SPATH_users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_threads_space_id_fkey"
-            columns: ["space_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_spaces"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      SPATH_users: {
-        Row: {
-          avatar_url: string | null
-          created_at: string
-          email: string
-          id: string
-          is_active: boolean
-          last_login: string | null
-          name: string
-          org_id: string
-          role: Database["public"]["Enums"]["user_role"]
-          updated_at: string
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string
-          email: string
-          id: string
-          is_active?: boolean
-          last_login?: string | null
-          name: string
-          org_id: string
-          role?: Database["public"]["Enums"]["user_role"]
-          updated_at?: string
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string
-          email?: string
-          id?: string
-          is_active?: boolean
-          last_login?: string | null
-          name?: string
-          org_id?: string
-          role?: Database["public"]["Enums"]["user_role"]
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_users_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_orgs"
             referencedColumns: ["id"]
           },
         ]
       }
     }
     Views: {
-      v_allocator_weights: {
-        Row: {
-          allocated_budget: number | null
-          channel_id: string | null
-          channel_type: Database["public"]["Enums"]["channel_type"] | null
-          current_weight: number | null
-          experiment_id: string | null
-          rationale: string | null
-          weight_updated_at: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_channels_experiment_id_fkey"
-            columns: ["experiment_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_experiments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      v_finance: {
-        Row: {
-          channel_id: string | null
-          channel_type: Database["public"]["Enums"]["channel_type"] | null
-          cpqm: number | null
-          created_at: string | null
-          date: string | null
-          experiment_id: string | null
-          meetings_held: string | null
-          total_cost: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "SPATH_channels_experiment_id_fkey"
-            columns: ["experiment_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_experiments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "SPATH_results_channel_id_fkey"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "SPATH_channels"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
       [_ in never]: never
     }
     Enums: {
-      agent_status: "idle" | "working" | "blocked" | "done"
-      artifact_type: "benchmark" | "copy" | "calc" | "alloc"
-      channel_type:
-        | "google_search"
-        | "linkedin_inmail"
-        | "webinar"
-        | "content_marketing"
-        | "outbound_email"
-        | "events"
-        | "partnerships"
-        | "referrals"
-        | "social_media"
-        | "paid_social"
-      company_size: "startup" | "smb" | "mid_market" | "enterprise"
-      decision_type: "scale" | "iterate" | "kill"
-      experiment_status: "draft" | "running" | "paused" | "completed" | "killed"
-      gate_metric:
-        | "reply_rate"
-        | "click_through_rate"
-        | "conversion_rate"
-        | "cost_per_lead"
-        | "cost_per_meeting"
-        | "meeting_show_rate"
-        | "opportunity_rate"
-        | "close_rate"
-        | "cac_payback_months"
-      gate_operator: "gte" | "lte" | "eq" | "between"
-      geographic_region:
-        | "north_america"
-        | "europe"
-        | "asia_pacific"
-        | "latin_america"
-        | "global"
-      notification_trigger:
-        | "experiment_started"
-        | "experiment_completed"
-        | "gate_failed"
-        | "budget_threshold_reached"
-        | "decision_required"
-        | "anomaly_detected"
       project_mode: "simulation" | "connected"
       project_status: "draft" | "active" | "paused" | "completed" | "archived"
-      sales_motion: "plg" | "sales_led" | "services"
       subscription_tier: "demo" | "starter" | "growth" | "enterprise"
-      user_role: "owner" | "contributor" | "viewer"
+      user_role: "owner" | "admin" | "contributor" | "viewer"
+      experiment_status: "draft" | "running" | "paused" | "completed" | "failed"
+      channel_type: "paid_search" | "paid_social" | "display" | "video" | "email" | "content" | "seo" | "affiliate" | "referral" | "direct" | "linkedin_inmail" | "webinar" | "events" | "partnership"
+      gate_metric: "cpl" | "cpqm" | "cac" | "roas" | "payback_months" | "conversion_rate" | "cost_per_click" | "click_through_rate" | "lead_to_meeting_rate" | "meeting_to_opp_rate" | "opp_to_win_rate" | "avg_deal_size"
+      gate_operator: ">" | "<" | ">=" | "<=" | "="
+      agent_status: "idle" | "working" | "blocked" | "done"
+      artifact_type: "report" | "recommendation" | "analysis" | "data" | "insight"
+      decision_type: "budget_allocation" | "channel_optimization" | "experiment_termination" | "scaling_decision"
+      company_size: "startup" | "small" | "medium" | "large" | "enterprise"
+      geographic_region: "north_america" | "europe" | "asia_pacific" | "latin_america" | "middle_east_africa"
+      sales_motion: "self_serve" | "sales_assisted" | "enterprise_sales"
+      notification_trigger: "gate_failure" | "budget_threshold" | "experiment_complete" | "anomaly_detected"
     }
     CompositeTypes: {
       [_ in never]: never

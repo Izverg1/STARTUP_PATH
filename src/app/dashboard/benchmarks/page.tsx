@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useCurrentProject } from '@/contexts/ProjectContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,11 +19,19 @@ import {
   Filter,
   ArrowUp,
   ArrowDown,
-  Minus
+  Minus,
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+  Info
 } from 'lucide-react';
 
 export default function BenchmarksPage() {
   const [selectedStage, setSelectedStage] = useState('seed');
+  const [currentPage, setCurrentPage] = useState(1);
+  const { currentProject } = useCurrentProject();
+  const [selectedMetric, setSelectedMetric] = useState(null);
+  const itemsPerPage = 5;
 
   const benchmarkData = {
     seed: {
@@ -91,144 +100,206 @@ export default function BenchmarksPage() {
 
   const currentData = benchmarkData[selectedStage as keyof typeof benchmarkData];
 
-  // Component to render benchmark content for each stage
+  // Streamlined table component with pagination
   function BenchmarkContent({ data }: { data: typeof benchmarkData.seed }) {
+    const totalPages = Math.ceil(data.metrics.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedMetrics = data.metrics.slice(startIndex, startIndex + itemsPerPage);
+
     return (
-      <div className="space-y-6">
-        {/* Stage Info */}
-        <Card className="bg-black border border-cyan-500/30">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-white">{data.title}</h3>
-                <p className="text-sm text-gray-400">{data.range}</p>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-300">Based on</div>
-                <div className="text-lg font-bold text-white">2,400+ startups</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="flex flex-col h-full">
+        {/* Compact info bar */}
+        <div className="flex items-center justify-between p-3 bg-cyan-950/20 border border-cyan-500/30 rounded mb-4">
+          <span className="text-white font-medium">{data.title}</span>
+          <span className="text-cyan-400 text-sm">{data.range} • {data.metrics.length} metrics</span>
+        </div>
 
-        {/* Benchmarks Grid by Category */}
-        {['Email Marketing', 'Cold Outbound', 'Content Marketing', 'Paid Acquisition', 'Organic Growth', 'Product-Led'].map(category => {
-          const categoryMetrics = data.metrics.filter(m => m.category === category);
-          
-          return (
-            <div key={category}>
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                {category}
-              </h3>
-              
-              <div className="space-y-2">
-                {categoryMetrics.map((item, index) => {
-                  const Icon = item.icon;
-                  
-                  return (
-                    <div key={index} className={`bg-black/50 border-l-4 ${getStatusColor(item.status).replace('border-', 'border-l-').replace('/30', '')} border-r border-t border-b border-gray-800/50 hover:bg-black/70 transition-all duration-200 rounded-r-lg`}>
-                      <div className="px-4 py-3 flex items-center justify-between">
-                        {/* Left side - Metric info */}
-                        <div className="flex items-center gap-3 flex-1">
-                          <div className="p-1.5 bg-zinc-800/50 rounded-md">
-                            <Icon className="h-3.5 w-3.5 text-gray-400" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-white text-sm truncate">{item.metric}</h4>
-                            <p className="text-xs text-gray-500">{item.category}</p>
-                          </div>
-                        </div>
-
-                        {/* Center - Values */}
-                        <div className="flex items-center gap-6 text-sm">
-                          <div className="text-center min-w-0">
-                            <div className="text-xs text-gray-400">Range</div>
-                            <div className="text-white font-medium">{item.value}</div>
-                          </div>
-                          <div className="text-center min-w-0">
-                            <div className="text-xs text-gray-400">Industry</div>
-                            <div className="text-cyan-400 font-medium">{item.industry}</div>
-                          </div>
-                        </div>
-
-                        {/* Right side - Status */}
-                        <div className="flex items-center gap-2 ml-4">
-                          {getStatusIcon(item.status)}
-                          <Badge variant="outline" className={`text-xs px-2 py-1 ${getStatusColor(item.status)} border-current`}>
-                            {item.status}
-                          </Badge>
-                        </div>
+        {/* Dense benchmark table with fixed height */}
+        <div className="flex-1 bg-black border border-gray-800 rounded-lg overflow-hidden flex flex-col">
+          <table className="w-full">
+            <thead className="bg-gray-900/50 border-b border-gray-800">
+              <tr>
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wide">Category</th>
+                <th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wide">Metric</th>
+                <th className="text-right px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wide">Range</th>
+                <th className="text-right px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wide">Industry</th>
+                <th className="text-center px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wide">Status</th>
+                <th className="w-10 px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800/50">
+              {paginatedMetrics.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <tr key={startIndex + index} className="hover:bg-gray-900/30 transition-colors">
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Icon className="h-3 w-3 text-gray-400" />
+                        <span className="text-gray-300 text-sm">{item.category.split(' ')[0]}</span>
                       </div>
-                    </div>
-                  );
-                })}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="text-white text-sm font-medium">{item.metric}</span>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <span className="text-white text-sm font-mono">{item.value}</span>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <span className="text-cyan-400 text-sm font-mono">{item.industry}</span>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <div className="inline-flex items-center gap-1">
+                        {getStatusIcon(item.status)}
+                        <span className={`text-xs font-medium ${getStatusColor(item.status).split(' ')[1]}`}>
+                          {item.status}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 text-gray-400 hover:text-white"
+                        onClick={() => setSelectedMetric(item)}
+                      >
+                        <Info className="h-3 w-3" />
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex items-center justify-between p-3 border-t border-gray-800 bg-gray-900/20">
+          <div className="text-sm text-gray-400">
+            Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, data.metrics.length)} of {data.metrics.length}
+          </div>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="h-8 w-8 p-0 text-gray-400 hover:text-white disabled:opacity-50"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="text-sm text-gray-300 px-2">
+              {currentPage} / {totalPages}
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="h-8 w-8 p-0 text-gray-400 hover:text-white disabled:opacity-50"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Metric Detail Popup */}
+        {selectedMetric && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 max-w-md w-full mx-4">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-white">{selectedMetric.metric}</h3>
+                  <p className="text-sm text-gray-400">{selectedMetric.category}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedMetric(null)}
+                  className="h-6 w-6 p-0 text-gray-400 hover:text-white"
+                >
+                  ×
+                </Button>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <span className="text-xs text-gray-400 uppercase tracking-wide">Benchmark Range</span>
+                  <div className="text-white font-mono">{selectedMetric.value}</div>
+                </div>
+                <div>
+                  <span className="text-xs text-gray-400 uppercase tracking-wide">Industry Average</span>
+                  <div className="text-cyan-400 font-mono">{selectedMetric.industry}</div>
+                </div>
+                <div>
+                  <span className="text-xs text-gray-400 uppercase tracking-wide">Performance Status</span>
+                  <div className="flex items-center gap-2 mt-1">
+                    {getStatusIcon(selectedMetric.status)}
+                    <span className={`text-sm font-medium ${getStatusColor(selectedMetric.status).split(' ')[1]}`}>
+                      {selectedMetric.status}
+                    </span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-gray-700">
+                  <span className="text-xs text-gray-400">
+                    Based on data from 2,400+ startups in the {data.range} range
+                  </span>
+                </div>
               </div>
             </div>
-          );
-        })}
+          </div>
+        )}
       </div>
     );
   }
 
   return (
     <div className="h-full flex flex-col">
-      {/* Benchmarks Content with Horizontal Tabs */}
-      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
-        <Tabs value={selectedStage} onValueChange={setSelectedStage} className="flex-1 flex flex-col">
-          <TabsList className="bg-zinc-800 border-2 border-zinc-500 p-1 m-6 mb-0 shrink-0 shadow-xl">
-            <TabsTrigger 
-              value="seed" 
-              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
-            >
-              🌱 Pre-Seed / Seed
-            </TabsTrigger>
-            <TabsTrigger 
-              value="series_a" 
-              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
-            >
-              🚀 Series A
-            </TabsTrigger>
-            <TabsTrigger 
-              value="growth" 
-              className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
-            >
-              📈 Growth Stage
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Pre-Seed / Seed Tab */}
-          <TabsContent value="seed" className="flex-1 overflow-y-auto p-6">
-            {/* Header Controls */}
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-white">YC-Style Benchmarks</h2>
-                <p className="text-sm text-cyan-400 font-medium">Industry Traction Metrics</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <Button variant="outline" size="sm" className="bg-zinc-900 border-cyan-500/30 text-cyan-200 hover:bg-cyan-900/20">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter
-                </Button>
-                <Button variant="outline" size="sm" className="bg-zinc-900 border-cyan-500/30 text-cyan-200 hover:bg-cyan-900/20">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export
-                </Button>
-              </div>
+      {/* Compact Header */}
+      <div className="shrink-0 bg-black border-b border-cyan-500/30 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="h-5 w-5 text-cyan-400" />
+            <div>
+              <h1 className="text-lg font-semibold text-white">YC Benchmarks</h1>
+              <p className="text-xs text-gray-400">Industry traction metrics • 2,400+ startups</p>
             </div>
-            <BenchmarkContent data={benchmarkData.seed} />
-          </TabsContent>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="bg-black border-cyan-500/30 text-cyan-200 hover:bg-cyan-900/20 h-8 px-3">
+              <Filter className="h-3 w-3 mr-1" />
+              Filter
+            </Button>
+            <Button variant="outline" size="sm" className="bg-black border-cyan-500/30 text-cyan-200 hover:bg-cyan-900/20 h-8 px-3">
+              <Download className="h-3 w-3 mr-1" />
+              Export
+            </Button>
+          </div>
+        </div>
+      </div>
 
-          {/* Series A Tab */}
-          <TabsContent value="series_a" className="flex-1 overflow-y-auto p-6">
-            <BenchmarkContent data={benchmarkData.series_a} />
-          </TabsContent>
+      {/* Streamlined Content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          {/* Compact Stage Selector */}
+          <div className="flex gap-2 mb-4">
+            {Object.entries(benchmarkData).map(([key, data]) => (
+              <Button
+                key={key}
+                variant={selectedStage === key ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedStage(key)}
+                className={`h-8 px-3 text-xs ${
+                  selectedStage === key 
+                    ? 'bg-cyan-600 text-white' 
+                    : 'bg-black border-cyan-500/30 text-cyan-300 hover:bg-cyan-900/20'
+                }`}
+              >
+                {data.title.split(' ')[0]} {data.range}
+              </Button>
+            ))}
+          </div>
 
-          {/* Growth Stage Tab */}
-          <TabsContent value="growth" className="flex-1 overflow-y-auto p-6">
-            <BenchmarkContent data={benchmarkData.growth} />
-          </TabsContent>
-        </Tabs>
+          <BenchmarkContent data={currentData} />
+        </div>
       </div>
     </div>
   );

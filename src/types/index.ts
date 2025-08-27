@@ -1,5 +1,5 @@
 // Core types for STARTUP_PATH platform
-// Based on database schema with sg_ prefix
+// Based on database schema with SPATH_ prefix
 
 // =============================================================================
 // Base Entity Types
@@ -34,7 +34,7 @@ export interface Project extends BaseEntity {
   name: string;
   description?: string;
   org_id: string;
-  owner_id: string;
+  created_by: string;
   status: ProjectStatus;
   mode: ProjectMode;
   settings: ProjectSettings;
@@ -426,6 +426,25 @@ export interface SpaceSettings {
 // Export all types
 // =============================================================================
 
-export * from './agents';
-export * from './dashboard';
-export * from './rules';
+// Export specific types to avoid conflicts
+export type {
+  Agent,
+  AgentStatus,
+  AgentKey,
+  AgentConfiguration,
+  AgentExecution,
+  ExecutionError
+} from './agents';
+
+export type {
+  DashboardConfig,
+  WidgetConfiguration,
+  MetricTrend
+} from './dashboard';
+
+export type {
+  BusinessRule,
+  RuleAction,
+  RuleCondition,
+  TimePeriod
+} from './rules';

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #0a0a0a; 
+            color: white; 
+            padding: 20px; 
+        }
+        .test-input {
+            width: 100%;
+            padding: 10px;
+            background: #222;
+            border: 2px solid #444;
+            color: white;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .test-input:focus {
+            border-color: #00ffff;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Input Field Test</h1>
+    <p>Click and type in these fields:</p>
+    
+    <input type="email" class="test-input" placeholder="Test email input" />
+    <input type="text" class="test-input" placeholder="Test text input" />
+    <input type="text" class="test-input" placeholder="Test company input" />
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.test-input');
+            inputs.forEach((input, index) => {
+                input.addEventListener('focus', function() {
+                    console.log(`Input ${index} focused`);
+                    this.style.borderColor = '#00ff00';
+                });
+                
+                input.addEventListener('input', function() {
+                    console.log(`Input ${index} value:`, this.value);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

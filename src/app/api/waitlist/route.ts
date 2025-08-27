@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { z } from 'zod'
+import { emailService } from '@/lib/email/service'
+import { generateAdminNotificationEmail, generateWelcomeEmail } from '@/lib/email/templates'
 
 // Validation schema
 const waitlistSchema = z.object({
@@ -9,7 +11,7 @@ const waitlistSchema = z.object({
   company: z.string().min(1, 'Company is required').optional(),
   position: z.string().optional(),
   type: z.enum(['customer', 'partner'], {
-    required_error: 'Type must be customer or partner'
+    message: 'Type must be customer or partner'
   }),
   additionalInfo: z.object({
     monthlyBudget: z.string().optional(),
@@ -83,6 +85,74 @@ export async function POST(request: NextRequest) {
         },
         { status: 500 }
       )
+    }
+
+    // Send email notifications (non-blocking)
+    const emailData = {
+      email: data.email,
+      name: data.name,
+      company: data.company,
+      position: data.position,
+      type: data.type,
+      additionalInfo: validatedData.additionalInfo,
+      ip_address: ip,
+      user_agent: userAgent,
+      referrer: referer,
+      created_at: data.created_at
+    }
+
+    // Always show console notification for immediate visibility
+    console.log('\n' + '='.repeat(80))
+    console.log(`🎉 NEW ${emailData.type.toUpperCase()} SIGNUP NOTIFICATION`)
+    console.log('='.repeat(80))
+    console.log(`📧 Email: ${emailData.email}`)
+    console.log(`👤 Name: ${emailData.name || 'Not provided'}`)
+    console.log(`🏢 Company: ${emailData.company || 'Not provided'}`)
+    console.log(`💼 Position: ${emailData.position || 'Not provided'}`)
+    console.log(`📊 Type: ${emailData.type} (${emailData.type === 'customer' ? 'High Priority' : 'Standard Priority'})`)
+    
+    if (emailData.additionalInfo && Object.keys(emailData.additionalInfo).length > 0) {
+      console.log('📋 Additional Info:')
+      if (emailData.additionalInfo.monthlyBudget) console.log(`   💰 Budget: ${emailData.additionalInfo.monthlyBudget}`)
+      if (emailData.additionalInfo.partnershipType) console.log(`   🤝 Partnership: ${emailData.additionalInfo.partnershipType}`)
+      if (emailData.additionalInfo.industry) console.log(`   🏭 Industry: ${emailData.additionalInfo.industry}`)
+    }
+    
+    console.log(`🌐 IP: ${emailData.ip_address}`)
+    console.log(`🔗 Referrer: ${emailData.referrer}`)
+    console.log(`⏰ Time: ${new Date(emailData.created_at).toLocaleString('en-US', { 
+      timeZone: 'America/New_York',
+      dateStyle: 'full',
+      timeStyle: 'long'
+    })}`)
+    console.log('='.repeat(80) + '\n')
+
+    // Try to send email notifications
+    try {
+      // Send admin notification email
+      const adminEmail = process.env.ADMIN_EMAIL || 'your-email@example.com'
+      const adminNotification = generateAdminNotificationEmail(emailData)
+      await emailService.sendEmail({
+        to: adminEmail,
+        subject: adminNotification.subject,
+        html: adminNotification.html,
+        text: adminNotification.text
+      })
+
+      // Send welcome email to user
+      const welcomeEmail = generateWelcomeEmail(emailData)
+      await emailService.sendEmail({
+        to: data.email,
+        subject: welcomeEmail.subject,
+        html: welcomeEmail.html,
+        text: welcomeEmail.text
+      })
+
+      console.log('📧 Email notifications sent successfully to', adminEmail)
+    } catch (emailError) {
+      // Log email errors but don't fail the signup
+      console.log('⚠️ Email notification failed (non-critical) - signup still successful')
+      console.log('💡 Fix Gmail app password to enable email notifications')
     }
 
     // Return success response

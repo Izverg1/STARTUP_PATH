@@ -1,7 +1,9 @@
 // Business rules types for STARTUP_PATH platform
 // Covers rule conditions, actions, versioning, and approval workflows
 
-import { BaseEntity, AgentKey, ChannelType } from './index';
+import { BaseEntity } from './index';
+
+export type AgentKey = 'channel_discovery_engine' | 'campaign_optimization_engine' | 'performance_analytics_engine' | 'budget_allocation_engine';
 
 // =============================================================================
 // Core Rule Types
@@ -565,6 +567,8 @@ export interface ExecutionError {
 // =============================================================================
 // Rule Analytics & Monitoring
 // =============================================================================
+
+export type TimePeriod = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
 
 export interface RuleAnalytics extends BaseEntity {
   rule_id: string;

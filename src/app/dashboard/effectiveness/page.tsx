@@ -1,6 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { useCurrentProject } from '@/contexts/ProjectContext';
+import { useEffectiveness } from '@/hooks/useEffectiveness';
+import type { ChannelPerformance, OptimizationOpportunity } from '@/lib/db/client-queries';
 import { MetricCard } from '@/components/dashboard/MetricCard';
 import { FunnelChart } from '@/components/dashboard/FunnelChart';
 import { FinanceMetrics } from '@/components/dashboard/FinanceMetrics';
@@ -39,7 +43,10 @@ import {
   Download,
   Zap,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
+  Loader2,
+  XCircle,
+  Building2
 } from 'lucide-react';
 
 // Mock data for effectiveness analysis
@@ -489,14 +496,90 @@ export default function EffectivenessPage() {
   const [timeRange, setTimeRange] = useState('last_30_days');
   const [selectedTab, setSelectedTab] = useState('overview');
 
-  const data = mockEffectivenessData;
+  // Real data hooks
+  const { user, organization, loading: userLoading, error: userError, refetch: refetchUser } = useCurrentUser();
+  const { currentProject, isLoading: projectLoading } = useCurrentProject();
+  const { 
+    effectivenessData, 
+    loading: effectivenessLoading, 
+    error: effectivenessError,
+    overview,
+    channelPerformance,
+    timeSeriesData,
+    optimizationOpportunities,
+    refetch 
+  } = useEffectiveness({ 
+    projectId: currentProject?.id,
+    orgId: !currentProject?.id ? organization?.id : undefined, // Fallback to org if no project
+    autoRefresh: true,
+    refreshInterval: 30000
+  });
+
+  // Combined loading state
+  const loading = userLoading || projectLoading || effectivenessLoading;
+  const error = userError || effectivenessError;
+
+  // Organization check - redirect to settings if no organization
+  if (!organization) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-zinc-950">
+        <div className="text-center space-y-4 max-w-md">
+          <Building2 className="h-16 w-16 text-yellow-400 mx-auto" />
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-2">Organization Required</h2>
+            <p className="text-gray-400 mb-6">
+              You need to join or create an organization to access effectiveness analytics.
+            </p>
+            <Button 
+              onClick={() => window.location.href = '/dashboard/settings?tab=organization'}
+              className="bg-blue-600/20 border border-blue-500/30 hover:bg-blue-600/30 text-blue-400"
+            >
+              <Building2 className="h-4 w-4 mr-2" />
+              Manage Organization
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-zinc-950">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-400 mx-auto" />
+          <p className="text-blue-200">Loading effectiveness analytics...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-zinc-950">
+        <div className="text-center space-y-4">
+          <AlertTriangle className="h-8 w-8 text-red-400 mx-auto" />
+          <p className="text-red-200">Error loading effectiveness data</p>
+          <p className="text-gray-400 text-sm">{error}</p>
+          <Button onClick={refetch} variant="outline" className="bg-zinc-900 border-blue-500/30 text-blue-200 hover:bg-blue-900/20">
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // No data state - use mock data as fallback for demonstration
+  const data = effectivenessData || mockEffectivenessData;
 
   return (
     <div className="h-full flex flex-col">
       {/* Effectiveness Content with Horizontal Tabs */}
       <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 flex flex-col">
-          <TabsList className="bg-zinc-800 border-2 border-zinc-500 p-1 m-6 mb-0 shrink-0 shadow-xl">
+          <TabsList className="bg-slate-900/50 border border-slate-700/50 p-1 m-6 mb-0 shrink-0">
             <TabsTrigger 
               value="overview" 
               className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"
@@ -524,7 +607,7 @@ export default function EffectivenessPage() {
           </TabsList>
 
           {/* Performance Overview Tab */}
-          <TabsContent value="overview" className="flex-1 overflow-y-auto p-6">
+          <TabsContent value="overview" className="flex-1 overflow-y-auto effectiveness-scrollbar p-6">
             {/* Header Controls */}
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -637,7 +720,7 @@ export default function EffectivenessPage() {
           </TabsContent>
 
           {/* Channel Analysis Tab */}
-          <TabsContent value="channels" className="flex-1 overflow-y-auto p-6">
+          <TabsContent value="channels" className="flex-1 overflow-y-auto effectiveness-scrollbar p-6">
             <div className="space-y-6">
               <ChannelPerformanceChart data={data.channelPerformance} />
               
@@ -700,9 +783,9 @@ export default function EffectivenessPage() {
           </TabsContent>
 
           {/* Funnel Analysis Tab */}
-          <TabsContent value="funnel" className="flex-1 overflow-y-auto p-6">
+          <TabsContent value="funnel" className="flex-1 overflow-y-auto effectiveness-scrollbar p-6">
             <FunnelChart 
-              data={data.funnelData}
+              data={data.funnelData || mockEffectivenessData.funnelData}
               title="Conversion Funnel Analysis"
               showDropOffAnalysis={true}
               showOptimizations={true}
@@ -710,7 +793,7 @@ export default function EffectivenessPage() {
           </TabsContent>
 
           {/* Optimization Tab */}
-          <TabsContent value="optimization" className="flex-1 overflow-y-auto p-6">
+          <TabsContent value="optimization" className="flex-1 overflow-y-auto effectiveness-scrollbar p-6">
             <OptimizationOpportunities opportunities={data.optimizationOpportunities} />
           </TabsContent>
         </Tabs>

@@ -18,7 +18,7 @@ export const onboardingSchema = z.object({
 
   // Mode Step
   mode: z.enum(["simulation", "connected"], {
-    required_error: "Please select a mode",
+    message: "Please select a mode",
   }),
 })
 

@@ -98,7 +98,7 @@ export default function AdminPage() {
       {/* Admin Content with Horizontal Tabs */}
       <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
         <Tabs defaultValue="demo-mode" className="flex-1 flex flex-col">
-          <TabsList className="bg-zinc-800 border-2 border-zinc-500 p-1 m-6 mb-0 shrink-0 shadow-xl">
+          <TabsList className="bg-slate-900/50 border border-slate-700/50 p-1 m-6 mb-0 shrink-0">
             <TabsTrigger 
               value="demo-mode" 
               className="data-[state=active]:bg-magenta-500/20 data-[state=active]:text-magenta-300 text-zinc-400"

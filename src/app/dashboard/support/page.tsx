@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { MainLayout } from '@/components/layout/MainLayout'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -31,7 +30,7 @@ export default function SupportPage() {
 
   const agentGuides = [
     {
-      name: 'Channel Discovery Engine',
+      name: 'Channel Agent',
       icon: '🔍',
       description: 'Channel discovery and recommendation engine',
       status: 'active',
@@ -48,7 +47,7 @@ export default function SupportPage() {
       ]
     },
     {
-      name: 'Campaign Optimization Engine',
+      name: 'Campaign Agent',
       icon: '✨',
       description: 'Copy generation and A/B testing automation',
       status: 'active',
@@ -65,7 +64,7 @@ export default function SupportPage() {
       ]
     },
     {
-      name: 'Performance Analytics Engine',
+      name: 'Analytics Agent',
       icon: '📊',
       description: 'Performance monitoring and anomaly detection',
       status: 'active',
@@ -82,7 +81,7 @@ export default function SupportPage() {
       ]
     },
     {
-      name: 'Budget Allocation Engine',
+      name: 'Finance Agent',
       icon: '💰',
       description: 'Budget optimization and allocation strategy',
       status: 'active',
@@ -113,7 +112,7 @@ export default function SupportPage() {
     },
     {
       question: 'How often do agents update their recommendations?',
-      answer: 'Agents run continuously, with Channel Discovery Engine checking every 2 hours, Campaign Optimization Engine running real-time A/B tests, Performance Analytics Engine monitoring every 5 minutes, and Budget Allocation Engine rebalancing weekly.',
+      answer: 'Agents run continuously, with Channel Agent checking every 2 hours, Campaign Agent running real-time A/B tests, Analytics Agent monitoring every 5 minutes, and Finance Agent rebalancing weekly.',
       category: 'Agents'
     },
     {
@@ -128,7 +127,7 @@ export default function SupportPage() {
     },
     {
       question: 'What happens if a channel fails its gate threshold?',
-      answer: 'When a channel fails its gate, Budget Allocation Engine automatically reallocates budget to better-performing channels while Channel Discovery Engine searches for alternative options.',
+      answer: 'When a channel fails its gate, Finance Agent automatically reallocates budget to better-performing channels while Channel Agent searches for alternative options.',
       category: 'Optimization'
     }
   ]
@@ -164,8 +163,7 @@ export default function SupportPage() {
   )
 
   return (
-    <MainLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -397,16 +395,15 @@ export default function SupportPage() {
                   <p className="text-gray-300">Set realistic gate thresholds based on your industry benchmarks for better agent recommendations.</p>
                 </div>
                 <div className="bg-slate-800/30 p-3 rounded">
-                  <p className="text-gray-300">Let Channel Discovery Engine run for 48 hours before making major strategy changes.</p>
+                  <p className="text-gray-300">Let Channel Agent run for 48 hours before making major strategy changes.</p>
                 </div>
                 <div className="bg-slate-800/30 p-3 rounded">
-                  <p className="text-gray-300">Use Campaign Optimization Engine's tone settings to match your brand voice across all channels.</p>
+                  <p className="text-gray-300">Use Campaign Agent's tone settings to match your brand voice across all channels.</p>
                 </div>
               </div>
             </Card>
           </div>
         </div>
       </div>
-    </MainLayout>
   )
 }

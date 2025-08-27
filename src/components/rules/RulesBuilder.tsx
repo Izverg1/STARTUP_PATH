@@ -16,7 +16,12 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  GitBranch
+  GitBranch,
+  BookOpen,
+  HelpCircle,
+  X,
+  ArrowRight,
+  Zap
 } from 'lucide-react';
 import { BusinessRule, ApprovalStatus } from '@/types/rules';
 import { PlainEnglishInput } from './PlainEnglishInput';
@@ -42,6 +47,8 @@ export function RulesBuilder({
   const [currentRule, setCurrentRule] = useState<Partial<BusinessRule> | null>(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
 
   // Example rules for demonstration
   const exampleRules = [
@@ -257,209 +264,356 @@ export function RulesBuilder({
     );
   };
 
+  const tutorialSteps = [
+    {
+      title: "Welcome to Business Rules",
+      content: "Create automated rules that control your GTM experiments. Rules help optimize budget allocation, pause underperforming channels, and scale winners automatically.",
+      highlight: ".space-y-6",
+      position: "center"
+    },
+    {
+      title: "Natural Language Input",
+      content: "Describe your rule in plain English. Example: 'If CAC payback > 18 months for 7 days, pause the channel and notify team'",
+      highlight: "[data-tutorial='natural-language']",
+      position: "bottom"
+    },
+    {
+      title: "Quick Examples",
+      content: "Start with these proven rule templates. Click 'View Rule' to see the full JSON structure and customize as needed.",
+      highlight: "[data-tutorial='examples']",
+      position: "bottom"
+    },
+    {
+      title: "JSON Editor",
+      content: "Advanced users can directly edit rule conditions, actions, and metadata in JSON format for precise control.",
+      highlight: "[data-tab='json']",
+      position: "top"
+    },
+    {
+      title: "Active Rules",
+      content: "Monitor your live rules here. Toggle active/inactive status, view performance metrics, and manage rule priorities.",
+      highlight: "[data-tab='rules']",
+      position: "top"
+    }
+  ];
+
+  const Tutorial = () => {
+    if (!showTutorial) return null;
+    
+    const step = tutorialSteps[tutorialStep];
+    
+    return (
+      <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
+        <div className="bg-gray-900 border border-cyan-500/30 rounded-lg p-6 max-w-md mx-4 relative">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowTutorial(false)}
+            className="absolute top-2 right-2 h-6 w-6 p-0"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+          
+          <div className="flex items-start gap-3 mb-4">
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                <BookOpen className="h-4 w-4 text-cyan-400" />
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-white mb-1">{step.title}</h3>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs text-gray-400">Step {tutorialStep + 1} of {tutorialSteps.length}</span>
+                <div className="flex gap-1">
+                  {tutorialSteps.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        i === tutorialStep ? 'bg-cyan-400' : 'bg-gray-600'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+              <p className="text-sm text-gray-300">{step.content}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTutorialStep(Math.max(0, tutorialStep - 1))}
+              disabled={tutorialStep === 0}
+              className="h-8"
+            >
+              Previous
+            </Button>
+            
+            {tutorialStep < tutorialSteps.length - 1 ? (
+              <Button
+                size="sm"
+                onClick={() => setTutorialStep(tutorialStep + 1)}
+                className="h-8 bg-cyan-600 hover:bg-cyan-700"
+              >
+                Next
+                <ArrowRight className="h-3 w-3 ml-1" />
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => {
+                  setShowTutorial(false);
+                  localStorage.setItem('rulesTutorialCompleted', 'true');
+                }}
+                className="h-8 bg-cyan-600 hover:bg-cyan-700"
+              >
+                Get Started
+                <Zap className="h-3 w-3 ml-1" />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="space-y-6 p-6">
-      {/* Simplified Header */}
-      <div className="flex items-center justify-end">
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <GitBranch className="h-4 w-4" />
-            Version History
-          </Button>
-          <Button variant="outline" size="sm">
-            <Settings className="h-4 w-4" />
-            Settings
-          </Button>
+    <div className="h-full flex flex-col">
+      {/* Tutorial Overlay */}
+      <Tutorial />
+      
+      {/* Compact Header */}
+      <div className="shrink-0 bg-black border-b border-cyan-500/30 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Zap className="h-5 w-5 text-cyan-400" />
+            <div>
+              <h1 className="text-lg font-semibold text-white">Business Rules Engine</h1>
+              <p className="text-xs text-gray-400">Automated GTM optimization • Plain English to JSON</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowTutorial(true)}
+              className="bg-black border-cyan-500/30 text-cyan-200 hover:bg-cyan-900/20 h-8 px-3"
+            >
+              <HelpCircle className="h-3 w-3 mr-1" />
+              Tutorial
+            </Button>
+            <Button variant="outline" size="sm" className="bg-black border-cyan-500/30 text-cyan-200 hover:bg-cyan-900/20 h-8 px-3">
+              <GitBranch className="h-3 w-3 mr-1" />
+              Versions
+            </Button>
+            <Button variant="outline" size="sm" className="bg-black border-cyan-500/30 text-cyan-200 hover:bg-cyan-900/20 h-8 px-3">
+              <Settings className="h-3 w-3 mr-1" />
+              Settings
+            </Button>
+          </div>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="builder">Rule Builder</TabsTrigger>
-          <TabsTrigger value="json">JSON Editor</TabsTrigger>
-          <TabsTrigger value="rules">Active Rules</TabsTrigger>
-          <TabsTrigger value="approval">Approval</TabsTrigger>
-          <TabsTrigger value="versions">Versions</TabsTrigger>
-        </TabsList>
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-4 py-4">
 
-        <TabsContent value="builder" className="space-y-6">
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Natural Language Input */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Natural Language Input</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <PlainEnglishInput onRuleGenerated={handleRuleFromNaturalLanguage} />
-              </CardContent>
-            </Card>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid w-full grid-cols-5 h-9">
+            <TabsTrigger value="builder" data-tab="builder" className="text-xs">Rule Builder</TabsTrigger>
+            <TabsTrigger value="json" data-tab="json" className="text-xs">JSON Editor</TabsTrigger>
+            <TabsTrigger value="rules" data-tab="rules" className="text-xs">Active Rules</TabsTrigger>
+            <TabsTrigger value="approval" data-tab="approval" className="text-xs">Approval</TabsTrigger>
+            <TabsTrigger value="versions" data-tab="versions" className="text-xs">Versions</TabsTrigger>
+          </TabsList>
 
-            {/* Quick Examples */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Examples</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {exampleRules.slice(0, 2).map((rule, index) => (
-                  <div key={index} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{rule.name}</span>
-                      {getStatusBadge(rule.approval_status)}
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {rule.description}
-                    </p>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => {
-                        setCurrentRule(rule);
-                        setActiveTab('json');
-                      }}
-                    >
-                      <Eye className="h-3 w-3" />
-                      View Rule
-                    </Button>
-                    {index < 1 && <Separator />}
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
+          <TabsContent value="builder" className="space-y-4">
+            <div className="grid gap-4 lg:grid-cols-2">
+              {/* Natural Language Input */}
+              <Card data-tutorial="natural-language">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-cyan-400" />
+                    Natural Language Input
+                  </CardTitle>
+                  <p className="text-xs text-gray-400">Describe your rule in plain English</p>
+                </CardHeader>
+                <CardContent>
+                  <PlainEnglishInput onRuleGenerated={handleRuleFromNaturalLanguage} />
+                </CardContent>
+              </Card>
 
-          {/* Current Rule Preview */}
-          {currentRule && (
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Rule Preview</CardTitle>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => setIsPreviewMode(!isPreviewMode)}>
-                      <Eye className="h-4 w-4" />
-                      {isPreviewMode ? 'Edit' : 'Preview'}
-                    </Button>
-                    <Button size="sm" onClick={handleSaveRule}>
-                      <Save className="h-4 w-4" />
-                      Save Rule
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium">Rule Name</label>
-                    <p className="text-sm text-muted-foreground">
-                      {currentRule.name || 'Untitled Rule'}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Description</label>
-                    <p className="text-sm text-muted-foreground">
-                      {currentRule.description || 'No description provided'}
-                    </p>
-                  </div>
-                  
-                  {/* Validation Errors */}
-                  {validationErrors.length > 0 && (
-                    <div className="rounded-md border border-destructive/20 bg-destructive/5 p-3">
-                      <div className="flex items-center gap-2 text-sm font-medium text-destructive">
-                        <AlertTriangle className="h-4 w-4" />
-                        Validation Errors
+              {/* Quick Examples */}
+              <Card data-tutorial="examples">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Zap className="h-4 w-4 text-cyan-400" />
+                    Quick Examples
+                  </CardTitle>
+                  <p className="text-xs text-gray-400">Start with proven templates</p>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {exampleRules.slice(0, 2).map((rule, index) => (
+                    <div key={index} className="space-y-2 p-3 bg-gray-900/30 rounded border border-gray-800">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-white">{rule.name}</span>
+                        {getStatusBadge(rule.approval_status)}
                       </div>
-                      <ul className="mt-2 space-y-1">
-                        {validationErrors.map((error, index) => (
-                          <li key={index} className="text-sm text-destructive">
-                            • {error}
-                          </li>
-                        ))}
-                      </ul>
+                      <p className="text-xs text-gray-400">
+                        {rule.description}
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => {
+                          setCurrentRule(rule);
+                          setActiveTab('json');
+                        }}
+                        className="h-7 px-2 text-xs"
+                      >
+                        <Eye className="h-3 w-3 mr-1" />
+                        View Rule
+                      </Button>
+                      {index < 1 && <Separator className="mt-3" />}
                     </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
 
-        <TabsContent value="json" className="space-y-6">
-          <JSONOutput 
-            rule={currentRule}
-            onRuleChange={setCurrentRule}
-            readonly={isPreviewMode}
-          />
-        </TabsContent>
+            {/* Current Rule Preview */}
+            {currentRule && (
+              <Card className="bg-gray-900/20 border-cyan-500/20">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-cyan-400" />
+                      Rule Preview
+                    </CardTitle>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm" onClick={() => setIsPreviewMode(!isPreviewMode)} className="h-7 px-2 text-xs">
+                        <Eye className="h-3 w-3 mr-1" />
+                        {isPreviewMode ? 'Edit' : 'Preview'}
+                      </Button>
+                      <Button size="sm" onClick={handleSaveRule} className="h-7 px-2 text-xs bg-cyan-600 hover:bg-cyan-700">
+                        <Save className="h-3 w-3 mr-1" />
+                        Save Rule
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">Rule Name</label>
+                      <p className="text-sm text-white">
+                        {currentRule.name || 'Untitled Rule'}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">Description</label>
+                      <p className="text-sm text-gray-300">
+                        {currentRule.description || 'No description provided'}
+                      </p>
+                    </div>
+                    
+                    {/* Validation Errors */}
+                    {validationErrors.length > 0 && (
+                      <div className="rounded border border-red-500/20 bg-red-500/5 p-3">
+                        <div className="flex items-center gap-2 text-sm font-medium text-red-400">
+                          <AlertTriangle className="h-4 w-4" />
+                          Validation Errors
+                        </div>
+                        <ul className="mt-2 space-y-1">
+                          {validationErrors.map((error, index) => (
+                            <li key={index} className="text-xs text-red-400">
+                              • {error}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
 
-        <TabsContent value="rules" className="space-y-6">
-          <RulesList 
-            rules={exampleRules}
-            onRuleUpdate={onRuleUpdate}
-            onRuleDelete={onRuleDelete}
-            onRuleEdit={(rule) => {
-              setCurrentRule(rule);
-              setActiveTab('json');
-            }}
-          />
-        </TabsContent>
-
-        <TabsContent value="approval" className="space-y-6">
-          {currentRule ? (
-            <ApprovalWorkflow 
+          <TabsContent value="json" className="space-y-4">
+            <JSONOutput 
               rule={currentRule}
-              onApprove={(ruleId, comment) => {
-                console.log('Approving rule:', ruleId, comment);
-                // Update rule approval status
-                setCurrentRule(prev => prev ? { ...prev, approval_status: 'approved' } : null);
-              }}
-              onReject={(ruleId, reason) => {
-                console.log('Rejecting rule:', ruleId, reason);
-                // Update rule approval status
-                setCurrentRule(prev => prev ? { ...prev, approval_status: 'rejected' } : null);
+              onRuleChange={setCurrentRule}
+              readonly={isPreviewMode}
+            />
+          </TabsContent>
+
+          <TabsContent value="rules" className="space-y-4">
+            <RulesList 
+              rules={exampleRules}
+              onRuleUpdate={onRuleUpdate}
+              onRuleDelete={onRuleDelete}
+              onRuleEdit={(rule) => {
+                setCurrentRule(rule);
+                setActiveTab('json');
               }}
             />
-          ) : (
-            <Card>
-              <CardContent className="flex items-center justify-center py-12">
-                <div className="text-center space-y-2">
-                  <CheckCircle className="h-12 w-12 mx-auto text-muted-foreground" />
-                  <p className="text-muted-foreground">No rule selected for approval</p>
-                  <p className="text-sm text-muted-foreground">
-                    Select a rule from the Rules tab to view its approval workflow
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="versions" className="space-y-6">
-          {currentRule ? (
-            <VersionHistory 
-              rule={currentRule}
-              onRestoreVersion={(versionId) => {
-                console.log('Restoring version:', versionId);
-                // In real app, restore the rule to the specified version
-              }}
-              onCompareVersions={(version1, version2) => {
-                console.log('Comparing versions:', version1, version2);
-                // In real app, show version comparison
-              }}
-            />
-          ) : (
-            <Card>
-              <CardContent className="flex items-center justify-center py-12">
-                <div className="text-center space-y-2">
-                  <GitBranch className="h-12 w-12 mx-auto text-muted-foreground" />
-                  <p className="text-muted-foreground">No rule selected for version history</p>
-                  <p className="text-sm text-muted-foreground">
-                    Select a rule from the Rules tab to view its version history
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="approval" className="space-y-4">
+            {currentRule ? (
+              <ApprovalWorkflow 
+                rule={currentRule}
+                onApprove={(ruleId, comment) => {
+                  console.log('Approving rule:', ruleId, comment);
+                  setCurrentRule(prev => prev ? { ...prev, approval_status: 'approved' } : null);
+                }}
+                onReject={(ruleId, reason) => {
+                  console.log('Rejecting rule:', ruleId, reason);
+                  setCurrentRule(prev => prev ? { ...prev, approval_status: 'rejected' } : null);
+                }}
+              />
+            ) : (
+              <Card>
+                <CardContent className="flex items-center justify-center py-8">
+                  <div className="text-center space-y-2">
+                    <CheckCircle className="h-8 w-8 mx-auto text-gray-600" />
+                    <p className="text-gray-400 text-sm">No rule selected for approval</p>
+                    <p className="text-xs text-gray-500">
+                      Select a rule from the Rules tab to view its approval workflow
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="versions" className="space-y-4">
+            {currentRule ? (
+              <VersionHistory 
+                rule={currentRule}
+                onRestoreVersion={(versionId) => {
+                  console.log('Restoring version:', versionId);
+                }}
+                onCompareVersions={(version1, version2) => {
+                  console.log('Comparing versions:', version1, version2);
+                }}
+              />
+            ) : (
+              <Card>
+                <CardContent className="flex items-center justify-center py-8">
+                  <div className="text-center space-y-2">
+                    <GitBranch className="h-8 w-8 mx-auto text-gray-600" />
+                    <p className="text-gray-400 text-sm">No rule selected for version history</p>
+                    <p className="text-xs text-gray-500">
+                      Select a rule from the Rules tab to view its version history
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }

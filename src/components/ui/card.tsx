@@ -7,13 +7,10 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "cyber-card relative flex flex-col gap-6 rounded-xl py-6 shadow-lg",
-        "bg-black/60 backdrop-blur-md border border-cyan-500/20 neon-border",
-        "shadow-cyan-500/10 hover:shadow-cyan-500/30 hover:border-cyan-400/60",
-        "transition-all duration-300 group overflow-hidden",
-        "before:absolute before:inset-0 before:rounded-xl before:p-[1px]",
-        "before:bg-gradient-to-r before:from-transparent before:via-red-400/20 before:to-transparent",
-        "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500",
+        "relative flex flex-col gap-6 rounded-lg py-6",
+        "bg-slate-900/50 border border-slate-700/50",
+        "hover:bg-slate-900/70 hover:border-slate-600/50",
+        "transition-colors duration-200",
         className
       )}
       {...props}
@@ -39,11 +36,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-title"
       className={cn(
-        "leading-none font-semibold text-cyan-200",
-        "group-hover:text-cyan-100 transition-colors duration-300",
-        "relative after:absolute after:inset-0 after:bg-gradient-to-r",
-        "after:from-transparent after:via-cyan-400/20 after:to-transparent",
-        "after:opacity-0 group-hover:after:opacity-100 after:transition-opacity after:duration-500",
+        "leading-none font-semibold text-white",
         className
       )}
       {...props}

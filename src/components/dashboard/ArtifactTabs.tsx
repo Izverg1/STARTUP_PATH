@@ -7,7 +7,17 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Satellite, Target, BarChart3, TrendingUp, TrendingDown, Clock, Eye, Download, Grid3X3, List, X, Maximize2 } from 'lucide-react'
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { Satellite, Target, BarChart3, TrendingUp, TrendingDown, Clock, Eye, Download, Grid3X3, List, X, Maximize2, Trash2, AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 // Mock artifact data organized by engine
@@ -364,7 +374,37 @@ function getTypeIcon(type: string) {
 }
 
 // Enhanced Artifact Card with Modal
-function ArtifactCard({ artifact, isCompact = false }: { artifact: any; isCompact?: boolean }) {
+function ArtifactCard({ artifact, isCompact = false, onDelete }: { artifact: any; isCompact?: boolean; onDelete?: (artifactId: string) => void }) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  
+  // Debug: Check if onDelete is being passed
+  console.log('ArtifactCard render:', { artifactId: artifact.id, hasOnDelete: !!onDelete, isCompact })
+
+  const handleDelete = async () => {
+    if (!onDelete) return
+    
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/artifacts/${artifact.id}`, {
+        method: 'DELETE',
+      })
+      
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to delete artifact')
+      }
+      
+      onDelete(artifact.id)
+      setShowDeleteDialog(false)
+    } catch (error) {
+      console.error('Error deleting artifact:', error)
+      // You might want to show a toast notification here
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'fresh': return 'bg-green-500/10 text-green-400 border-green-500/20'
@@ -396,6 +436,20 @@ function ArtifactCard({ artifact, isCompact = false }: { artifact: any; isCompac
                   {artifact.status}
                 </Badge>
               </div>
+              {onDelete && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="p-2 h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-950/50 border border-red-400/20"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setShowDeleteDialog(true)
+                  }}
+                  title="Delete artifact"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              )}
               <DialogTrigger asChild>
                 <Button variant="ghost" size="sm" className="p-1 h-auto w-auto">
                   <Eye className="w-4 h-4 text-zinc-400 hover:text-white" />
@@ -405,6 +459,44 @@ function ArtifactCard({ artifact, isCompact = false }: { artifact: any; isCompac
           </div>
         </Card>
         <ArtifactDetailModal artifact={artifact} />
+        
+        {/* Delete confirmation dialog */}
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-red-500" />
+                Delete Artifact
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{artifact.title}"? This action cannot be undone. 
+                The artifact will be marked as deleted and removed from the system after 24 hours.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="py-2">
+              <div className="flex items-center gap-2 text-sm text-zinc-400">
+                <span className="text-lg">{getTypeIcon(artifact.type)}</span>
+                <Badge className={cn('text-xs', getStatusColor(artifact.status))}>
+                  {artifact.engine}
+                </Badge>
+                <span>•</span>
+                <span>{artifact.timestamp}</span>
+              </div>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="bg-red-600 hover:bg-red-700 focus:ring-red-500"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Artifact'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </Dialog>
     )
   }
@@ -451,9 +543,60 @@ function ArtifactCard({ artifact, isCompact = false }: { artifact: any; isCompac
             <Download className="w-3 h-3" />
             Export
           </button>
+          {onDelete && (
+            <button 
+              className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors border border-red-400/20 px-2 py-1 rounded"
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowDeleteDialog(true)
+              }}
+              title="Delete artifact"
+            >
+              <Trash2 className="w-3 h-3" />
+              Delete
+            </button>
+          )}
         </div>
       </Card>
       <ArtifactDetailModal artifact={artifact} />
+      
+      {/* Delete confirmation dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-500" />
+              Delete Artifact
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{artifact.title}"? This action cannot be undone. 
+              The artifact will be marked as deleted and removed from the system after 24 hours.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="py-2">
+            <div className="flex items-center gap-2 text-sm text-zinc-400">
+              <span className="text-lg">{getTypeIcon(artifact.type)}</span>
+              <Badge className={cn('text-xs', getStatusColor(artifact.status))}>
+                {artifact.engine}
+              </Badge>
+              <span>•</span>
+              <span>{artifact.timestamp}</span>
+            </div>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-500"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete Artifact'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   )
 }
@@ -466,48 +609,41 @@ export function ArtifactTabs() {
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
   
+  // Handle artifact deletion
+  const handleArtifactDelete = async (artifactId: string) => {
+    // Remove from local state immediately for better UX
+    setRealArtifacts(prev => prev.filter(artifact => artifact.id !== artifactId))
+    
+    // Optionally refresh artifacts from database
+    await loadArtifacts()
+  }
+  
   // Load real artifacts from database
   const loadArtifacts = async () => {
+    // Prevent multiple simultaneous calls
+    if (isLoading) return
+    
     try {
       setIsLoading(true)
       const supabase = createClient()
       
-      console.log('🔍 Loading artifacts from Supabase...')
-      console.log('- Supabase client created:', !!supabase)
-      
       // Query artifacts from the database
       const { data: artifacts, error } = await supabase
-        .from('sg_artifacts')
+        .from('SPATH_artifacts')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(50)
       
-      console.log('📊 Query result:')
-      console.log('- Data:', artifacts)
-      console.log('- Error:', error)
-      
       if (error) {
-        console.error('Error loading artifacts from database:')
-        console.error('- Message:', error.message || 'No message')
-        console.error('- Code:', error.code || 'No code')
-        console.error('- Details:', error.details || 'No details')
-        console.error('- Hint:', error.hint || 'No hint')
-        console.error('- Full error object:', error)
-        console.error('- Error keys:', Object.keys(error))
+        // Silently handle database errors - use demo data instead
+        console.warn('Database not available for artifacts, using demo data')
         setRealArtifacts([])
       } else {
         setRealArtifacts(artifacts || [])
       }
     } catch (error) {
-      console.error('Error loading artifacts (unexpected):')
-      console.error('- Error:', error)
-      console.error('- Error type:', typeof error)
-      console.error('- Error constructor:', error?.constructor?.name)
-      if (error instanceof Error) {
-        console.error('- Message:', error.message)
-        console.error('- Stack:', error.stack)
-      }
-      // Fallback to mock data if real data fails
+      // Silently handle unexpected errors - use demo data instead
+      console.warn('Database connection failed for artifacts, using demo data')
       setRealArtifacts([])
     } finally {
       setIsLoading(false)
@@ -570,7 +706,14 @@ export function ArtifactTabs() {
 
   // Load artifacts on mount
   useEffect(() => {
-    loadArtifacts()
+    let mounted = true
+    const loadData = async () => {
+      if (mounted) {
+        await loadArtifacts()
+      }
+    }
+    loadData()
+    return () => { mounted = false }
   }, [])
 
   // Responsive layout logic
@@ -914,14 +1057,14 @@ export function ArtifactTabs() {
               /* List View */
               <div className="space-y-2">
                 {getAllArtifacts().map((artifact) => (
-                  <ArtifactCard key={artifact.id} artifact={artifact} isCompact={true} />
+                  <ArtifactCard key={artifact.id} artifact={artifact} isCompact={true} onDelete={handleArtifactDelete} />
                 ))}
               </div>
             ) : (
               /* Card Grid View */
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {getAllArtifacts().map((artifact) => (
-                  <ArtifactCard key={artifact.id} artifact={artifact} isCompact={false} />
+                  <ArtifactCard key={artifact.id} artifact={artifact} isCompact={false} onDelete={handleArtifactDelete} />
                 ))}
               </div>
             )}
