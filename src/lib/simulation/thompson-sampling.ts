@@ -240,15 +240,36 @@ export class ThompsonSamplingAllocator {
       };
     });
 
-    // Normalize to ensure total budget is respected
-    const totalAllocated = results.reduce((sum, r) => sum + r.allocatedBudget, 0);
-    const scaleFactor = this.config.totalBudget / totalAllocated;
-    
-    results.forEach(result => {
-      result.allocatedBudget = Math.round(result.allocatedBudget * scaleFactor);
-    });
+    // Normalize to ensure total budget is respected (with rounding error compensation)
+    const normalized = this.normalizeAllocations(results, this.config.totalBudget);
+    return normalized;
+  }
 
-    return results;
+  // Ensure the integer allocations sum exactly to totalBudget by compensating rounding drift
+  private normalizeAllocations(results: AllocationResult[], totalBudget: number): AllocationResult[] {
+    // First scale to target total
+    const currentTotal = results.reduce((sum, r) => sum + r.allocatedBudget, 0);
+    const scale = currentTotal > 0 ? totalBudget / currentTotal : 1;
+    const scaled = results.map(r => ({ ...r, allocatedBudget: Math.round(r.allocatedBudget * scale) }));
+
+    // Compute remainder and adjust by distributing +/-1 to items with largest fractional errors
+    let remainder = totalBudget - scaled.reduce((sum, r) => sum + r.allocatedBudget, 0);
+    if (remainder === 0) return scaled;
+
+    // Sort by sampledValue desc to adjust the most promising channels first
+    const byPriority = [...scaled].sort((a, b) => b.sampledValue - a.sampledValue);
+    const direction = Math.sign(remainder);
+    remainder = Math.abs(remainder);
+    let i = 0;
+    while (remainder > 0 && i < byPriority.length) {
+      byPriority[i].allocatedBudget += direction; // add or subtract 1
+      remainder -= 1;
+      i = (i + 1) % byPriority.length;
+    }
+
+    // Map adjusted amounts back to original order
+    const map = new Map(byPriority.map(r => [r.channelId, r.allocatedBudget]));
+    return scaled.map(r => ({ ...r, allocatedBudget: map.get(r.channelId)! }));
   }
 
   // Check decision gates and return recommendations
