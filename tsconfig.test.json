@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": ".tmp/test-build",
+    "module": "commonjs",
+    "target": "ES2019",
+    "esModuleInterop": true,
+    "noEmitOnError": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/lib/simulation/**/*.ts",
+    "tests/unit/**/*.ts"
+  ]
+}
+

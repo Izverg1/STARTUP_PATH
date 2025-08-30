@@ -12,7 +12,9 @@
     "test:headed": "node scripts/run-playwright.js --headed",
     "test:ui": "node scripts/run-playwright.js --ui",
     "test:ui:root": "playwright test tests/ui",
-    "test:ui:root:headed": "playwright test tests/ui --headed"
+    "test:ui:root:headed": "playwright test tests/ui --headed",
+    "build:test": "tsc -p tsconfig.test.json",
+    "test:unit": "npm run build:test && node .tmp/test-build/tests/unit/allocator.test.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

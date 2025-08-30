@@ -33,6 +33,8 @@ export interface ThompsonSamplingConfig {
   maxAllocationPercentage: number; // Maximum allocation per channel (e.g., 0.60 = 60%)
   decisionThreshold: number; // Threshold for automatic allocation decisions
   riskTolerance: 'conservative' | 'moderate' | 'aggressive';
+  deterministic?: boolean; // If true, use seeded RNG for reproducibility
+  seed?: number; // Seed value for deterministic runs
 }
 
 export interface SimulationScenario {
@@ -58,10 +60,24 @@ export class ThompsonSamplingAllocator {
   private channels: Map<string, ChannelArm> = new Map();
   private config: ThompsonSamplingConfig;
   private decisionGates: DecisionGate[] = [];
+  private rng: () => number; // RNG source (seeded or Math.random)
 
   constructor(config: ThompsonSamplingConfig) {
     this.config = config;
+    this.rng = this.createRng(config.deterministic, config.seed);
     this.initializeDefaultDecisionGates();
+  }
+
+  // Seedable PRNG (Mulberry32)
+  private createRng(deterministic?: boolean, seed?: number) {
+    if (!deterministic) return Math.random;
+    let a = (seed ?? 123456789) >>> 0;
+    return function() {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
   }
 
   private initializeDefaultDecisionGates(): void {
@@ -172,7 +188,7 @@ export class ThompsonSamplingAllocator {
       if (v <= 0) continue;
       
       v = v * v * v;
-      const u = Math.random();
+      const u = this.rng();
       
       if (u < 1 - 0.0331 * x * x * x * x) {
         return d * v;
@@ -186,8 +202,8 @@ export class ThompsonSamplingAllocator {
 
   private randomNormal(): number {
     // Box-Muller transform
-    const u1 = Math.random();
-    const u2 = Math.random();
+    const u1 = this.rng();
+    const u2 = this.rng();
     return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
   }
 
@@ -508,6 +524,8 @@ export function createDefaultConfig(): ThompsonSamplingConfig {
     minAllocationPercentage: 0.05,
     maxAllocationPercentage: 0.60,
     decisionThreshold: 0.80,
-    riskTolerance: 'moderate'
+    riskTolerance: 'moderate',
+    deterministic: false,
+    seed: undefined
   };
 }

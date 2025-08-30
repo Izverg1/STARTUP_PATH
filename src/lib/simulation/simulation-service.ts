@@ -248,13 +248,24 @@ export class SimulationService {
   // Update configuration
   updateConfig(newConfig: Partial<ThompsonSamplingConfig>) {
     this.state.config = { ...this.state.config, ...newConfig }
-    
-    // Reinitialize allocator if it exists
+
+    // Reinitialize allocator and rehydrate channels if it exists
     if (this.state.allocator) {
+      const prevSummary = this.state.allocator.getChannelSummary()
       this.state.allocator = new ThompsonSamplingAllocator(this.state.config)
-      // Re-add all channels (would need to store channel data)
+      for (const ch of prevSummary) {
+        const channelArm: Omit<ChannelArm, 'alpha' | 'beta' | 'lastUpdated'> = {
+          id: ch.channelId,
+          name: ch.name,
+          type: ch.type,
+          totalConversions: ch.totalConversions,
+          totalImpressions: ch.totalImpressions,
+          totalBudget: ch.totalBudget
+        }
+        this.state.allocator.addChannel(channelArm)
+      }
     }
-    
+
     this.notifySubscribers()
   }
 
