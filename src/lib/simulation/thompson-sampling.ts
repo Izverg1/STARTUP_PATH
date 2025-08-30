@@ -197,6 +197,20 @@ export class ThompsonSamplingAllocator {
       throw new Error('No channels available for allocation');
     }
 
+    // Guard against invalid min/max constraints
+    const n = this.channels.size;
+    const minTotal = this.config.minAllocationPercentage * n;
+    const maxTotal = this.config.maxAllocationPercentage * n;
+    // If constraints are impossible, relax them proportionally
+    if (minTotal > 1) {
+      const relaxedMin = 1 / n;
+      this.config.minAllocationPercentage = relaxedMin * 0.95; // keep a small margin
+    }
+    if (maxTotal < 1) {
+      const relaxedMax = 1 / n;
+      this.config.maxAllocationPercentage = relaxedMax * 1.05; // keep a small margin
+    }
+
     const samples: Array<{channelId: string, sampledValue: number, channel: ChannelArm}> = [];
     
     // Sample from each channel's Beta distribution
