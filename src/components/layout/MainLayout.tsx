@@ -247,6 +247,7 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
               <main className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden relative">
                 {isFooterExpanded && (
                   <div
+                    data-testid="footer-blur-overlay"
                     className={
                       "absolute inset-0 z-20 pointer-events-none bg-black/5 backdrop-blur-[1px] transition-opacity duration-300"
                     }
