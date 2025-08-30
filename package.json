@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "node scripts/run-playwright.js",
+    "test:headed": "node scripts/run-playwright.js --headed",
+    "test:ui": "node scripts/run-playwright.js --ui"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
