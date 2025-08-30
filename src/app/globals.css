@@ -1515,6 +1515,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   min-height: 40px;
+  animation: scrollbar-pulse 2.6s ease-in-out infinite;
 }
 
 .effectiveness-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -1528,6 +1529,19 @@
 
 .effectiveness-scrollbar::-webkit-scrollbar-corner {
   background: rgba(15, 23, 42, 0.5);
+}
+
+/* Effectiveness: support red horizontal thumb and Firefox colors */
+.effectiveness-scrollbar {
+  scrollbar-color: #ef4444 rgba(0, 0, 0, 0.25);
+}
+.effectiveness-scrollbar::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+.effectiveness-scrollbar::-webkit-scrollbar-thumb:horizontal {
+  background: linear-gradient(90deg, #7f1d1d, #ef4444, #7f1d1d);
+  border-radius: 6px;
+  animation: scrollbar-pulse 2.4s ease-in-out infinite;
 }
 
 /* Global: red horizontal scrollbar and subtle pulse for main content */
