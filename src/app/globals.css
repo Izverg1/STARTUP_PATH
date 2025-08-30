@@ -1530,6 +1530,43 @@
   background: rgba(15, 23, 42, 0.5);
 }
 
+/* Global: red horizontal scrollbar and subtle pulse for main content */
+@keyframes scrollbar-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(255, 0, 0, 0.25); filter: brightness(1); }
+  50% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); filter: brightness(1.05); }
+}
+
+/* Apply to dashboard main scroll container */
+.dashboard-scrollbar {
+  scrollbar-color: #ef4444 rgba(0, 0, 0, 0.25);
+}
+
+/* Horizontal scrollbar styling (WebKit/Blink) */
+.dashboard-scrollbar::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+.dashboard-scrollbar::-webkit-scrollbar-track:horizontal {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 6px;
+}
+.dashboard-scrollbar::-webkit-scrollbar-thumb:horizontal {
+  background: linear-gradient(90deg, #7f1d1d, #ef4444, #7f1d1d);
+  border-radius: 6px;
+  animation: scrollbar-pulse 2.4s ease-in-out infinite;
+}
+
+/* Vertical track/thumb for consistency, kept subtle */
+.dashboard-scrollbar::-webkit-scrollbar:vertical {
+  width: 10px;
+}
+.dashboard-scrollbar::-webkit-scrollbar-thumb:vertical {
+  background: linear-gradient(180deg, #7f1d1d, #ef4444, #7f1d1d);
+  border-radius: 6px;
+  animation: scrollbar-pulse 2.8s ease-in-out infinite;
+}
+
+/* Note: limit red pulse to dashboard only via .dashboard-scrollbar */
+
 /* Red scrollbar for all dashboard pages */
 .dashboard-scrollbar::-webkit-scrollbar {
   width: 12px;
