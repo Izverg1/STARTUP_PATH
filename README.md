@@ -61,7 +61,7 @@ Edit `.env.local` with your Supabase credentials (optional for demo mode).
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000)
+5. Open [http://localhost:1010](http://localhost:1010)
 
 ## 🎯 Quick Start
 
@@ -109,6 +109,35 @@ npm run build      # Build for production
 npm run start      # Start production server
 npm run lint       # Run ESLint
 npm run type-check # TypeScript validation
+npm test           # Run Playwright tests (see below)
+```
+
+## 🧑‍💻 How to Run Locally
+
+1) Install dependencies:
+```
+npm install
+```
+
+2) Configure environment:
+```
+cp .env.local.example .env.local
+```
+Fill Supabase/email vars as needed (see GETTING_STARTED.md, MCP_SETUP.md, EMAIL_SETUP.md).
+
+3) Start the app:
+```
+npm run dev
+```
+Open http://localhost:1010
+
+4) Optional — run tests:
+```
+npm test
+```
+Note: Playwright needs local browser binaries. If missing, run:
+```
+cd playwright-mcp && npx playwright install
 ```
 
 ### Key Components
