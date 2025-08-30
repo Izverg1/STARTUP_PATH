@@ -439,7 +439,7 @@ function OptimizationOpportunities({ opportunities }: { opportunities: any[] }) 
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {opportunities
+        {[...opportunities]
           .sort((a, b) => b.estimated_roi - a.estimated_roi)
           .map((opportunity, index) => (
             <div key={index} className="border border-red-500/30 bg-zinc-900 rounded-lg p-4 hover:border-red-500/50 transition-colors">
@@ -745,7 +745,7 @@ export default function EffectivenessPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.channelPerformance
+                        {[...data.channelPerformance]
                           .sort((a, b) => b.efficiency_score - a.efficiency_score)
                           .map((channel, index) => (
                             <tr key={index} className="border-b border-gray-700/30 hover:bg-black/20">
