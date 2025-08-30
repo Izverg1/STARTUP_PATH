@@ -248,14 +248,14 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
                 {isFooterExpanded && (
                   <div
                     className={
-                      "absolute inset-0 z-20 pointer-events-none bg-black/10 backdrop-blur-[2px] transition-opacity duration-300"
+                      "absolute inset-0 z-20 pointer-events-none bg-black/5 backdrop-blur-[1px] transition-opacity duration-300"
                     }
                   />
                 )}
                 <div
                   className={cn(
                     "mx-auto px-4 py-6 w-full h-full max-w-[1280px] overflow-y-auto dashboard-scrollbar transition-[filter] duration-300",
-                    isFooterExpanded ? "filter blur-[2px]" : "filter-none"
+                    isFooterExpanded ? "filter blur-[1px]" : "filter-none"
                   )}
                 >
                   <ErrorBoundary>
