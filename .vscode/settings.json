@@ -1,0 +1,16 @@
+{
+  // VS Code settings for MCP-capable extensions
+  // Configure the Supabase MCP server for Claude Dev or other MCP clients.
+  "claudeDev.mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "${env:SUPABASE_ACCESS_TOKEN}"
+      ]
+    }
+  }
+}
+
