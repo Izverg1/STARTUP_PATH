@@ -8,9 +8,9 @@ function makeAllocator(opts?: Partial<ReturnType<typeof createDefaultConfig>>) {
 }
 
 function addSimpleChannels(alloc: ThompsonSamplingAllocator) {
-  alloc.addChannel({ id: 'A', name: 'A', type: 'paid_search', totalConversions: 80, totalImpressions: 4000, totalBudget: 2000 })
-  alloc.addChannel({ id: 'B', name: 'B', type: 'paid_social', totalConversions: 60, totalImpressions: 4000, totalBudget: 2000 })
-  alloc.addChannel({ id: 'C', name: 'C', type: 'display',      totalConversions: 20, totalImpressions: 4000, totalBudget: 2000 })
+  alloc.addChannel({ id: 'A', name: 'A', type: 'google_search',   totalConversions: 80, totalImpressions: 4000, totalBudget: 2000 })
+  alloc.addChannel({ id: 'B', name: 'B', type: 'paid_social',     totalConversions: 60, totalImpressions: 4000, totalBudget: 2000 })
+  alloc.addChannel({ id: 'C', name: 'C', type: 'content_marketing', totalConversions: 20, totalImpressions: 4000, totalBudget: 2000 })
 }
 
 // 1) Deterministic reproducibility
@@ -69,4 +69,3 @@ function addSimpleChannels(alloc: ThompsonSamplingAllocator) {
 }
 
 console.log('Thompson Sampling unit tests passed')
-

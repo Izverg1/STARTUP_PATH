@@ -1550,66 +1550,84 @@
   50% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); filter: brightness(1.05); }
 }
 
-/* Apply to dashboard main scroll container */
+/* Apply to dashboard + any element using red-scrollbar utility */
+.red-scrollbar,
 .dashboard-scrollbar {
   scrollbar-color: #ef4444 rgba(0, 0, 0, 0.25);
+  /* Reserve space for the scrollbar gutter so it appears at the right consistently */
+  scrollbar-gutter: stable both-edges;
+  /* Firefox width (auto = default thickness for visibility) */
+  scrollbar-width: auto;
+  /* Prevent scroll chain from bubbling to body/parent */
+  overscroll-behavior: contain;
 }
 
 /* Horizontal scrollbar styling (WebKit/Blink) */
+.red-scrollbar::-webkit-scrollbar:horizontal,
 .dashboard-scrollbar::-webkit-scrollbar:horizontal {
   height: 10px;
 }
+.red-scrollbar::-webkit-scrollbar-track:horizontal,
 .dashboard-scrollbar::-webkit-scrollbar-track:horizontal {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 6px;
 }
+.red-scrollbar::-webkit-scrollbar-thumb:horizontal,
 .dashboard-scrollbar::-webkit-scrollbar-thumb:horizontal {
   background: linear-gradient(90deg, #7f1d1d, #ef4444, #7f1d1d);
   border-radius: 6px;
   animation: scrollbar-pulse 2.4s ease-in-out infinite;
 }
 
-/* Vertical track/thumb for consistency, kept subtle */
+/* Vertical track/thumb */
+.red-scrollbar::-webkit-scrollbar:vertical,
 .dashboard-scrollbar::-webkit-scrollbar:vertical {
-  width: 10px;
+  width: 14px; /* bumped width for visibility */
 }
+.red-scrollbar::-webkit-scrollbar-thumb:vertical,
 .dashboard-scrollbar::-webkit-scrollbar-thumb:vertical {
-  background: linear-gradient(180deg, #7f1d1d, #ef4444, #7f1d1d);
+  background: linear-gradient(180deg, #7f1d1d, #ff1a1a, #7f1d1d);
   border-radius: 6px;
   animation: scrollbar-pulse 2.8s ease-in-out infinite;
 }
 
 /* Note: limit red pulse to dashboard only via .dashboard-scrollbar */
 
-/* Red scrollbar for all dashboard pages */
+/* Red scrollbar for all dashboard pages and .red-scrollbar utility */
+.red-scrollbar::-webkit-scrollbar,
 .dashboard-scrollbar::-webkit-scrollbar {
-  width: 12px;
+  width: 14px; /* bumped width */
   height: 12px;
 }
 
+.red-scrollbar::-webkit-scrollbar-track,
 .dashboard-scrollbar::-webkit-scrollbar-track {
   background: rgba(15, 23, 42, 0.5);
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.red-scrollbar::-webkit-scrollbar-thumb,
 .dashboard-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  background: linear-gradient(135deg, #dc2626 0%, #ff1a1a 100%);
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   min-height: 40px;
 }
 
+.red-scrollbar::-webkit-scrollbar-thumb:hover,
 .dashboard-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  background: linear-gradient(135deg, #ff2d2d 0%, #ff6b6b 100%);
   box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
 }
 
+.red-scrollbar::-webkit-scrollbar-thumb:active,
 .dashboard-scrollbar::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+  background: linear-gradient(135deg, #b91c1c 0%, #e11d48 100%);
 }
 
+.red-scrollbar::-webkit-scrollbar-corner,
 .dashboard-scrollbar::-webkit-scrollbar-corner {
   background: rgba(15, 23, 42, 0.5);
 }

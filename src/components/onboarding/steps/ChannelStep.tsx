@@ -100,6 +100,7 @@ export default function ChannelStep() {
                                           )
                                         )
                                   }}
+                                  data-testid={`channel-${channel.id}`}
                                 />
                               </FormControl>
                               <div className="flex-1">

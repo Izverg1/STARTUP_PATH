@@ -77,7 +77,7 @@ export default function ICPStep() {
                 <FormLabel>Your Role</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="select-persona">
                       <SelectValue placeholder="Select your role" />
                     </SelectTrigger>
                   </FormControl>
@@ -102,7 +102,7 @@ export default function ICPStep() {
                 <FormLabel>Company Size</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="select-companySize">
                       <SelectValue placeholder="Select company size" />
                     </SelectTrigger>
                   </FormControl>
@@ -127,7 +127,7 @@ export default function ICPStep() {
                 <FormLabel>Primary Geography</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="select-geography">
                       <SelectValue placeholder="Select geography" />
                     </SelectTrigger>
                   </FormControl>
@@ -152,7 +152,7 @@ export default function ICPStep() {
                 <FormLabel>Average Contract Value</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="select-acvBand">
                       <SelectValue placeholder="Select ACV band" />
                     </SelectTrigger>
                   </FormControl>
@@ -183,6 +183,7 @@ export default function ICPStep() {
                     max="100"
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    data-testid="input-grossMargin"
                   />
                 </FormControl>
                 <FormMessage />
@@ -198,7 +199,7 @@ export default function ICPStep() {
                 <FormLabel>Primary Sales Motion</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="select-salesMotion">
                       <SelectValue placeholder="Select sales motion" />
                     </SelectTrigger>
                   </FormControl>

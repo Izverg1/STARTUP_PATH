@@ -402,7 +402,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="settings-scrollbar h-screen overflow-y-auto space-y-6">
+    <div className="settings-scrollbar red-scrollbar h-screen overflow-y-auto space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

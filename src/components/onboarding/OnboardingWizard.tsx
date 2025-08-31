@@ -102,7 +102,7 @@ export default function OnboardingWizard() {
   const StepComponent = currentStepData.component
 
   return (
-    <div className="max-w-4xl mx-auto p-6 min-w-[800px]">
+    <div className="max-w-4xl mx-auto p-6 min-w-[800px]" data-testid="onboarding-wizard">
       {/* Header */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-2 mb-4">
@@ -172,6 +172,7 @@ export default function OnboardingWizard() {
               onClick={handlePrevious}
               disabled={currentStep === 0}
               className="flex items-center gap-2"
+              data-testid="prev"
             >
               <ArrowLeft className="h-4 w-4" />
               Previous
@@ -186,6 +187,7 @@ export default function OnboardingWizard() {
               onClick={currentStep === steps.length - 1 ? undefined : handleNext}
               className="flex items-center gap-2"
               disabled={formState.isSubmitting}
+              data-testid={currentStep === steps.length - 1 ? 'submit' : 'next'}
             >
               {currentStep === steps.length - 1 ? "Complete Setup" : "Next"}
               <ArrowRight className="h-4 w-4" />

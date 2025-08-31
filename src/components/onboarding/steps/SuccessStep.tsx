@@ -81,6 +81,7 @@ export default function SuccessStep() {
                     max="36"
                     {...field}
                     onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                    data-testid="input-cacPaybackWindow"
                   />
                 </FormControl>
                 <FormDescription>
@@ -112,6 +113,7 @@ export default function SuccessStep() {
                     step="10"
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    data-testid="input-cpqmTarget"
                   />
                 </FormControl>
                 <FormDescription>

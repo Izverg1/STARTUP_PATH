@@ -86,7 +86,7 @@ export default function ModeStep() {
                       >
                         <FormItem className="flex items-start space-x-3 space-y-0">
                           <FormControl>
-                            <RadioGroupItem value={mode.value} className="mt-1" />
+                            <RadioGroupItem value={mode.value} className="mt-1" data-testid={`mode-${mode.value}`} />
                           </FormControl>
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">

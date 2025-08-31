@@ -241,22 +241,22 @@ export class ThompsonSamplingAllocator {
     // Calculate total sampled value for normalization
     const totalSampledValue = samples.reduce((sum, s) => sum + s.sampledValue, 0);
 
-    // Allocate budget based on sampled performance
-    const results: AllocationResult[] = samples.map((sample, index) => {
+    // Allocate budget based on sampled performance (initial raw shares)
+    const base: Array<AllocationResult & { priority: number }> = samples.map((sample, index) => {
       const rawAllocation = (sample.sampledValue / totalSampledValue) * this.config.totalBudget;
-      
-      // Apply min/max constraints
       const minBudget = this.config.totalBudget * this.config.minAllocationPercentage;
       const maxBudget = this.config.totalBudget * this.config.maxAllocationPercentage;
-      
-      const allocatedBudget = Math.max(minBudget, Math.min(maxBudget, rawAllocation));
-      
+
+      // Start with clamped, integer allocations
+      let allocatedBudget = Math.max(minBudget, Math.min(maxBudget, rawAllocation));
+      allocatedBudget = Math.round(allocatedBudget);
+
       // Calculate confidence interval
       const expectedRate = sample.channel.alpha / (sample.channel.alpha + sample.channel.beta);
       const variance = (sample.channel.alpha * sample.channel.beta) / 
         (Math.pow(sample.channel.alpha + sample.channel.beta, 2) * (sample.channel.alpha + sample.channel.beta + 1));
       const stdDev = Math.sqrt(variance);
-      
+
       return {
         channelId: sample.channelId,
         allocatedBudget: Math.round(allocatedBudget),
@@ -266,40 +266,70 @@ export class ThompsonSamplingAllocator {
           upper: Math.min(1, expectedRate + 1.96 * stdDev),
           confidence: 0.95
         },
-        sampledValue: sample.sampledValue
+        sampledValue: sample.sampledValue,
+        priority: index
       };
     });
 
-    // Normalize to ensure total budget is respected (with rounding error compensation)
-    const normalized = this.normalizeAllocations(results, this.config.totalBudget);
+    // Enforce exact sum and constraints
+    const normalized = this.normalizeAllocations(base, this.config.totalBudget);
     return normalized;
   }
 
-  // Ensure the integer allocations sum exactly to totalBudget by compensating rounding drift
-  private normalizeAllocations(results: AllocationResult[], totalBudget: number): AllocationResult[] {
-    // First scale to target total
-    const currentTotal = results.reduce((sum, r) => sum + r.allocatedBudget, 0);
-    const scale = currentTotal > 0 ? totalBudget / currentTotal : 1;
-    const scaled = results.map(r => ({ ...r, allocatedBudget: Math.round(r.allocatedBudget * scale) }));
+  // Ensure the integer allocations sum exactly to totalBudget with min/max constraints
+  private normalizeAllocations(results: Array<AllocationResult & { priority: number }>, totalBudget: number): AllocationResult[] {
+    const n = results.length;
+    const minBudget = Math.floor(this.config.minAllocationPercentage * totalBudget);
+    const maxBudget = Math.ceil(this.config.maxAllocationPercentage * totalBudget);
 
-    // Compute remainder and adjust by distributing +/-1 to items with largest fractional errors
-    let remainder = totalBudget - scaled.reduce((sum, r) => sum + r.allocatedBudget, 0);
-    if (remainder === 0) return scaled;
+    // Start from clamped values
+    let allocs = results.map(r => ({ ...r }));
+    let sum = allocs.reduce((s, r) => s + r.allocatedBudget, 0);
 
-    // Sort by sampledValue desc to adjust the most promising channels first
-    const byPriority = [...scaled].sort((a, b) => b.sampledValue - a.sampledValue);
-    const direction = Math.sign(remainder);
-    remainder = Math.abs(remainder);
-    let i = 0;
-    while (remainder > 0 && i < byPriority.length) {
-      byPriority[i].allocatedBudget += direction; // add or subtract 1
-      remainder -= 1;
-      i = (i + 1) % byPriority.length;
+    // If sum < totalBudget, distribute remaining to those with headroom (<= maxBudget)
+    if (sum < totalBudget) {
+      let remaining = totalBudget - sum;
+      // Sort by sampled value desc (priority ensures stable tie-break)
+      allocs.sort((a, b) => (b.sampledValue - a.sampledValue) || (a.priority - b.priority));
+      let idx = 0;
+      while (remaining > 0) {
+        const r = allocs[idx % n];
+        if (r.allocatedBudget < maxBudget) {
+          r.allocatedBudget += 1;
+          remaining -= 1;
+        }
+        idx++;
+        // Safety to avoid infinite loop if maxBudget too tight
+        if (idx > n * (maxBudget + 1)) break;
+      }
     }
 
-    // Map adjusted amounts back to original order
-    const map = new Map(byPriority.map(r => [r.channelId, r.allocatedBudget]));
-    return scaled.map(r => ({ ...r, allocatedBudget: map.get(r.channelId)! }));
+    // If sum > totalBudget, remove surplus from those above minBudget
+    sum = allocs.reduce((s, r) => s + r.allocatedBudget, 0);
+    if (sum > totalBudget) {
+      let surplus = sum - totalBudget;
+      // Reduce from lowest sampled first to preserve strong performers
+      allocs.sort((a, b) => (a.sampledValue - b.sampledValue) || (a.priority - b.priority));
+      let idx = 0;
+      while (surplus > 0) {
+        const r = allocs[idx % n];
+        if (r.allocatedBudget > minBudget) {
+          r.allocatedBudget -= 1;
+          surplus -= 1;
+        }
+        idx++;
+        if (idx > n * (maxBudget + 1)) break;
+      }
+    }
+
+    // Final clamp and return without priority field
+    return allocs.map(r => ({
+      channelId: r.channelId,
+      allocatedBudget: Math.max(minBudget, Math.min(maxBudget, r.allocatedBudget)),
+      expectedConversionRate: r.expectedConversionRate,
+      confidenceInterval: r.confidenceInterval,
+      sampledValue: r.sampledValue
+    }));
   }
 
   // Check decision gates and return recommendations
@@ -486,7 +516,7 @@ export function createDefaultChannels(): Partial<ChannelArm>[] {
     {
       id: 'google-ads',
       name: 'Google Ads',
-      type: 'paid_search',
+      type: 'google_search',
       totalConversions: 150,
       totalImpressions: 10000,
       totalBudget: 5000
@@ -510,7 +540,7 @@ export function createDefaultChannels(): Partial<ChannelArm>[] {
     {
       id: 'display-network',
       name: 'Display Network',
-      type: 'display',
+      type: 'social_media',
       totalConversions: 32,
       totalImpressions: 15000,
       totalBudget: 2500

@@ -14,7 +14,8 @@
     "test:ui:root": "playwright test tests/ui",
     "test:ui:root:headed": "playwright test tests/ui --headed",
     "build:test": "tsc -p tsconfig.test.json",
-    "test:unit": "npm run build:test && node .tmp/test-build/tests/unit/allocator.test.js"
+    "test:unit": "npm run build:test && node .tmp/test-build/tests/unit/allocator.test.js",
+    "smoke:full": "node scripts/smoke-full.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -68,6 +69,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.55.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

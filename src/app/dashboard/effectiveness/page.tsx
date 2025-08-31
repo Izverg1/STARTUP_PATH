@@ -607,7 +607,7 @@ export default function EffectivenessPage() {
           </TabsList>
 
           {/* Performance Overview Tab */}
-          <TabsContent value="overview" className="flex-1 overflow-y-auto effectiveness-scrollbar p-6">
+          <TabsContent value="overview" className="flex-1 overflow-y-auto effectiveness-scrollbar red-scrollbar p-6">
             {/* Header Controls */}
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -720,7 +720,7 @@ export default function EffectivenessPage() {
           </TabsContent>
 
           {/* Channel Analysis Tab */}
-          <TabsContent value="channels" className="flex-1 overflow-y-auto effectiveness-scrollbar p-6">
+          <TabsContent value="channels" className="flex-1 overflow-y-auto effectiveness-scrollbar red-scrollbar p-6">
             <div className="space-y-6">
               <ChannelPerformanceChart data={data.channelPerformance} />
               
@@ -783,7 +783,7 @@ export default function EffectivenessPage() {
           </TabsContent>
 
           {/* Funnel Analysis Tab */}
-          <TabsContent value="funnel" className="flex-1 overflow-y-auto effectiveness-scrollbar p-6">
+          <TabsContent value="funnel" className="flex-1 overflow-y-auto effectiveness-scrollbar red-scrollbar p-6">
             <FunnelChart 
               data={data.funnelData || mockEffectivenessData.funnelData}
               title="Conversion Funnel Analysis"
@@ -793,7 +793,7 @@ export default function EffectivenessPage() {
           </TabsContent>
 
           {/* Optimization Tab */}
-          <TabsContent value="optimization" className="flex-1 overflow-y-auto effectiveness-scrollbar p-6">
+          <TabsContent value="optimization" className="flex-1 overflow-y-auto effectiveness-scrollbar red-scrollbar p-6">
             <OptimizationOpportunities opportunities={data.optimizationOpportunities} />
           </TabsContent>
         </Tabs>

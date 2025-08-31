@@ -255,7 +255,7 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
                 )}
                 <div
                   className={cn(
-                    "mx-auto px-4 py-6 w-full h-full max-w-[1280px] overflow-y-auto dashboard-scrollbar transition-[filter] duration-300",
+                    "mx-auto px-4 py-6 w-full h-full max-w-[1280px] overflow-y-scroll dashboard-scrollbar transition-[filter] duration-300",
                     isFooterExpanded ? "filter blur-[1px]" : "filter-none"
                   )}
                 >
@@ -312,7 +312,9 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
                 onMouseEnter={handleRightSidebarMouseEnter}
                 onMouseLeave={handleRightSidebarMouseLeave}
               >
-                <div ref={sidebarRef} className="h-full p-4 pt-4 overflow-hidden flex flex-col">
+                <div ref={sidebarRef} className="h-full p-4 pt-4">
+                  {/* Scrollable content inside the right panel with red scrollbar */}
+                  <div className="h-full overflow-y-auto red-scrollbar pr-2 flex flex-col">
                   {/* Header */}
                   <div className="mb-4 shrink-0">
                     <div className="flex items-center gap-2 mb-2">
@@ -428,6 +430,7 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
                         </div>
                       )}
                     </div>
+                  </div>
                   </div>
                 </div>
               </div>
