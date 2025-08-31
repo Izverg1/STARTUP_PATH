@@ -5,19 +5,18 @@ import { NextRequest, NextResponse } from 'next/server'
 // Types
 import type { Database } from './types'
 
-// Environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables')
-}
+// Environment variables (evaluated lazily in functions below to avoid build-time failures)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 // =============================================================================
 // Server Client (Server Components & API Routes)
 // =============================================================================
 
 export async function createServerSupabaseClient() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
   const cookieStore = await cookies()
   
   return createServerClient<Database>(
@@ -49,6 +48,9 @@ export async function createServerSupabaseClient() {
 // =============================================================================
 
 export function createMiddlewareClient(request: NextRequest) {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -154,6 +156,9 @@ export async function getUserProfile() {
  * Only use this for operations that require bypassing RLS
  */
 export function createAdminClient() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   
   if (!serviceRoleKey) {
