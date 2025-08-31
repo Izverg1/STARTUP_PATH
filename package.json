@@ -16,7 +16,10 @@
     "build:test": "tsc -p tsconfig.test.json",
     "test:unit": "npm run build:test && node .tmp/test-build/tests/unit/allocator.test.js",
     "smoke:full": "node scripts/smoke-full.js",
-    "mcp:supabase": "if [ -z \"$SUPABASE_ACCESS_TOKEN\" ]; then echo 'Set SUPABASE_ACCESS_TOKEN first'; exit 1; fi; npx -y @supabase/mcp-server-supabase@latest --access-token $SUPABASE_ACCESS_TOKEN"
+    "mcp:supabase": "if [ -z \"$SUPABASE_ACCESS_TOKEN\" ]; then echo 'Set SUPABASE_ACCESS_TOKEN first'; exit 1; fi; npx -y @supabase/mcp-server-supabase@latest --access-token $SUPABASE_ACCESS_TOKEN",
+    "mail:up": "docker compose -f docker-compose.mailpit.yml up -d",
+    "mail:down": "docker compose -f docker-compose.mailpit.yml down",
+    "status:send": "curl -fsS -X POST http://localhost:1010/api/status/notify -H 'x-status-secret: '$(printenv APP_STATUS_SECRET) -H 'Content-Type: application/json' -d '{\\\"subject\\\":\\\"Local status test\\\",\\\"text\\\":\\\"Hello from Startup_Path\\\"}'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
