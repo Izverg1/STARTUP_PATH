@@ -15,7 +15,8 @@
     "test:ui:root:headed": "playwright test tests/ui --headed",
     "build:test": "tsc -p tsconfig.test.json",
     "test:unit": "npm run build:test && node .tmp/test-build/tests/unit/allocator.test.js",
-    "smoke:full": "node scripts/smoke-full.js"
+    "smoke:full": "node scripts/smoke-full.js",
+    "mcp:supabase": "if [ -z \"$SUPABASE_ACCESS_TOKEN\" ]; then echo 'Set SUPABASE_ACCESS_TOKEN first'; exit 1; fi; npx -y @supabase/mcp-server-supabase@latest --access-token $SUPABASE_ACCESS_TOKEN"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
