@@ -72,7 +72,6 @@ export default function LoginPage() {
   const [isClient, setIsClient] = useState(false)
   const [showTransition, setShowTransition] = useState(false)
   const [localLoading, setLocalLoading] = useState(false)
-  const minimal = (process.env.NEXT_PUBLIC_LOGIN_MINIMAL || '').toLowerCase() === 'true'
 
   useEffect(() => {
     setIsClient(true)
@@ -163,14 +162,13 @@ export default function LoginPage() {
 
   // Render immediately; defer heavy/animated bits to client-only sections below
 
-  if (showTransition && !minimal) {
+  if (showTransition) {
     return <LoadingTransition onComplete={handleTransitionComplete} />
   }
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-black">
       {/* Storm Background */}
-      {!minimal && (
       <div className="absolute inset-0">
         
         {/* Dark storm clouds background */}
@@ -344,7 +342,6 @@ export default function LoginPage() {
           ))}
         </div>
       </div>
-      )}
 
       {/* Login Card - Professional Style */}
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
