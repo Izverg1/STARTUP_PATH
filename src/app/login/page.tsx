@@ -117,7 +117,11 @@ export default function LoginPage() {
       // Success - show professional transition
       console.log('✅ Login completed, showing transition')
       setLocalLoading(false)
-      setShowTransition(true)
+      if ((process.env.NEXT_PUBLIC_LOGIN_MINIMAL || '').toLowerCase() === 'true') {
+        router.push('/dashboard/projects')
+      } else {
+        setShowTransition(true)
+      }
     } catch (err) {
       // Log technical details to console for debugging (dev only)
       if (process.env.NODE_ENV === 'development') {
