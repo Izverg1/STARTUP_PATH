@@ -156,14 +156,7 @@ export default function LoginPage() {
     { label: 'Perf', value: '4x', icon: Zap, color: 'text-orange-400' }
   ]
 
-  // Don't render anything until client-side hydration is complete
-  if (!isClient) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white">Loading...</div>
-      </div>
-    )
-  }
+  // Render immediately; defer heavy/animated bits to client-only sections below
 
   if (showTransition) {
     return <LoadingTransition onComplete={handleTransitionComplete} />
