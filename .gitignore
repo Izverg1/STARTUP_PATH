@@ -15,8 +15,8 @@
 
 # next.js
 /.next/
-/ .next-dev.log
-/ .next-dev.pid
+/.next-dev.log
+/.next-dev.pid
 /out/
 
 # production

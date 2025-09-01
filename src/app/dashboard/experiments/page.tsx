@@ -166,7 +166,7 @@ export default function ExperimentsPage() {
 
   return (
     <ErrorBoundary>
-      <div className="h-full flex flex-col p-6 experiments-scrollbar red-scrollbar">
+      <div className="h-full flex flex-col p-6 experiments-scrollbar">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -1011,7 +1011,7 @@ export default function ExperimentsPage() {
                 </Link>
               </div>
             ) : viewMode === 'table' ? (
-              <div className="overflow-x-auto h-full experiments-scrollbar red-scrollbar">
+              <div className="overflow-x-auto h-full experiments-scrollbar">
                 <table className="w-full">
                   <thead className="bg-slate-800/50 border-b border-slate-700/50">
                     <tr>
@@ -1116,7 +1116,7 @@ export default function ExperimentsPage() {
               </div>
             ) : (
               /* Grid View */
-              <div className="p-6 h-[600px] overflow-y-auto experiments-scrollbar red-scrollbar">
+              <div className="p-6 h-[600px] overflow-y-auto experiments-scrollbar">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Test cards to ensure scrolling */}
                   {Array.from({length: 50}).map((_, i) => (
@@ -1370,7 +1370,7 @@ export default function ExperimentsPage() {
                 <span className="ml-2 text-gray-400">Loading artifacts...</span>
               </div>
             ) : experimentArtifacts && experimentArtifacts.length > 0 ? (
-              <div className="max-h-96 overflow-y-auto space-y-4 experiments-scrollbar red-scrollbar">
+              <div className="max-h-96 overflow-y-auto space-y-4 experiments-scrollbar">
                 {experimentArtifacts.map((artifact) => (
                   <Card key={artifact.id} className="bg-slate-800/50 border-slate-600/50 p-4">
                     <div className="flex items-start justify-between mb-2">

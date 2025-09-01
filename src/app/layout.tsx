@@ -25,10 +25,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const uiEnhanced = (process.env.NEXT_PUBLIC_UI_ENHANCED || '').toLowerCase() === 'true'
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} font-sans antialiased`}
+        className={`${inter.variable} font-sans antialiased ${uiEnhanced ? 'ui-enhanced' : ''}`}
       >
         <AuthProvider>
           {children}

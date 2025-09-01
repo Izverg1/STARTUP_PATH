@@ -245,7 +245,7 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
             <div className="flex flex-1 min-h-0">
               {/* Main Content (responsive) - now takes full width */}
               <main className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden relative">
-                {isFooterExpanded && (
+                {process.env.NEXT_PUBLIC_UI_ENHANCED?.toLowerCase() === 'true' && isFooterExpanded && (
                   <div
                     data-testid="footer-blur-overlay"
                     className={
@@ -255,8 +255,8 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
                 )}
                 <div
                   className={cn(
-                    "mx-auto px-4 py-6 w-full h-full max-w-[1280px] overflow-y-scroll dashboard-scrollbar transition-[filter] duration-300",
-                    isFooterExpanded ? "filter blur-[1px]" : "filter-none"
+                    "mx-auto px-4 py-6 w-full h-full max-w-[1280px] overflow-y-auto transition-[filter] duration-300",
+                    (process.env.NEXT_PUBLIC_UI_ENHANCED?.toLowerCase() === 'true' && isFooterExpanded) ? "filter blur-[1px]" : "filter-none"
                   )}
                 >
                   <ErrorBoundary>
@@ -313,8 +313,8 @@ export function MainLayout({ children, showArtifacts = true }: MainLayoutProps) 
                 onMouseLeave={handleRightSidebarMouseLeave}
               >
                 <div ref={sidebarRef} className="h-full p-4 pt-4">
-                  {/* Scrollable content inside the right panel with red scrollbar */}
-                  <div className="h-full overflow-y-auto red-scrollbar pr-2 flex flex-col">
+                  {/* Scrollable content inside the right panel */}
+                  <div className={cn("h-full overflow-y-auto pr-2 flex flex-col", (process.env.NEXT_PUBLIC_UI_ENHANCED?.toLowerCase() === 'true') && 'red-scrollbar')}>
                   {/* Header */}
                   <div className="mb-4 shrink-0">
                     <div className="flex items-center gap-2 mb-2">
